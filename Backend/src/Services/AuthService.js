@@ -1,6 +1,7 @@
-import { AuthRepository } from "../Repositories/AuthRepository.js"
+import { AuthRepository } from "../Repositories/AuthRepository.js";
 import bcrypt from "bcryptjs";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import jwt from "jsonwebtoken"
 
 import EmailSender from "../Utils/EmailSender.js";
 import { VerificationCodesRepository } from "../Repositories/verificationCodesRepository.js";
@@ -183,63 +184,118 @@ export const getWelcomeEmailTemplate = (verificationLink) => {
     </html>
   `;
 };
-export class AuthService{
-    
-    static signup=async (user)=>{
-        try{
-            //هون بتاكد انو باعت الداتا 
-            if(!user.email){
-                return {success:false,message:"Email is required"};
-            }else if(!user.password){
-                return {success:false,message:"Password is required"};
-            }else if(!user.role || ["PATIENT","DOCTOR","DONOR"].includes(user.role)===false){
-                return {success:false,message:"Role is required"};
-            }
+export class AuthService {
+  static signup = async (user) => {
+    try {
+      //هون بتاكد انو باعت الداتا
+      if (!user.email) {
+        return { success: false, message: "Email is required" };
+      } else if (!user.password) {
+        return { success: false, message: "Password is required" };
+      } else if (
+        !user.role ||
+        ["PATIENT", "DOCTOR", "DONOR"].includes(user.role) === false
+      ) {
+        return { success: false, message: "Role is required" };
+      }
 
+      //هون بتاكد انو الايميل مش مستخدم
+      let isUsedEmail = await AuthRepository.isUsedEmail(user.email);
+      if (isUsedEmail > 0) {
+        return { success: false, message: "Email is already in use" };
+      }
+      //هون بعمل هاش للباسورد
+      let hashedPassword = bcrypt.hashSync(user.password, 8);
+      user.password = hashedPassword;
 
-            //هون بتاكد انو الايميل مش مستخدم
-            let isUsedEmail=await AuthRepository.isUsedEmail(user.email);
-            if(isUsedEmail>0){
-                return {success:false,message:"Email is already in use"};
-            }
-            //هون بعمل هاش للباسورد
-            let hashedPassword= bcrypt.hashSync(user.password,8);
-            user.password=hashedPassword;
-
-            //هون بعمل يوزر جديد
-            let result=await AuthRepository.createUser(user);
-            let code=uuidv4(20);
-            await VerificationCodesRepository.createVerificationCode(result.insertId,code,"VERIFY_EMAIL");
-            EmailSender.sendEmail(user.email,"Welcome to HealthPal",getWelcomeEmailTemplate("http://localhost:5555/api/auth/verify-email?code="+code));
-            if(result.affectedRows>0){
-                //هون بعمل يوزر جديد في الجدول المناسب حسب الرول
-                if(user.role==="PATIENT"){
-                    await AuthRepository.createPatient(result.insertId);
-                }else if(user.role==="DOCTOR"){
-                    await AuthRepository.createDoctor(result.insertId);
-
-                }else if(user.role==="DONOR"){
-                    await AuthRepository.createDonor(result.insertId);
-                }
-                return {success:true,message:"User created successfully"};
-            }else{
-                return {success:false,message:"User creation failed"};
-            }
-        }catch(error){
-            return {success:false,message:"Server error",error};
+      //هون بعمل يوزر جديد
+      let result = await AuthRepository.createUser(user);
+      let code = uuidv4(20);
+      await VerificationCodesRepository.createVerificationCode(
+        result.insertId,
+        code,
+        "VERIFY_EMAIL"
+      );
+      EmailSender.sendEmail(
+        user.email,
+        "Welcome to HealthPal",
+        getWelcomeEmailTemplate(
+          "http://localhost:5555/api/auth/verify-email?code=" + code
+        )
+      );
+      if (result.affectedRows > 0) {
+        //هون بعمل يوزر جديد في الجدول المناسب حسب الرول
+        if (user.role === "PATIENT") {
+          await AuthRepository.createPatient(result.insertId);
+        } else if (user.role === "DOCTOR") {
+          await AuthRepository.createDoctor(result.insertId);
+        } else if (user.role === "DONOR") {
+          await AuthRepository.createDonor(result.insertId);
         }
+        return { success: true, message: "User created successfully" };
+      } else {
+        return { success: false, message: "User creation failed" };
+      }
+    } catch (error) {
+      return { success: false, message: "Server error", error };
     }
-    static verifyEmail=async (query)=>{
-        if(!query.code){
-            return {success:false,message:" Verification code is required"};
-        }
-        let code=await VerificationCodesRepository.findValidCode(query.code,"VERIFY_EMAIL");
-        if(!code){
-            return {success:false,message:"Invalid or expired verification code or already used"};
-        }
-        // If code is valid, mark it as used
-        await VerificationCodesRepository.markCodeAsUsed(code.id);
-        await AuthRepository.markEmailAsVerified(code.target_id);
-        return {success:true,message:"Email verified successfully"};
+  };
+  static verifyEmail = async (query) => {
+    try {
+      if (!query.code) {
+        return { success: false, message: " Verification code is required" };
+      }
+      let code = await VerificationCodesRepository.findValidCode(
+        query.code,
+        "VERIFY_EMAIL"
+      );
+      if (!code) {
+        return {
+          success: false,
+          message: "Invalid or expired verification code or already used",
+        };
+      }
+      // If code is valid, mark it as used
+      await VerificationCodesRepository.markCodeAsUsed(code.id);
+      await AuthRepository.markEmailAsVerified(code.target_id);
+      return { success: true, message: "Email verified successfully" };
+    } catch (error) {
+      return { success: false, message: "Server error", error };
     }
+  };
+  static login = async (credentials) => {
+    try {
+        if(!credentials){
+            return {success:false,message:"Email & Password are required"}
+        }
+        if(!credentials.email){
+            return {success:false,message:"Email is required"}
+        }
+        if(!credentials.password){
+            return {success:false,message:"Password is required"}
+        }
+        let user=await AuthRepository.getUserByEmail(credentials.email);
+        if(!user){
+            return {success: false, message:`There is no user with :${credentials.email} in the system .`};
+        }
+        else if(!user.email_verified){
+            return {success: false, message:`The ${credentials.email} email is not verify .`};
+        }
+        let isCorrect=bcrypt.compareSync(credentials.password, user.password);
+        if(isCorrect){
+            let tokeInfo={
+                id:user.id,
+                role:user.role,
+                email:user.email,
+            }
+            let token=jwt.sign(tokeInfo,"healthpal");
+            return {success:true,message:"Login Success",token};
+        }
+        else{
+            return {success: false, message: "Wrong Password"};
+        }
+    } catch (error) {
+      return { success: false, message: "Server error", error };
+    }
+  };
 }
