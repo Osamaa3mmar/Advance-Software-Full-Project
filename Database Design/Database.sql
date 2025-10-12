@@ -165,7 +165,7 @@ CREATE TABLE group_member (
 CREATE TABLE group_messages (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     group_id BIGINT UNSIGNED NOT NULL,
-    user_id BIGINT UNSIGNED NOT NULL,
+    user_id BIGINT UNSIGNED NULL,
     message VARCHAR(2000),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_groupmessage_group FOREIGN KEY (group_id)
@@ -173,6 +173,7 @@ CREATE TABLE group_messages (
     CONSTRAINT fk_groupmessage_user FOREIGN KEY (user_id)
         REFERENCES users (id) ON DELETE SET NULL ON UPDATE CASCADE
 );
+
 
 CREATE TABLE medical_needs (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
