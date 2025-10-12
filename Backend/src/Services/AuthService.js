@@ -1,7 +1,7 @@
 import { AuthRepository } from "../Repositories/AuthRepository.js"
 import bcrypt from "bcryptjs";
 export class AuthService{
-
+    
     static signup=async (user)=>{
         try{
             //هون بتاكد انو باعت الداتا 
@@ -25,8 +25,7 @@ export class AuthService{
 
             //هون بعمل يوزر جديد
             let result=await AuthRepository.createUser(user);
-            
-
+            //TODO: send verification email and url
             if(result.affectedRows>0){
                 //هون بعمل يوزر جديد في الجدول المناسب حسب الرول
                 if(user.role==="PATIENT"){

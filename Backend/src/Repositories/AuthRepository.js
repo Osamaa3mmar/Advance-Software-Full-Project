@@ -4,11 +4,10 @@ export class AuthRepository{
 
     static isUsedEmail=async(email)=>{
         let [rows]=await connection.query("SELECT count(*) FROM users AS user WHERE user.email=? ",[email]);
-        console.log(rows);
         return rows[0]["count(*)"];
     }
     static createUser=async(user)=>{
-        let [rows]=await connection.query("INSERT INTO users (email,password) VALUES (?,?)",[user.email,user.password]);
+        let [rows]=await connection.query("INSERT INTO users (email,password,role) VALUES (?,?,?)",[user.email,user.password,user.role]);
         return rows;
     }
     static createPatient=async(userId)=>{
