@@ -1,15 +1,14 @@
 CREATE TABLE users (
     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
-    full_name VARCHAR(255),
-    email VARCHAR(255) UNIQUE,
+    first_name VARCHAR(20),
+    last_name VARCHAR(20),
+    email VARCHAR(120) UNIQUE,
     profile_image_url VARCHAR(500),
     password VARCHAR(255),
     birth_date DATE,
-    phone_number VARCHAR(50),
-    street VARCHAR(255),
-    city VARCHAR(100),
+    phone_number VARCHAR(30),
+    street VARCHAR(30),
+    city VARCHAR(30),
     role ENUM('PATIENT','DONOR','DOCTOR') NOT NULL DEFAULT 'PATIENT',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
