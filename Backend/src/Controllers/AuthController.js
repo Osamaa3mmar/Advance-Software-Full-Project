@@ -16,6 +16,21 @@ class AuthController{
             res.status(500).json({message:"Server Error",error});
         }
     }
+    verifyEmail=async(req,res)=>{
+        try{
+            let response=await AuthService.verifyEmail(req.query);
+            if(response.success===true){
+                res.status(200).json({message:response.message})
+            }
+            else{
+                res.status(400).json({message:response.message});
+            }
+        }catch(error){
+            res.status(500).json({message:"Server Error",error});
+        }
+    }
+
+
 }
 
 

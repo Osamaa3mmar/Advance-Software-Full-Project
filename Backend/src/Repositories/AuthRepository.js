@@ -22,6 +22,9 @@ export class AuthRepository{
         let [rows]=await connection.query("INSERT INTO donors (user_id) VALUES (?)",[userId]);
         return rows;
     }
+    static markEmailAsVerified=async(userId)=>{
+        await connection.query("UPDATE users SET email_verified=1 WHERE id=?",[userId]);
+    }
 
 }
 

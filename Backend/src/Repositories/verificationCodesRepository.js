@@ -8,4 +8,11 @@ export class VerificationCodesRepository {
     );
     return result.insertId;
   };
+  static findValidCode = async (code, type) => {
+    const [rows]=await connection.query("SELECT * FROM verification_codes WHERE code=? AND target_type=? AND expires_at>NOW() AND is_used=0", [code, type]);
+    return rows[0];
+  }
+  static markCodeAsUsed = async (id) => {
+    await connection.query("UPDATE verification_codes SET is_used=1 WHERE id=?", [id]); 
+  };
 }

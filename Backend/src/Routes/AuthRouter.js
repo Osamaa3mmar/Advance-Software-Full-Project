@@ -6,6 +6,7 @@ const authRouter=Router();
 
 
 authRouter.post("/signup",authController.signUp);
+authRouter.get("/verify-email",authController.verifyEmail);
 
 
 
