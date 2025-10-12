@@ -1,4 +1,5 @@
 import { AuthService } from "../Services/AuthService.js";
+import cloudinary from "../Utils/Cloudinary.js";
 
 class AuthController{
 
@@ -29,7 +30,7 @@ class AuthController{
             res.status(500).json({message:"Server Error",error});
         }
     }
-
+   
 
 }
 
