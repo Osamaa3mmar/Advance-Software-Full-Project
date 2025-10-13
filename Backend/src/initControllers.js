@@ -5,7 +5,7 @@ import authRouter from "./Routes/AuthRouter.js";
 export const initControllers=(app)=>{
 
 
-app.use("/healthGuides", healthGuidesRoutes);
+app.use("/api/healthGuides", healthGuidesRoutes);
 app.use("/api/auth",authRouter);
 
 
