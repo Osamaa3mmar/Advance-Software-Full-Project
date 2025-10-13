@@ -9,11 +9,11 @@ export const isLogin=(req,res,next)=>{
             res.status(401).json({message:"Unauthorized User"});
             return;
         }
-        const decoded = jwt.verify(token, "healthpal"); // verify instead of decode
+        const decoded = jwt.verify(token, "healthpal"); 
 
     req.user = decoded;
         next();
     }catch(error){
-        res.status(500).json({message:"Server Error"});
+        res.status(500).json({message:"Invalid Token",error});
     }
 }
