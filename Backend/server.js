@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { initControllers } from './src/initControllers.js';
 import cors from "cors"
 import http from "http";

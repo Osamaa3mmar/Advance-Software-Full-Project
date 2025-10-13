@@ -1,3 +1,4 @@
+import userRouter from "./Routes/UsersRouter.js"
 import healthGuidesRoutes from "./Routes/healthGuidesRoutes.js";
 import workshopsRouter from "./Routes/workshopsRouter.js";
 import authRouter from "./Routes/AuthRouter.js";
@@ -25,6 +26,7 @@ app.use("/api/admin",AdminInfoRouter);
 app.use("/api/users",userRouter);
 app.use("/api/documents",documentsRouter);
 	app.use("/api/medicalNeeds", medicalNeedsRouter);
+  app.use("/api/anonymous-messages", anonymousMessagesRouter);
 }
 // app.use("/api/rooms",roomsRouter);
 
