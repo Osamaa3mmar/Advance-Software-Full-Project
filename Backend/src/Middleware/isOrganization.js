@@ -1,4 +1,4 @@
-export const adminMiddleware = (req, res, next) => {
+export const isOrganization = (req, res, next) => {
   try {
     const user = req.user;
 
@@ -6,8 +6,10 @@ export const adminMiddleware = (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized. User not found." });
     }
 
-    if (user.role !== "ADMIN") {
-      return res.status(403).json({ message: "Forbidden. Admins only." });
+    if (user.role !== "ORGANIZATION") {
+      return res
+        .status(403)
+        .json({ message: "Forbidden. Organizations only." });
     }
 
     next();
