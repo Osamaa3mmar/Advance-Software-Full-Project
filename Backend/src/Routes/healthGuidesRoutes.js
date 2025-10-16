@@ -1,11 +1,10 @@
 import express from "express";
 import { HealthGuidesController } from "../Controllers/HealthGuidesController.js";
-import { adminMiddleware } from "../Middleware/adminMiddleware.js";
+import {  isAdmin } from "../Middleware/IsAdmin.js";
 
 const router = express.Router();
 
 router.get("/", HealthGuidesController.getGuides);
-router.post("/", adminMiddleware, HealthGuidesController.createGuide);
-
+router.post("/", isAdmin, HealthGuidesController.createGuide);
 
 export default router;

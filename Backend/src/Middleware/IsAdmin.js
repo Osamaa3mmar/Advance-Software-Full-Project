@@ -1,4 +1,4 @@
-export const adminMiddleware = (req, res, next) => {
+export const isAdmin = (req, res, next) => {
   try {
     const user = req.user;
 
