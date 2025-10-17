@@ -1,5 +1,5 @@
 import { AuthService } from "../Services/AuthService.js";
-import cloudinary from "../Utils/Cloudinary.js";
+
 
 class AuthController {
   signUp = async (req, res) => {

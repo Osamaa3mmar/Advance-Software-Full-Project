@@ -2,7 +2,7 @@ import { HealthGuidesRepository } from "../Repositories/HealthGuidesRepository.j
 
 export class HealthGuidesService {
 
-  static creatGuide = async ({ translations , files}) => {
+  static createGuide = async ({ translations , files}) => {
     const guide = await HealthGuidesRepository.creatGuide();
 
 if(files && files.length > 0)
@@ -26,11 +26,43 @@ if(files && files.length > 0)
     }
 
 
-static updateGuide=async(guideId,{translations,files})=>{
-    
-    const guide=await HealthGuidesRepository.updateGuide(guideId,{translations,files})
-     return guide;
+static updateGuide=async(guideId,{translations,files})=>
+    {
+         if(!guideId)
+         {
+              throw new Error("Invalid or missing guideId");
+         }
+         
+    if (!translations || typeof translations !== "object") {
+    throw new Error("Translation not valid");
 }
+    
+    let normalizedFiles = [];
+  if (Array.isArray(files)) {
+    normalizedFiles = files;
+  } else if (files && typeof files === "object") {
+    normalizedFiles = [files];
+  }
+
+
+  for (const file of normalizedFiles) {
+    if (!file.link || typeof file.link !== "string") {
+      throw new Error("Each file must contain a valid 'link'");
+    }
+  }
+
+    const existing = await HealthGuidesRepository.getGuideById(guideId);
+  if (!existing) {
+    throw new Error("Guide not found");
+  }
+
+
+   const updatedGuide = await HealthGuidesRepository.updateGuide(guideId, {
+    translations,
+    files: normalizedFiles
+  })
+}
+
 
 
 static deleteGuide=async(guideId)=>

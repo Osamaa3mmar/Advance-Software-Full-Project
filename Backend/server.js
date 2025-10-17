@@ -1,6 +1,5 @@
 import express from 'express';
 import { initControllers } from './src/initControllers.js';
-import { connection } from './Database/Connection.js';
 const app = express();
 const Port=5555;
 

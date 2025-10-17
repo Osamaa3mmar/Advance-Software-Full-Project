@@ -40,7 +40,7 @@ export class HealthGuidesRepository {
 };
 
    // create new guide 
-static creatGuide=async ()=>{
+static createGuide=async ()=>{
 
 const [result] = await connection.query(
         "INSERT INTO health_guides () VALUES ()"
@@ -51,68 +51,70 @@ const [result] = await connection.query(
 
 
 // create file 
-static addFiles=async (guideId,files)=>
-{
-    const promises = files.map(file=>{
-connection.query( 'insert into files (guide_id, link, type) VALUES (?, ?, ?)',
-                [guideId, file.link, 'HEALTH_GUIDE'])
-    })
-       return Promise.all(promises);
+static addFiles = async (guideId, files) => {
+  const promises = files.map(file => {
+    return connection.query(
+      'INSERT INTO files (guide_id, link, type) VALUES (?, ?, ?)',
+      [guideId, file.link, 'HEALTH_GUIDE']
+    );
+  });
+  return Promise.all(promises);
 }
+
 
 // add translate
 static addTranslations = async (guideId, translations) => {
-    const promises = translations.map(tr => {
-         connection.query(
+
+    const promises = connection.query(
             `INSERT INTO health_guide_translations
                 (health_guide_id, category_en, category_ar, title_en, title_ar, content_en, content_ar)
                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [guideId, tr.category_en, tr.category_ar, tr.title_en, tr.title_ar, tr.content_en, tr.content_ar]
-        );
-    });
+            [guideId, translations.category_en, translations.category_ar, translations.title_en, translations.title_ar, translations.content_en, translations.content_ar]  );
     return Promise.all(promises);
-
 }
 
 
-//update guide 
+
 static updateGuide = async (guideId, { translations, files }) => {
-        const translationPromises = translations.map(tr =>
-            connection.query(
-                `UPDATE health_guide_translations
-                 SET category_en = ?, category_ar = ?, title_en = ?, title_ar = ?, content_en = ?, content_ar = ?
-                 WHERE health_guide_id = ?`,
-                [tr.category_en, tr.category_ar, tr.title_en, tr.title_ar, tr.content_en, tr.content_ar, guideId]
-            )
-        );
+  // update translations  
+  const [result] = await connection.query(
+    `UPDATE health_guide_translations SET
+      category_en = ?, category_ar = ?, title_en = ?, title_ar = ?, content_en = ?, content_ar = ?
+      WHERE health_guide_id = ?`,
+    [
+      translations.category_en,
+      translations.category_ar,
+      translations.title_en, 
+      translations.title_ar,
+      translations.content_en,
+      translations.content_ar,
+      guideId
+    ]
+  );
 
-        await Promise.all(translationPromises);
-    
-   
-       const deleteFiles= await connection.query("DELETE FROM files WHERE guide_id = ? AND type='HEALTH_GUIDE'", [guideId]);
-        const filePromises = files.map(file =>
-            connection.query(
-                "INSERT INTO files (guide_id, link, type) VALUES (?, ?, 'HEALTH_GUIDE')",
-                [guideId, file.link]
-            )
-        );
-        await Promise.all(filePromises);
-    
-    
-    const [updatedTranslations] = await connection.query(
-        "SELECT * FROM health_guide_translations WHERE health_guide_id = ?",
-        [guideId]
+  // delete old files
+  await connection.query(
+    "DELETE FROM files WHERE guide_id = ? AND type = 'HEALTH_GUIDE'",
+    [guideId]
+  );
+
+  // add new files
+  const insertedFiles = [];
+  for (const file of files) {
+    const [insertResult] = await connection.query(
+      'INSERT INTO files (guide_id, link, type) VALUES (?, ?, ?)',
+      [guideId, file.link, 'HEALTH_GUIDE']
     );
+    insertedFiles.push(insertResult.insertId);
+  }
 
-    const [updatedFiles] = await connection.query(
-        "SELECT id, link AS url, type FROM files WHERE guide_id = ? AND type='HEALTH_GUIDE'",
-        [guideId]
-    );
-
-    return { guideId, translations: updatedTranslations, files: updatedFiles };
+  // return result
+  return {
+    id: guideId,
+    updated: result.affectedRows > 0,
+    files: insertedFiles
+  };
 }
-
-
 
 
 // delete guide 
@@ -121,11 +123,6 @@ static deleteGuide=async(guideId)=>
    const [result] = await connection.query("delete from health_guides where id=?",[guideId]);
    return { deleted: result.affectedRows > 0 };
 }
-
-
-
-
-
 
 
 static searchGuides = async ({ query = "", dateBefore, dateAfter, skip = 0, limit = 5 }) => {
@@ -167,10 +164,15 @@ static searchGuides = async ({ query = "", dateBefore, dateAfter, skip = 0, limi
 };
 
 
+//get guide by id 
+static getGuideById=async(guideId)=>
+{
+   const [result] = await connection.query("select * from   health_guides where id=?",[guideId]);
+   return { data: result };
 }
 
 
-
+};
 
 
 
