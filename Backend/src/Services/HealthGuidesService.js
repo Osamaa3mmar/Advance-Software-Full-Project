@@ -57,10 +57,8 @@ static updateGuide=async(guideId,{translations,files})=>
   }
 
 
-   const updatedGuide = await HealthGuidesRepository.updateGuide(guideId, {
-    translations,
-    files: normalizedFiles
-  })
+   const updatedGuide = await HealthGuidesRepository.updateGuide(guideId, {  translations,files: normalizedFiles })
+   return updatedGuide;
 }
 
 

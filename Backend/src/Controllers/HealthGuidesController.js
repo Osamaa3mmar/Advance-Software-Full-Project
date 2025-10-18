@@ -91,23 +91,25 @@ export class HealthGuidesController {
 };
 
 
-     searchGuides = async (req, res) => {
-        try {
-            const { query, dateBefore, dateAfter, skip, limit } = req.query;
+   searchGuides = async (req, res) => {
+  try {
+    const { title, content, date, skip, limit } = req.query;
 
-            const guides = await HealthGuidesService.searchGuides({
-                query,
-                dateBefore,
-                dateAfter,
-                skip: parseInt(skip) || 0,
-                limit: parseInt(limit) || 5
-            });
+    const guides = await HealthGuidesService.searchGuides({
+      title: title || null,
+      content: content || null,
+      date: date || null,
+      skip: parseInt(skip, 10) || 0,
+      limit: parseInt(limit, 10) || 5,
+    });
 
-            res.status(200).json(guides);
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-        }
-}
+    res.status(200).json(guides);
+  } catch (err) {
+    console.error("Error in searchGuides controller:", err);
+    res.status(500).json({ message: err.message || "Internal server error" });
+  }
+};
+
       
 }
 const healthGuidesController=new HealthGuidesController();

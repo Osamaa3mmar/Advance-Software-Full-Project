@@ -125,43 +125,32 @@ static deleteGuide=async(guideId)=>
 }
 
 
-static searchGuides = async ({ query = "", dateBefore, dateAfter, skip = 0, limit = 5 }) => {
-    let conditions = [];
-    let params = [];
+static searchGuides = async ({ title, content, date, skip = 0, limit = 5 }) => {
+  let params = [];
+  let query = "SELECT * FROM health_guide_translations WHERE 1=1 ";
 
-   
-    if (query) {
-        const likeQuery = `%${query}%`;
-        conditions.push(`(hgt.title_en LIKE ? OR hgt.title_ar LIKE ? OR hgt.content_en LIKE ? OR hgt.content_ar LIKE ?)`);
-        params.push(likeQuery, likeQuery, likeQuery, likeQuery);
-    }
+  if (title) {
+    query += "AND (title_en LIKE ? OR title_ar LIKE ?) ";
+    params.push(`%${title}%`, `%${title}%`);
+  }
 
-    if (dateBefore) {
-        conditions.push(`hg.created_at <= ?`);
-        params.push(dateBefore);
-    }
+  if (content) {
+    query += "AND (content_en LIKE ? OR content_ar LIKE ?) ";
+    params.push(`%${content}%`, `%${content}%`);
+  }
 
-    
-    if (dateAfter) {
-        conditions.push(`hg.created_at >= ?`);
-        params.push(dateAfter);
-    }
+  if (date) {
+    query += "AND DATE(created_at) <= ? ";
+    params.push(date);
+  }
 
-    const whereClause = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
+  query += "LIMIT ? OFFSET ?";
+  params.push(limit, skip);
 
-    const [rows] = await connection.query(
-        `SELECT hg.id, hg.created_at, hgt.title_en, hgt.title_ar, hgt.content_en, hgt.content_ar
-         FROM health_guides hg
-         LEFT JOIN health_guide_translations hgt ON hg.id = hgt.health_guide_id
-         ${whereClause}
-         ORDER BY hg.created_at DESC
-         LIMIT ? OFFSET ?`,
-        [...params, limit, skip]
-    );
-
-
-    return { data: rows };
+  const [rows] = await connection.query(query, params);
+  return rows;
 };
+
 
 
 //get guide by id 
