@@ -36,7 +36,7 @@ export default function LoginForm() {
         detail: t("auth.login.success.detail"),
         life: 2000,
       });
-      navigate("/signup");
+      navigate("/main/home");
     } catch (error) {
       console.log(error.response.data);
       toast.current.show({
@@ -77,7 +77,7 @@ export default function LoginForm() {
             <Button
               type="button"
               onClick={() => {
-                navigate("/");
+                navigate("/reset-password");
               }}
               label={t("auth.forgetPassword")}
               text

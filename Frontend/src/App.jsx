@@ -8,6 +8,7 @@ import { useContext } from "react";
 import ToastContext from "./Context/Toast";
 import { Toast } from "primereact/toast";
 import { LanguageProvider } from "./Context/LanguageContext";
+import ResetPassword from "./Page/Auth/ResetPassword";
 
 export default function App() {
   const value = {
@@ -24,9 +25,18 @@ export default function App() {
         { path: "", element: <LoginPage/> },
         { path:"/login",element:<LoginPage/>},
         { path:"/signup",element:<SignupPage/>},
+        { path:"/reset-password",element:<ResetPassword/>},
 
       ],
-    },
+    },{
+      path:"/main",
+      element:<div>Main App Here</div>,
+      children:[{
+        path:"home",
+        element:<div>Home Page</div>
+
+      }]
+    }
   ]);
 
   return (

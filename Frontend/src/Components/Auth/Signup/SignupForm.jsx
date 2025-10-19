@@ -119,6 +119,7 @@ export default function SignupForm() {
             </label>
             <div className="card flex justify-content-center">
               <SelectButton
+              dir="ltr"
                 className="p-button-sm"
                 value={role}
                 onChange={(e) => setRole(e.value)}
