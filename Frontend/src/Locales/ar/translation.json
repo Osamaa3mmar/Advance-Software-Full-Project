@@ -1,3 +1,48 @@
 {
-    
+    "auth": {
+        "loginMessage":"الرجاء إدخال بياناتك لتسجيل الدخول.",
+        "signupMessage":"الرجاء ملء التفاصيل لإنشاء حساب.",
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "forgetPassword": "نسيت كلمة المرور؟",
+        "emailPlaceholder": "مثال: osama@gmail.com",
+        "login": {
+            "button": "تسجيل الدخول",
+            "organizationButton": "صفحة تسجيل دخول المؤسسات",
+            "noAccount": "ليس لديك حساب؟",
+            "signupLink": "إنشاء حساب",
+            "success": {
+                "summary": "تم تسجيل الدخول بنجاح",
+                "detail": "مرحباً بعودتك!"
+            },
+            "failed": {
+                "summary": "فشل تسجيل الدخول"
+            }
+        },
+        "signup": {
+            "button": "إنشاء حساب",
+            "role": "الدور",
+            "haveAccount": "لديك حساب بالفعل؟",
+            "loginLink": "تسجيل الدخول",
+            "success": {
+                "summary": "تم إنشاء الحساب بنجاح",
+                "detail": "تم إنشاء حسابك بنجاح!"
+            },
+            "failed": {
+                "summary": "فشل إنشاء الحساب"
+            },
+            "emailVerification": {
+                "summary": "تحقق من بريدك الإلكتروني",
+                "detail": "يرجى التحقق من بريدك الإلكتروني لتفعيل حسابك"
+            }
+        },
+        "roles": {
+            "PATIENT": "مريض",
+            "DONOR": "متبرع",
+            "DOCTOR": "طبيب"
+        }
+    },
+    "common": {
+        "or": "أو"
+    }
 }

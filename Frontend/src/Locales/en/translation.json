@@ -1,3 +1,48 @@
 {
-    
+    "auth": {
+        "loginMessage":"Please enter your credentials to log in.",
+        "signupMessage":"Please fill in the details to create an account.",
+        "email": "Email",
+        "password": "Password",
+        "forgetPassword": "Forget Password?",
+        "emailPlaceholder": "Ex: osama@gmail.com",
+        "login": {
+            "button": "Login",
+            "organizationButton": "Organization Login Page",
+            "noAccount": "Don't have an account?",
+            "signupLink": "Sign Up",
+            "success": {
+                "summary": "Login Success",
+                "detail": "Welcome back!"
+            },
+            "failed": {
+                "summary": "Login Failed"
+            }
+        },
+        "signup": {
+            "button": "Create Account",
+            "role": "Role",
+            "haveAccount": "Already have an account?",
+            "loginLink": "Login",
+            "success": {
+                "summary": "Signup Success",
+                "detail": "Account created successfully!"
+            },
+            "failed": {
+                "summary": "Signup Failed"
+            },
+            "emailVerification": {
+                "summary": "Check your email",
+                "detail": "Please verify your email address to activate your account."
+            }
+        },
+        "roles": {
+            "PATIENT": "Patient",
+            "DONOR": "Donor",
+            "DOCTOR": "Doctor"
+        }
+    },
+    "common": {
+        "or": "OR"
+    }
 }
