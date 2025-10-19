@@ -7,5 +7,5 @@ export const initControllers = (app) => {
   app.use("/healthGuides", healthGuidesRoutes);
   app.use("/api/auth", authRouter);
   app.use("/workshops", workshopsRouter);
-  app.use("/api/organization", orgRouter);
+  app.use("/api/organization", orgRouter);//
 };
