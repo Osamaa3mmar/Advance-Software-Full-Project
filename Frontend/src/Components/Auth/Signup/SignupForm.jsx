@@ -4,9 +4,10 @@ import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
 import { SelectButton } from 'primereact/selectbutton';
 import { Toast } from 'primereact/toast';
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import ToastContext from '../../../Context/Toast';
 
 export default function SignupForm() {
     const { register, handleSubmit } = useForm();
@@ -16,10 +17,11 @@ export default function SignupForm() {
   const [error,setError]=useState(null);
   const [showPass,setShowPass]=useState(false);
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    const toast=useRef(null);
+    // const toast=useRef(null);
     const options=["DOCTOR","PATIENT","DONOR"];
     const [role,setRole]=useState(options[0]);
-    
+      const { toast } = useContext(ToastContext);
+
     
     
     const signup=async(info)=>{
@@ -32,8 +34,8 @@ export default function SignupForm() {
             });
             setData(data);
             setError(null);
-            toast.current.show({severity: 'success', summary: 'Signup Success', detail:"Account created successfully! " , life:2000 });
-            // toast.current.show({severity: 'info', summary: 'Check your email', detail:"Please verify your email address to activate your account." , life:2000 });
+            toast.current.show([{severity: 'success', summary: 'Signup Success', detail:"Account created successfully! " , life:3000 }]);
+            toast.current.show({severity: 'info', summary: 'Check your email', detail:"Please verify your email address to activate your account." , life:6000 });
             navigate("/login");
         }catch(error){
             console.log(error);
@@ -120,7 +122,6 @@ export default function SignupForm() {
             <div className="signup flex justify-center mt-6">
                 <p>Already have an account? <Link to="/login" className="text-[#06b6d4]">Login</Link></p>
             </div>
-      <Toast ref={toast}/>
     </form>
   )
 }

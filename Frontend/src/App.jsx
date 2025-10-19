@@ -4,12 +4,16 @@ import AuthLayout from "./Layout/AuthLayout";
 import LoginPage from "./Page/Auth/LoginPage";
 import 'primeicons/primeicons.css';
 import SignupPage from "./Page/Auth/SignupPage";
+import { useContext } from "react";
+import ToastContext from "./Context/Toast";
 import { Toast } from "primereact/toast";
 
 export default function App() {
   const value = {
     ripple: true,
   };
+    const { toast } = useContext(ToastContext);
+
   const router = createBrowserRouter([
     //auth
     {
@@ -27,6 +31,7 @@ export default function App() {
   return (
     <PrimeReactProvider value={value}>
       <RouterProvider router={router} />
+      <Toast ref={toast}/>
     </PrimeReactProvider>
   );
 }

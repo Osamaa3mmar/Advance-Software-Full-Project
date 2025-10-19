@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form";
 import { InputText } from "primereact/inputtext";
 import {  Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Toast } from 'primereact/toast';
 import { Divider } from 'primereact/divider';
+import ToastContext from "../../../Context/Toast";
         
 export default function LoginForm() {
   const { register, handleSubmit } = useForm();
@@ -15,7 +16,8 @@ export default function LoginForm() {
   const [error,setError]=useState(null);
   const [showPass,setShowPass]=useState(false);
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-    const toast=useRef(null);
+  const { toast } = useContext(ToastContext);
+
   const login = async (info) => {
     try{
         setLoading(true);
@@ -28,7 +30,7 @@ export default function LoginForm() {
         console.log(data);
         localStorage.setItem("token",data.token);
         toast.current.show({severity: 'success', summary: 'Login Success', detail:"Welcome back! " , life:2000 });
-        navigate("/")
+        navigate("/signup")
     }catch(error){
         setError(error.response.data);
         console.log(error.response.data);
@@ -105,7 +107,6 @@ export default function LoginForm() {
             <div className="signup flex justify-center mt-6">
                 <p>Dont have an account? <Link to="/signup" className="text-[#06b6d4]">Sign Up</Link></p>
             </div>
-      <Toast ref={toast}/>
     </form>
   );
 }
