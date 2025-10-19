@@ -3,6 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthLayout from "./Layout/AuthLayout";
 import LoginPage from "./Page/Auth/LoginPage";
 import 'primeicons/primeicons.css';
+import SignupPage from "./Page/Auth/SignupPage";
+import { Toast } from "primereact/toast";
 
 export default function App() {
   const value = {
@@ -16,6 +18,7 @@ export default function App() {
       children: [
         { path: "", element: <LoginPage/> },
         { path:"/login",element:<LoginPage/>},
+        { path:"/signup",element:<SignupPage/>},
 
       ],
     },

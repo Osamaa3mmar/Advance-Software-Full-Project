@@ -4,6 +4,7 @@ import cloudinary from "../Utils/Cloudinary.js";
 class AuthController {
   signUp = async (req, res) => {
     try {
+      console.log("object")
       let response = await AuthService.signup(req.body);
       if (response.success === true) {
         return res.status(201).json({ message: response.message });

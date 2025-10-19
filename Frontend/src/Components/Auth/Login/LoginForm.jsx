@@ -1,11 +1,12 @@
 import { Button } from "primereact/button";
 import { useForm } from "react-hook-form";
 import { InputText } from "primereact/inputtext";
-import {  useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRef, useState } from "react";
 import { Toast } from 'primereact/toast';
-
+import { Divider } from 'primereact/divider';
+        
 export default function LoginForm() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
@@ -28,7 +29,6 @@ export default function LoginForm() {
         localStorage.setItem("token",data.token);
         toast.current.show({severity: 'success', summary: 'Login Success', detail:"Welcome back! " , life:2000 });
         navigate("/")
-
     }catch(error){
         setError(error.response.data);
         console.log(error.response.data);
@@ -88,15 +88,23 @@ export default function LoginForm() {
         </div>
       </div>
 
-      <div className="buttons  flex items-center justify-end mt-10">
+      <div className="buttons  flex items-start justify-between mt-10">
+        <Button type="button" severity="warning" size="small" label="Organization Login Page" outlined/>
         <Button
         loading={loading}
           className=" w-[140px]"
           icon="pi pi-sign-in"
           label="login"
           type="submit"
+          
         />
       </div>
+       <Divider  className="hidden md:flex">
+                <b>OR</b>
+            </Divider>
+            <div className="signup flex justify-center mt-6">
+                <p>Dont have an account? <Link to="/signup" className="text-[#06b6d4]">Sign Up</Link></p>
+            </div>
       <Toast ref={toast}/>
     </form>
   );
