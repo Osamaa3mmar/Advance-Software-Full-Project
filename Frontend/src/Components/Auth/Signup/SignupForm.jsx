@@ -18,7 +18,7 @@ export default function SignupForm() {
   const [showPass,setShowPass]=useState(false);
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     // const toast=useRef(null);
-    const options=["DOCTOR","PATIENT","DONOR"];
+    const options=["PATIENT","DONOR","DOCTOR"];
     const [role,setRole]=useState(options[0]);
       const { toast } = useContext(ToastContext);
 
@@ -101,13 +101,13 @@ export default function SignupForm() {
               Role
             </label>
              <div className="card flex justify-content-center">
-            <SelectButton size={1} value={role} onChange={(e) => setRole(e.value)} options={options} />
+            <SelectButton   className="p-button-sm" value={role} onChange={(e) => setRole(e.value)} options={options} />
         </div>
           </div>
         </div>
       </div>
 
-      <div className="buttons  flex items-start justify-end mt-10">
+      <div className="buttons  flex items-start justify-end mt-6">
         <Button
         loading={loading}
           className=" "

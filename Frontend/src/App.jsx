@@ -7,6 +7,7 @@ import SignupPage from "./Page/Auth/SignupPage";
 import { useContext } from "react";
 import ToastContext from "./Context/Toast";
 import { Toast } from "primereact/toast";
+import { LanguageProvider } from "./Context/LanguageContext";
 
 export default function App() {
   const value = {
@@ -30,8 +31,10 @@ export default function App() {
 
   return (
     <PrimeReactProvider value={value}>
+      <LanguageProvider>  
       <RouterProvider router={router} />
       <Toast ref={toast}/>
+    </LanguageProvider>
     </PrimeReactProvider>
   );
 }
