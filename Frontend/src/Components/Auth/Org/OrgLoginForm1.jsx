@@ -27,12 +27,12 @@ export default function OrgLoginForm1() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const login=async ()=>{
-    
+
   }
   const firstLogin = async(data) => {
     try {
       setLoading(true);
-      const info=await axios.put("http://localhost:5555/api/organization/organization-setup",{
+      await axios.put("http://localhost:5555/api/organization/organization-setup",{
         email:data.email,
         password:data.password,
         code:token
