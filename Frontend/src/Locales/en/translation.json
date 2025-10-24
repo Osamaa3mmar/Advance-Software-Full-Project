@@ -1,5 +1,12 @@
 {
     "auth": {
+        "org":{
+            "headerMessage":"Organization Login Page "
+        },
+        "warningMessage":"Please enter your email first",
+        "warningTitle":"Warning",
+        "resendOtp":"Resend verification code .",
+        "firstLogin": "First Login",
         "loginMessage":"Please enter your credentials to log in.",
         "signupMessage":"Please fill in the details to create an account.",
         "email": "Email",

@@ -113,6 +113,9 @@ export default function LoginForm() {
           size="small"
           label={t("auth.login.organizationButton")}
           outlined
+          onClick={()=>{
+            navigate("/login/organaization");
+          }}
         />
         <Button
           loading={loading}
