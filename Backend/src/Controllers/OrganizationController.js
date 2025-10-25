@@ -27,7 +27,7 @@ class OrganizationController {
       password
     );
     if (response.success) {
-      return res.status(200).json({ message: response.message });
+      return res.status(200).json({ message: response.message,token:response.token });
     } else {
       return res.status(400).json({ message: response.message });
     }

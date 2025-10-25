@@ -11,7 +11,6 @@ import { LanguageProvider } from "./Context/LanguageContext";
 import ResetPassword from "./Page/Auth/ResetPassword";
 import VerifyPage from "./Page/Auth/VerifyPage";
 import OrganizationLogin from "./Page/Auth/OrganizationLogin";
-import OrganizationLogin2 from "./Page/Auth/OrganizationLogin2";
 
 export default function App() {
   const value = {
@@ -31,7 +30,6 @@ export default function App() {
         { path:"/reset-password",element:<ResetPassword/>},
         { path:"/verify/:code",element:<VerifyPage/>},
         { path:"/login/organaization",element:<OrganizationLogin/>},
-        { path:"/login/organaization/:email",element:<OrganizationLogin2/>},
 
       ],
     },{
@@ -42,7 +40,35 @@ export default function App() {
         element:<div>Home Page</div>
 
       }]
+    },
+    {
+      path:"/org",
+      element:<div>Organization App Here</div>,
+      children:[
+        {
+          path:"dashboard",
+          element:<div>Organization Dashboard</div>
+        },
+        {
+
+        }
+      ]
+
+    },
+    {
+      path:"/admin",
+      element:<div>Admin App Here</div>,
+      children:[
+        {
+          path:"dashboard",
+          element:<div>Admin Dashboard</div>
+        },
+        {
+
+        }
+      ]
     }
+
   ]);
 
   return (

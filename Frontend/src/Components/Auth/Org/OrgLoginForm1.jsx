@@ -7,59 +7,89 @@ import { ToggleButton } from "primereact/togglebutton";
 import { InputOtp } from "primereact/inputotp";
 import axios from "axios";
 import ToastContext from "../../../Context/Toast";
+import { useNavigate } from "react-router-dom";
 
 export default function OrgLoginForm1() {
-  const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
-  const [token, setTokens] = useState('');
-  const { register, handleSubmit,watch } = useForm();
-  const email=watch("email");
-  const sendEmail = async (data) => {
-    console.log(data);
-    if(checked){
-      await firstLogin(data);
-    }else{
-      await login(data);
-    }
-  };
-    const { toast } = useContext(ToastContext);
-
+  const [token, setTokens] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const login=async ()=>{
+  const { register, handleSubmit, watch } = useForm();
+  const { t } = useTranslation();
+  const email = watch("email");
+  const { toast } = useContext(ToastContext);
+  const navigate = useNavigate();
+  const login = async (data) => {
+    if (checked) {
+      await firstLogin(data);
+    } else {
+      await normalLogin(data);
+    }
+  };
+  // const sendEmail = async (info) => {
 
-  }
-  const firstLogin = async(data) => {
-    try {
+  // };
+
+  const normalLogin=async(info)=>{
+    try{
       setLoading(true);
-      await axios.put("http://localhost:5555/api/organization/organization-setup",{
-        email:data.email,
-        password:data.password,
-        code:token
-      });
-      toast.current.show({
-        severity: "Success",
-        summary: "Login Successful",
-        life: 3000,
+      const {data}=await axios.post("http://localhost:5555/api/organization/login",{
+        email: info.email,
+        password: info.password
       });
       console.log(data);
+      setError(null);
+      toast.current.show({
+        severity: "success",
+        summary: "Login Successful",
+        detail: "Welcome to the Organization Dashboard",
+        life: 3000,
+      });
+      localStorage.setItem("orgToken",data.token);
+      navigate("/org/dashboard");
+
     }catch(error){
       setError(error);
-     toast.current.show({
-            severity: "error",
-            summary: "Error",
-            detail: error.response?.data?.message || error.message,
-            life: 3000,
-          });
     }finally{
       setLoading(false);
     }
-
-
-
   }
-  const reSend = async() => {
-    if(email==undefined||email==""){
+  const firstLogin = async (info) => {
+    try {
+      setLoading(true);
+      await axios.put(
+        "http://localhost:5555/api/organization/organization-setup",
+        {
+          email: info.email,
+          password: info.password,
+          code: token,
+        }
+      );
+      toast.current.show({
+        severity: "success",
+        summary: "Login Successful",
+        detail: "Welcome to the Organization Dashboard",
+        life: 3000,
+      });
+      console.log(info);
+      setError(null);
+      localStorage.setItem("orgToken",info.token);
+      navigate("/org/dashboard");
+    } catch (error) {
+      setError(error);
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: error.response?.data?.message || error.message,
+        life: 3000,
+      });
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const reSend = async () => {
+    if (email == undefined || email == "") {
       toast.current.show({
         severity: "warn",
         summary: t("auth.warningTitle"),
@@ -68,36 +98,27 @@ export default function OrgLoginForm1() {
       });
       return;
     }
-    
+
     try {
       setLoading(true);
-      
-
-
-    }catch(error){
+    } catch (error) {
       setError(error);
-     toast.current.show({
-            severity: "error",
-            summary: "Error",
-            detail: error.response?.data?.message || error.message,
-            life: 3000,
-          });
-    }finally{
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: error.response?.data?.message || error.message,
+        life: 3000,
+      });
+    } finally {
       setLoading(false);
     }
-
-
-
-  }
-
-
-
+  };
 
   return (
     <form
       className=" w-[95%] md:w-[85%] lg:w-[40%] "
       action=""
-      onSubmit={handleSubmit(sendEmail)}
+      onSubmit={handleSubmit(login)}
     >
       <div className="inputs flex flex-col gap-6">
         <div className="input flex flex-col gap-1.5 ">
@@ -126,31 +147,29 @@ export default function OrgLoginForm1() {
             required
           />
         </div>
-        {
-          checked&&
+        {checked && (
           <div className="input flex flex-col gap-1.5 ">
-          <label className="text-lg font-normal" htmlFor="email">
-            {t("auth.otpLabel")}
-          </label>
-          
-          <div className="flex items-center justify-center">
-          <InputOtp
-            required
-            className="mt-10"
-            length={8}
-            value={token}
-            onChange={(e) => setTokens(e.value)}
-          />
+            <label className="text-lg font-normal" htmlFor="email">
+              {t("auth.otpLabel")}
+            </label>
+
+            <div className="flex items-center justify-center">
+              <InputOtp
+                required
+                className="mt-10"
+                length={8}
+                value={token}
+                onChange={(e) => setTokens(e.value)}
+              />
+            </div>
+            <Button
+              text
+              label={t("auth.resendOtp")}
+              type="button"
+              onClick={reSend}
+            />
           </div>
-          <Button
-          text
-          label={t("auth.resendOtp")}
-          type="button"
-          onClick={reSend}
-          />
-        </div>
-        }
-        
+        )}
       </div>
       <div className="buttons  flex items-start justify-between mt-10">
         <Button

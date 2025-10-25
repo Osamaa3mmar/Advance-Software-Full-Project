@@ -80,10 +80,18 @@ export class OrganizationService {
 
       // Mark code as used
       await VerificationCodesRepository.markCodeAsUsed(verificationCode.id);
-
+      const org=await OrganizationRepository.getOrganizationByEmail(email);
+      const tokenTemplate={
+        name:org.name,
+        id:org.id,
+        type:org.type,
+        isActive:org.is_active
+      }
+      const token=jwt.sign(tokenTemplate,"healthpal");
       return {
         success: true,
         message: "Organization setup completed successfully",
+        token:token
       };
     // } catch (error) {
     //   return { success: false, message: "Server error", error };
