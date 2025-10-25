@@ -29,6 +29,18 @@ class AdminInfoServices {
   static getAllOrganizations = async () => {
     return await OrganizationRepository.getAllOrganizations(false);
   }
+  static deleteOrganization = async (id) => {
+    try {
+      const organization = await OrganizationRepository.getOrganizationById(id);
+      if (!organization) {
+        return { success: false, message: "Organization not found" };
+      }
+      await OrganizationRepository.deleteOrganizationById(id);
+      return { success: true, message: "Organization deleted successfully" };
+    } catch (error) {
+      return { success: false, message: "Server Error", error };
+    }
+  };
 }
 
 export default AdminInfoServices;

@@ -1,17 +1,17 @@
 import { Card } from "primereact/card";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import ToastContext from "../../Context/Toast";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Dialog } from "primereact/dialog";
 import AddOrganizationForm from "../../Components/Organization/AddOrganizationForm";
 import axios from "axios";
+import { Button } from "primereact/button";
 export default function DashboardPage() {
   const { t } = useTranslation();
   const { toast } = useContext(ToastContext);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
   const [showAddOrgDialog, setShowAddOrgDialog] = useState(false);
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -41,7 +41,7 @@ export default function DashboardPage() {
       color: "bg-purple-500",
     },
   ];
-  const getData = async () => {
+  const getData = useCallback(async () => {
     try {
       setLoading(true);
       await delay(1000);
@@ -52,7 +52,6 @@ export default function DashboardPage() {
       });
       setData(data.data);
     } catch (error) {
-      setError(error);
       console.log(error);
       toast.current.show({
         severity: "error",
@@ -63,10 +62,10 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
   useEffect(() => {
     getData();
-  }, []);
+  }, [getData]);
   return (
     <div className="space-y-6">
       {/* Page Title */}
@@ -111,7 +110,7 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Charts Row */}
+      {/* Right Column */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card
           title={t("admin.quickActions.title")}
@@ -143,48 +142,91 @@ export default function DashboardPage() {
         </Card>
 
         <Card
-          title={t("admin.recentActivity.title")}
+          title={t("admin.recentPending.title")}
           className="shadow-sm border border-slate-200"
         >
-          <div className="space-y-4">
-            {[
+          {(() => {
+            const typeIcon = {
+              PATIENT_RECORD: "pi pi-file-pdf text-red-500",
+              HEALTH_GUIDE: "pi pi-book text-green-600",
+              DOCTOR_CERTIFICATE: "pi pi-id-card text-purple-600",
+              OTHER: "pi pi-file text-slate-600",
+            };
+            const pending = [
               {
-                text: t("admin.recentActivity.newOrg"),
-                time: "2 " + t("admin.recentActivity.hoursAgo"),
-                icon: "pi-building",
+                id: 201,
+                name: "Patient-Record-009.pdf",
+                type: "PATIENT_RECORD",
+                uploadedBy: "Nour",
+                uploadedAt: "2025-10-23T10:00:00Z",
+                url: "https://res.cloudinary.com/demo/image/upload/v1690000000/samples/pdf-sample.pdf",
               },
               {
-                text: t("admin.recentActivity.guidePublished"),
-                time: "5 " + t("admin.recentActivity.hoursAgo"),
-                icon: "pi-book",
+                id: 202,
+                name: "Healthy-Diet-Guide.pdf",
+                type: "HEALTH_GUIDE",
+                uploadedBy: "Sarah",
+                uploadedAt: "2025-10-23T09:40:00Z",
+                url: "https://res.cloudinary.com/demo/image/upload/v1690000000/samples/landscapes/nature-mountains.jpg",
               },
               {
-                text: t("admin.recentActivity.alertTriggered"),
-                time: "1 " + t("admin.recentActivity.dayAgo"),
-                icon: "pi-bell",
+                id: 203,
+                name: "Doctor-Certificate-777.png",
+                type: "DOCTOR_CERTIFICATE",
+                uploadedBy: "Dr. Ali",
+                uploadedAt: "2025-10-22T18:20:00Z",
+                url: "https://res.cloudinary.com/demo/video/upload/v1690000000/samples/sea-turtle.mp4",
               },
               {
-                text: t("admin.recentActivity.userCreated"),
-                time: "2 " + t("admin.recentActivity.daysAgo"),
-                icon: "pi-user",
+                id: 204,
+                name: "Misc-Notes.docx",
+                type: "OTHER",
+                uploadedBy: "Admin",
+                uploadedAt: "2025-10-22T08:05:00Z",
+                url: "https://res.cloudinary.com/demo/raw/upload/v1690000000/samples/sample.docx",
               },
-            ].map((activity, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg transition-colors"
-              >
-                <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">
-                  <i className={`pi ${activity.icon} text-slate-600`}></i>
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-slate-800">
-                    {activity.text}
-                  </p>
-                  <p className="text-xs text-slate-500">{activity.time}</p>
-                </div>
+            ]
+              .sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))
+              .slice(0, 4);
+
+            return (
+              <div className="space-y-3">
+                {pending.map((f) => (
+                  <div
+                    key={f.id}
+                    className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg transition-colors"
+                  >
+                    <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
+                      <i className={`${typeIcon[f.type]} text-lg`}></i>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-slate-800 truncate">
+                        {f.name}
+                      </p>
+                      <p className="text-xs text-slate-500">
+                        {t("admin.files.filterType")
+                          .replace(":", "")
+                          .replace("by type", "")}{" "}
+                        {/* fallback small label context */}{" "}
+                        {f.type.replace("_", " ")}
+                        {" • "}
+                        {new Date(f.uploadedAt).toLocaleString()}
+                        {" • "}
+                        {f.uploadedBy}
+                      </p>
+                    </div>
+                    <Button
+                      label={t("admin.files.open")}
+                      icon="pi pi-external-link"
+                      onClick={() => window.open(f.url, "_blank", "noopener")}
+                      size="small"
+                      outlined
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            );
+          })()}
         </Card>
       </div>
 

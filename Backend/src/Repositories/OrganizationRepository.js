@@ -83,6 +83,9 @@ export class OrganizationRepository {
     return rows;
   }
 
+  static deleteOrganizationById = async (orgId) => {
+    await connection.query("DELETE FROM organizations WHERE id = ?", [orgId]);
+  };
 
 
 }

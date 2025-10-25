@@ -68,7 +68,29 @@
             "healthGuides": "الأدلة الصحية",
             "alerts": "التنبيهات",
             "organizations": "المنظمات",
+            "files": "الملفات",
             "groups": "المجموعات"
+        },
+        "files": {
+            "title": "الملفات",
+            "searchPlaceholder": "ابحث بالاسم أو الرافع...",
+            "filterStatus": "تصفية حسب الحالة",
+            "filterType": "تصفية حسب النوع",
+            "allFiles": "الذهاب إلى كل الملفات",
+            "open": "فتح",
+            "changeStatus": "تغيير الحالة",
+            "noFiles": "لا توجد ملفات",
+            "status": {
+                "approved": "مقبول",
+                "pending": "قيد المراجعة",
+                "rejected": "مرفوض"
+            },
+            "type": {
+                "patientRecord": "سجل مريض",
+                "healthGuide": "دليل صحي",
+                "doctorCertificate": "شهادة طبيب",
+                "other": "أخرى"
+            }
         },
         "logout": "تسجيل الخروج",
         "stats": {
@@ -80,15 +102,8 @@
         "charts": {
             "donations": "التبرعات"
         },
-        "recentActivity": {
-            "title": "النشاط الأخير",
-            "newOrg": "تسجيل منظمة جديدة",
-            "guidePublished": "نشر دليل صحي",
-            "alertTriggered": "تفعيل تنبيه النظام",
-            "userCreated": "إنشاء حساب مستخدم",
-            "hoursAgo": "منذ ساعات",
-            "dayAgo": "منذ يوم",
-            "daysAgo": "منذ أيام"
+        "recentPending": {
+            "title": "أحدث الملفات قيد المراجعة"
         },
         "quickActions": {
             "title": "إجراءات سريعة",

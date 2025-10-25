@@ -68,7 +68,29 @@
             "healthGuides": "Health Guides",
             "alerts": "Alerts",
             "organizations": "Organizations",
+            "files": "Files",
             "groups": "Groups"
+        },
+        "files": {
+            "title": "Files",
+            "searchPlaceholder": "Search by name or uploader...",
+            "filterStatus": "Filter by status",
+            "filterType": "Filter by type",
+            "allFiles": "Go to all files",
+            "open": "Open",
+            "changeStatus": "Change status",
+            "noFiles": "No files found",
+            "status": {
+                "approved": "Approved",
+                "pending": "Pending",
+                "rejected": "Rejected"
+            },
+            "type": {
+                "patientRecord": "Patient Record",
+                "healthGuide": "Health Guide",
+                "doctorCertificate": "Doctor Certificate",
+                "other": "Other"
+            }
         },
         "logout": "Logout",
         "stats": {
@@ -80,15 +102,8 @@
         "charts": {
             "donations": "Donations"
         },
-        "recentActivity": {
-            "title": "Recent Activity",
-            "newOrg": "New organization registered",
-            "guidePublished": "Health guide published",
-            "alertTriggered": "System alert triggered",
-            "userCreated": "User account created",
-            "hoursAgo": "hours ago",
-            "dayAgo": "day ago",
-            "daysAgo": "days ago"
+        "recentPending": {
+            "title": "Recent Pending Files"
         },
         "quickActions": {
             "title": "Quick Actions",

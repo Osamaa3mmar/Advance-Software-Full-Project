@@ -85,8 +85,9 @@ export default function OrganizationsPage() {
       icon: "pi pi-exclamation-triangle",
       accept: async () => {
         try {
+            setLoading(true);
           await axios.delete(
-            `http://localhost:5555/api/admin/organizations/${orgId}`,
+            `http://localhost:5555/api/admin/organization/delete/${orgId}`,
             {
               headers: {
                 Authorization: localStorage.getItem("token"),
@@ -109,6 +110,8 @@ export default function OrganizationsPage() {
               error.response?.data?.message || "Failed to delete organization",
             life: 3000,
           });
+        } finally {
+          setLoading(false);
         }
       },
     });

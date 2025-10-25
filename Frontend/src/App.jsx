@@ -14,6 +14,7 @@ import VerifyPage from "./Page/Auth/VerifyPage";
 import OrganizationLogin from "./Page/Auth/OrganizationLogin";
 import DashboardPage from "./Page/Admin/DashboardPage";
 import OrganizationsPage from "./Page/Admin/OrganizationsPage";
+import FilesPage from "./Page/Admin/FilesPage";
 
 export default function App() {
   const value = {
@@ -79,6 +80,10 @@ export default function App() {
         {
           path: "organizations",
           element: <OrganizationsPage />,
+        },
+        {
+          path: "files",
+          element: <FilesPage />,
         },
         {
           path: "groups",
