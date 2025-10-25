@@ -187,13 +187,10 @@ export class AuthService {
         return { success: false, message: "Invalid or expired reset code" };
       }
 
-      // Hash the new password
       const hashedPassword = bcrypt.hashSync(newPassword, 8);
 
-      // Update password
       await AuthRepository.updatePassword(user.id, hashedPassword);
 
-      // Mark code as used
       await VerificationCodesRepository.markCodeAsUsed(verificationCode.id);
 
       return {
@@ -204,138 +201,6 @@ export class AuthService {
       return { success: false, message: "Server error", error };
     }
   };
-
-  
-  // static updateOrganizationProfile = async (
-  //   orgId,
-  //   updateData,
-  //   profileImage
-  // ) => {
-  //   try {
-  //     const currentOrg = await AuthRepository.getOrganizationById(orgId);
-  //     if (!currentOrg) {
-  //       return { success: false, message: "Organization not found" };
-  //     }
-
-  //     const updateFields = {};
-
-  //     if (updateData.name) {
-  //       if (updateData.name.length < 3 || updateData.name.length > 255) {
-  //         return {
-  //           success: false,
-  //           message: "Name must be between 3 and 255 characters",
-  //         };
-  //       }
-  //       updateFields.name = updateData.name;
-  //     }
-
-  //     if (updateData.email) {
-  //       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //       if (!emailRegex.test(updateData.email)) {
-  //         return { success: false, message: "Invalid email format" };
-  //       }
-
-  //       // Check if email is already used by another organization
-  //       const isUsed = await AuthRepository.isOrganizationEmailUsed(
-  //         updateData.email
-  //       );
-  //       if (isUsed > 0 && currentOrg.email !== updateData.email) {
-  //         return { success: false, message: "Email is already in use" };
-  //       }
-  //       updateFields.email = updateData.email;
-  //     }
-
-  //     if (updateData.type) {
-  //       const validTypes = [
-  //         "HOSPITAL",
-  //         "PHARMACY",
-  //         "CLINIC",
-  //         "LABORATORY",
-  //         "CHARITY",
-  //         "BLOOD_BANK",
-  //         "OTHER",
-  //       ];
-  //       if (!validTypes.includes(updateData.type)) {
-  //         return { success: false, message: "Invalid organization type" };
-  //       }
-  //       updateFields.type = updateData.type;
-  //     }
-
-  //     if (updateData.phone_number) {
-  //       const phoneRegex = /^\+?[\d\s-]{8,}$/;
-  //       if (!phoneRegex.test(updateData.phone_number)) {
-  //         return { success: false, message: "Invalid phone number format" };
-  //       }
-  //       updateFields.phone_number = updateData.phone_number;
-  //     }
-
-  //     if (updateData.street) {
-  //       if (updateData.street.length > 255) {
-  //         return { success: false, message: "Street address is too long" };
-  //       }
-  //       updateFields.street = updateData.street;
-  //     }
-
-  //     if (updateData.city) {
-  //       if (updateData.city.length > 100) {
-  //         return { success: false, message: "City name is too long" };
-  //       }
-  //       updateFields.city = updateData.city;
-  //     }
-
-  //     // Handle profile image upload if provided
-  //     if (profileImage) {
-  //       try {
-  //         // Delete old profile image from Cloudinary if exists
-  //         if (currentOrg.profile_image_url) {
-  //           const publicId = currentOrg.profile_image_url
-  //             .split("/")
-  //             .pop()
-  //             .split(".")[0];
-  //           await cloudinary.uploader.destroy(publicId);
-  //         }
-
-  //         // Upload new image
-  //         const result = await cloudinary.uploader.upload(profileImage.path, {
-  //           folder: "organization_profiles",
-  //         });
-  //         updateFields.profile_image_url = result.secure_url;
-  //       } catch (uploadError) {
-  //         console.error("Image upload error:", uploadError);
-  //         return { success: false, message: "Failed to upload profile image" };
-  //       }
-  //     }
-
-  //     if (Object.keys(updateFields).length === 0) {
-  //       return { success: false, message: "No valid fields to update" };
-  //     }
-
-  //     // Update organization
-  //     await AuthRepository.updateOrganization(orgId, updateFields);
-
-  //     // Get updated organization data
-  //     const updatedOrg = await AuthRepository.getOrganizationById(orgId);
-
-  //     return {
-  //       success: true,
-  //       message: "Organization profile updated successfully",
-  //       organization: {
-  //         id: updatedOrg.id,
-  //         name: updatedOrg.name,
-  //         email: updatedOrg.email,
-  //         type: updatedOrg.type,
-  //         phone_number: updatedOrg.phone_number,
-  //         profile_image_url: updatedOrg.profile_image_url,
-  //         street: updatedOrg.street,
-  //         city: updatedOrg.city,
-  //         is_active: updatedOrg.is_active,
-  //       },
-  //     };
-  //   } catch (error) {
-  //     console.error("Update organization error:", error);
-  //     return { success: false, message: "Server error", error };
-  //   }
-  // };
 
 
 }

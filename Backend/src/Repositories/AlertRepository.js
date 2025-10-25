@@ -72,5 +72,11 @@ return result.map((alert)=>({
 }))
 }
 
+  static getTotalAlertsCount=async()=>
+{
+   const [rows]=await connection.query("SELECT COUNT(*) as count FROM alerts");
+   return rows[0].count;
+
+}
 
 }

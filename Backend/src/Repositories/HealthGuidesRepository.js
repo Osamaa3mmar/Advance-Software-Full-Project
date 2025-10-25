@@ -160,8 +160,13 @@ static getGuideById=async(guideId)=>
    return { data: result };
 }
 
+static getTotalGuidesCount=async()=>
+{
+   const [rows]=await connection.query("SELECT COUNT(*) as count FROM health_guides");
+   return rows[0].count;
 
 };
+}
 
 
 

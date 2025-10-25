@@ -6,4 +6,8 @@ export class UsersRepository {
         const [rows]=await connection.query("SELECT * FROM users");
         return rows;
     }
+    static getAllUsersCount=async()=>{
+        const [rows]=await connection.query("SELECT COUNT(*) as count FROM users");
+        return rows[0].count;
+    }
 }

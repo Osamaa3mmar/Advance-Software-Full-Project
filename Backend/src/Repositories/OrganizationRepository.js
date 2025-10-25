@@ -61,4 +61,10 @@ export class OrganizationRepository {
       [hashedPassword, orgId]
     );
   };
+  static getAllOrganizationsCount = async () => {
+    const [rows] = await connection.query(
+      "SELECT COUNT(*) as count FROM organizations"
+    );
+    return rows[0].count;
+  }
 }

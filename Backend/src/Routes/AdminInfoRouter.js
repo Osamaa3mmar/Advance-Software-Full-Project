@@ -1,0 +1,14 @@
+import { Router } from "express";
+import { isLogin } from "../Middleware/IsLogin.js";
+import { isAdmin } from "../Middleware/IsAdmin.js";
+import adminInfoController from "../Controllers/AdminControllers.js";
+
+const AdminInfoRouter=Router();
+
+
+
+AdminInfoRouter.get("/info",isLogin,isAdmin,adminInfoController.getSummerize);
+
+
+
+export default AdminInfoRouter;
