@@ -2,7 +2,7 @@ import { Button } from "primereact/button";
 import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-
+import logo from "../../assets/HpLogo.png"
 export default function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -72,11 +72,10 @@ export default function Sidebar({ isOpen, onClose }) {
         {/* Header */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center font-bold text-lg text-white">
-              A
-            </div>
+            <img src={logo} className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center font-bold text-lg text-white"/>
+             
             <span className="font-semibold text-lg text-slate-800">
-              {t("admin.panel")}
+              HealthPal
             </span>
           </div>
         </div>

@@ -13,6 +13,7 @@ import ResetPassword from "./Page/Auth/ResetPassword";
 import VerifyPage from "./Page/Auth/VerifyPage";
 import OrganizationLogin from "./Page/Auth/OrganizationLogin";
 import DashboardPage from "./Page/Admin/DashboardPage";
+import OrganizationsPage from "./Page/Admin/OrganizationsPage";
 
 export default function App() {
   const value = {
@@ -77,7 +78,7 @@ export default function App() {
         },
         {
           path: "organizations",
-          element: <div>Organizations Page - Coming Soon</div>,
+          element: <OrganizationsPage />,
         },
         {
           path: "groups",
