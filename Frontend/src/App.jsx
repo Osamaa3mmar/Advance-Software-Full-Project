@@ -79,6 +79,10 @@ export default function App() {
           path: "organizations",
           element: <div>Organizations Page - Coming Soon</div>,
         },
+        {
+          path: "groups",
+          element: <div>Groups Page - Coming Soon</div>,
+        },
       ],
     },
   ]);

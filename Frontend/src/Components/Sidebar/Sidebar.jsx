@@ -1,31 +1,38 @@
 import { Button } from "primereact/button";
 import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const menuItems = [
     {
-      label: "Dashboard",
+      label: t("admin.navigation.dashboard"),
       icon: "pi pi-home",
       path: "/admin/dashboard",
     },
     {
-      label: "Health Guides",
+      label: t("admin.navigation.healthGuides"),
       icon: "pi pi-book",
       path: "/admin/health-guides",
     },
     {
-      label: "Alerts",
+      label: t("admin.navigation.alerts"),
       icon: "pi pi-bell",
       path: "/admin/alerts",
     },
     {
-      label: "Organizations",
+      label: t("admin.navigation.organizations"),
       icon: "pi pi-building",
       path: "/admin/organizations",
+    },
+    {
+      label: t("admin.navigation.groups"),
+      icon: "pi pi-users",
+      path: "/admin/groups",
     },
   ];
 
@@ -69,7 +76,7 @@ export default function Sidebar({ isOpen, onClose }) {
               A
             </div>
             <span className="font-semibold text-lg text-slate-800">
-              Admin Panel
+              {t("admin.panel")}
             </span>
           </div>
         </div>
@@ -100,7 +107,7 @@ export default function Sidebar({ isOpen, onClose }) {
         {/* Logout Button */}
         <div className="p-4 border-t border-slate-200">
           <Button
-            label="Logout"
+            label={t("admin.logout")}
             icon="pi pi-sign-out"
             onClick={handleLogout}
             className="w-full justify-center"

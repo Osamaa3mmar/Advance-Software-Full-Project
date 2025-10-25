@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Avatar } from "primereact/avatar";
+import { useTranslation } from "react-i18next";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import LanguageToggle from "../Components/LanguageToggle/LanguageToggle";
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -30,7 +32,7 @@ export default function AdminLayout() {
               aria-label="Toggle sidebar"
             />
             <h1 className="text-xl font-semibold text-slate-800 hidden sm:block">
-              Dashboard
+              {t("admin.dashboard")}
             </h1>
           </div>
 

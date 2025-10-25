@@ -1,14 +1,14 @@
 {
     "auth": {
-        "org":{
-            "headerMessage":"صفحة تسجيل دخول المنظمات "
+        "org": {
+            "headerMessage": "صفحة تسجيل دخول المنظمات "
         },
-        "warningMessage":"الرجاء إدخال بريدك الإلكتروني أولاً",
-        "warningTitle":"تحذير",
+        "warningMessage": "الرجاء إدخال بريدك الإلكتروني أولاً",
+        "warningTitle": "تحذير",
         "firstLogin": "تسجيل الدخول لأول مرة",
-        "resendOtp":"إعادة إرسال رمز التحقق",
-        "loginMessage":"الرجاء إدخال بياناتك لتسجيل الدخول.",
-        "signupMessage":"الرجاء ملء التفاصيل لإنشاء حساب.",
+        "resendOtp": "إعادة إرسال رمز التحقق",
+        "loginMessage": "الرجاء إدخال بياناتك لتسجيل الدخول.",
+        "signupMessage": "الرجاء ملء التفاصيل لإنشاء حساب.",
         "email": "البريد الإلكتروني",
         "password": "كلمة المرور",
         "resetPassword": "إعادة تعيين كلمة المرور",
@@ -57,5 +57,44 @@
     },
     "common": {
         "or": "أو"
+    },
+    "admin": {
+        "panel": "لوحة الإدارة",
+        "dashboard": "لوحة التحكم",
+        "dashboardTitle": "نظرة عامة على لوحة التحكم",
+        "dashboardSubtitle": "مرحباً بعودتك! إليك ما يحدث اليوم.",
+        "navigation": {
+            "dashboard": "لوحة التحكم",
+            "healthGuides": "الأدلة الصحية",
+            "alerts": "التنبيهات",
+            "organizations": "المنظمات",
+            "groups": "المجموعات"
+        },
+        "logout": "تسجيل الخروج",
+        "stats": {
+            "totalUsers": "إجمالي المستخدمين",
+            "healthGuides": "الأدلة الصحية",
+            "activeAlerts": "التنبيهات النشطة",
+            "organizations": "المنظمات"
+        },
+        "charts": {
+            "donations": "التبرعات"
+        },
+        "recentActivity": {
+            "title": "النشاط الأخير",
+            "newOrg": "تسجيل منظمة جديدة",
+            "guidePublished": "نشر دليل صحي",
+            "alertTriggered": "تفعيل تنبيه النظام",
+            "userCreated": "إنشاء حساب مستخدم",
+            "hoursAgo": "منذ ساعات",
+            "dayAgo": "منذ يوم",
+            "daysAgo": "منذ أيام"
+        },
+        "quickActions": {
+            "title": "إجراءات سريعة",
+            "addGuide": "إضافة دليل صحي",
+            "createAlert": "إنشاء تنبيه",
+            "addOrg": "إضافة منظمة"
+        }
     }
 }

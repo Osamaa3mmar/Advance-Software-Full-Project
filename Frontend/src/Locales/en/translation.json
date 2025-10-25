@@ -1,14 +1,14 @@
 {
     "auth": {
-        "org":{
-            "headerMessage":"Organization Login Page "
+        "org": {
+            "headerMessage": "Organization Login Page "
         },
-        "warningMessage":"Please enter your email first",
-        "warningTitle":"Warning",
-        "resendOtp":"Resend verification code .",
+        "warningMessage": "Please enter your email first",
+        "warningTitle": "Warning",
+        "resendOtp": "Resend verification code .",
         "firstLogin": "First Login",
-        "loginMessage":"Please enter your credentials to log in.",
-        "signupMessage":"Please fill in the details to create an account.",
+        "loginMessage": "Please enter your credentials to log in.",
+        "signupMessage": "Please fill in the details to create an account.",
         "email": "Email",
         "password": "Password",
         "resetPassword": "Reset Password",
@@ -57,5 +57,44 @@
     },
     "common": {
         "or": "OR"
+    },
+    "admin": {
+        "panel": "Admin Panel",
+        "dashboard": "Dashboard",
+        "dashboardTitle": "Dashboard Overview",
+        "dashboardSubtitle": "Welcome back! Here's what's happening today.",
+        "navigation": {
+            "dashboard": "Dashboard",
+            "healthGuides": "Health Guides",
+            "alerts": "Alerts",
+            "organizations": "Organizations",
+            "groups": "Groups"
+        },
+        "logout": "Logout",
+        "stats": {
+            "totalUsers": "Total Users",
+            "healthGuides": "Health Guides",
+            "activeAlerts": "Active Alerts",
+            "organizations": "Organizations"
+        },
+        "charts": {
+            "donations": "Donations"
+        },
+        "recentActivity": {
+            "title": "Recent Activity",
+            "newOrg": "New organization registered",
+            "guidePublished": "Health guide published",
+            "alertTriggered": "System alert triggered",
+            "userCreated": "User account created",
+            "hoursAgo": "hours ago",
+            "dayAgo": "day ago",
+            "daysAgo": "days ago"
+        },
+        "quickActions": {
+            "title": "Quick Actions",
+            "addGuide": "Add Health Guide",
+            "createAlert": "Create Alert",
+            "addOrg": "Add Organization"
+        }
     }
 }
