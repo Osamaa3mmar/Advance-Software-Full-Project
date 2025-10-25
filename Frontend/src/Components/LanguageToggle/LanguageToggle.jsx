@@ -20,8 +20,17 @@ export default function LanguageToggle() {
     if (toggleLanguage) toggleLanguage();
   }, [language, i18n, toggleLanguage, changeLanguage]);
 
- 
-
+  // keyboard shortcut: Alt+L toggles language
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.altKey && (e.key === "l" || e.key === "L")) {
+        e.preventDefault();
+        handleLanguageChange();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [handleLanguageChange]);
 
   return (
     <Button

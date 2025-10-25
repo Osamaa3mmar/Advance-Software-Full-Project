@@ -1,8 +1,9 @@
 import { PrimeReactProvider } from "primereact/api";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthLayout from "./Layout/AuthLayout";
+import AdminLayout from "./Layout/AdminLayout";
 import LoginPage from "./Page/Auth/LoginPage";
-import 'primeicons/primeicons.css';
+import "primeicons/primeicons.css";
 import SignupPage from "./Page/Auth/SignupPage";
 import { useContext } from "react";
 import ToastContext from "./Context/Toast";
@@ -11,12 +12,13 @@ import { LanguageProvider } from "./Context/LanguageContext";
 import ResetPassword from "./Page/Auth/ResetPassword";
 import VerifyPage from "./Page/Auth/VerifyPage";
 import OrganizationLogin from "./Page/Auth/OrganizationLogin";
+import DashboardPage from "./Page/Admin/DashboardPage";
 
 export default function App() {
   const value = {
     ripple: true,
   };
-    const { toast } = useContext(ToastContext);
+  const { toast } = useContext(ToastContext);
 
   const router = createBrowserRouter([
     //auth
@@ -24,59 +26,69 @@ export default function App() {
       path: "/",
       element: <AuthLayout />,
       children: [
-        { path: "", element: <LoginPage/> },
-        { path:"/login",element:<LoginPage/>},
-        { path:"/signup",element:<SignupPage/>},
-        { path:"/reset-password",element:<ResetPassword/>},
-        { path:"/verify/:code",element:<VerifyPage/>},
-        { path:"/login/organaization",element:<OrganizationLogin/>},
-
+        { path: "", element: <LoginPage /> },
+        { path: "/login", element: <LoginPage /> },
+        { path: "/signup", element: <SignupPage /> },
+        { path: "/reset-password", element: <ResetPassword /> },
+        { path: "/verify/:code", element: <VerifyPage /> },
+        { path: "/login/organaization", element: <OrganizationLogin /> },
       ],
-    },{
-      path:"/main",
-      element:<div>Main App Here</div>,
-      children:[{
-        path:"home",
-        element:<div>Home Page</div>
-
-      }]
     },
     {
-      path:"/org",
-      element:<div>Organization App Here</div>,
-      children:[
+      path: "/main",
+      element: <div>Main App Here</div>,
+      children: [
         {
-          path:"dashboard",
-          element:<div>Organization Dashboard</div>
+          path: "home",
+          element: <div>Home Page</div>,
         },
-        {
-
-        }
-      ]
-
+      ],
     },
     {
-      path:"/admin",
-      element:<div>Admin App Here</div>,
-      children:[
+      path: "/org",
+      element: <div>Organization App Here</div>,
+      children: [
         {
-          path:"dashboard",
-          element:<div>Admin Dashboard</div>
+          path: "dashboard",
+          element: <div>Organization Dashboard</div>,
+        },
+        {},
+      ],
+    },
+    {
+      path: "/admin",
+      element: <AdminLayout />,
+      children: [
+        {
+          path: "",
+          element: <DashboardPage />,
         },
         {
-
-        }
-      ]
-    }
-
+          path: "dashboard",
+          element: <DashboardPage />,
+        },
+        {
+          path: "health-guides",
+          element: <div>Health Guides Page - Coming Soon</div>,
+        },
+        {
+          path: "alerts",
+          element: <div>Alerts Page - Coming Soon</div>,
+        },
+        {
+          path: "organizations",
+          element: <div>Organizations Page - Coming Soon</div>,
+        },
+      ],
+    },
   ]);
 
   return (
     <PrimeReactProvider value={value}>
-      <LanguageProvider>  
-      <RouterProvider router={router} />
-      <Toast ref={toast}/>
-    </LanguageProvider>
+      <LanguageProvider>
+        <RouterProvider router={router} />
+        <Toast ref={toast} />
+      </LanguageProvider>
     </PrimeReactProvider>
   );
 }
