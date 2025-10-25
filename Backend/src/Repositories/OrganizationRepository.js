@@ -10,12 +10,13 @@ export class OrganizationRepository {
   };
   static createOrganization = async (organization) => {
     let [rows] = await connection.query(
-      "INSERT INTO organizations (name, email, type, is_active) VALUES (?, ?, ?, ?)",
+      "INSERT INTO organizations (name, email, type, is_active,	profile_image_url) VALUES (?, ?, ?, ?,?)",
       [
         organization.name,
         organization.email,
         organization.type,
         organization.is_active,
+        organization.profile_image_url
       ]
     );
     return rows;
@@ -67,4 +68,21 @@ export class OrganizationRepository {
     );
     return rows[0].count;
   }
+  static getAllOrganizations = async (active=true) => {
+    if(active){
+      const [rows] = await connection.query(
+        "SELECT id,name,email,type,is_active,profile_image_url,phone_number,created_at,city,street FROM organizations WHERE is_active=1"
+      );
+      return rows;
+    }
+    
+      const [rows] = await connection.query(
+        "SELECT id,name,email,type,is_active,profile_image_url,phone_number,created_at,city,street FROM organizations"
+      );
+    
+    return rows;
+  }
+
+
+
 }

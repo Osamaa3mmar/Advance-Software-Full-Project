@@ -7,7 +7,7 @@ class OrganizationController {
       const response = await OrganizationService.createOrganization(
         name,
         email,
-        type
+        type, req.files.org_image
       );
       if (response.success) {
         return res.status(201).json({ message: response.message });
@@ -89,6 +89,15 @@ class OrganizationController {
     } catch (error) {
       return res.status(500).json({ message: "Server Error", error });
     }
+  };
+  getAllOrganizations = async (req, res) => {
+    try {
+      const organizations = await OrganizationService.getAllOrganizations();
+      return res.status(200).json({ message: "Success", organizations });
+    } catch (error) {
+      return res.status(500).json({ message: "Server Error", error });
+    }
+
   };
 }
 const organizationController = new OrganizationController();

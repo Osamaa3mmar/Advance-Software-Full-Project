@@ -7,6 +7,7 @@ import groupRoutes from "./Routes/groupRouter.js"
 import groupMessagesRouter from "./Routes/groupMessagesRouter.js"
 import orgRouter from "./Routes/OrganizationRouter.js";
 import AdminInfoRouter from "./Routes/AdminInfoRouter.js";
+import userRouter from "./Routes/UsersRouter.js";
 
 
 export const initControllers = (app) => {
@@ -17,7 +18,8 @@ export const initControllers = (app) => {
   app.use("/api/alerts", alertRoutes);
 app.use("/api/supportGroups",groupRoutes)
 app.use("/api/group/messages",groupMessagesRouter);
-app.use("/api/admin",AdminInfoRouter)
+app.use("/api/admin",AdminInfoRouter);
+app.use("/api/users",userRouter);
 };
 
 

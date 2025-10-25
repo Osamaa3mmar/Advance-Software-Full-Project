@@ -1,17 +1,19 @@
 import { Card } from "primereact/card";
 import { useContext, useEffect, useState } from "react";
-import {  useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import ToastContext from "../../Context/Toast";
-import { ProgressSpinner } from 'primereact/progressspinner';
-
+import { ProgressSpinner } from "primereact/progressspinner";
+import { Dialog } from "primereact/dialog";
+import AddOrganizationForm from "../../Components/Organization/AddOrganizationForm";
 import axios from "axios";
 export default function DashboardPage() {
   const { t } = useTranslation();
-  const {toast}=useContext(ToastContext);
-    const [loading,setLoading]=useState(false);
-    const [data,setData]=useState(null);
-    const [error,setError]=useState(null);
-      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const { toast } = useContext(ToastContext);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [showAddOrgDialog, setShowAddOrgDialog] = useState(false);
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const stats = [
     {
@@ -39,33 +41,32 @@ export default function DashboardPage() {
       color: "bg-purple-500",
     },
   ];
-  const getData=async()=>{
-    try{
-        
-        setLoading(true);
-        await delay(1000);
-        const {data}=await axios.get("http://localhost:5555/api/admin/info",{
-            headers:{
-                Authorization:localStorage.getItem("token")
-            }
-        });
-        setData(data.data);
-    }catch(error){
-        setError(error);
-        console.log(error);
-        toast.current.show({
-            severity: "error",
-            summary: "Error while fetching data",
-            detail: error.message,
-            life: 3000,
-          });
-    }finally{
-        setLoading(false);
+  const getData = async () => {
+    try {
+      setLoading(true);
+      await delay(1000);
+      const { data } = await axios.get("http://localhost:5555/api/admin/info", {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
+      setData(data.data);
+    } catch (error) {
+      setError(error);
+      console.log(error);
+      toast.current.show({
+        severity: "error",
+        summary: "Error while fetching data",
+        detail: error.message,
+        life: 3000,
+      });
+    } finally {
+      setLoading(false);
     }
-  }
-  useEffect(()=>{
+  };
+  useEffect(() => {
     getData();
-  },[])
+  }, []);
   return (
     <div className="space-y-6">
       {/* Page Title */}
@@ -79,22 +80,29 @@ export default function DashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
-          <Card key={index} className="shadow-sm border border-slate-200">
+          <Card
+            key={index}
+            className="shadow-sm border border-slate-200 hover:shadow-lg hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-600 mb-1">{stat.title}</p>
-                <h3 className="text-2xl font-bold text-slate-800">
-                    {loading?
-                <ProgressSpinner style={{width: '40px', height: '40px'}}   animationDuration=".5s" />
-                    :
-                   stat.value
-                   }
+                <p className="text-sm text-slate-600 mb-1 group-hover:text-slate-700 transition-colors">
+                  {stat.title}
+                </p>
+                <h3 className="text-2xl font-bold text-slate-800 group-hover:text-slate-900 transition-colors">
+                  {loading ? (
+                    <ProgressSpinner
+                      style={{ width: "30px", height: "30px" }}
+                      animationDuration=".5s"
+                    />
+                  ) : (
+                    stat.value
+                  )}
                   {}
-
                 </h3>
               </div>
               <div
-                className={`w-14 h-14 ${stat.color} rounded-xl flex items-center justify-center`}
+                className={`w-14 h-14 ${stat.color} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
               >
                 <i className={`${stat.icon} text-white text-2xl`}></i>
               </div>
@@ -122,7 +130,10 @@ export default function DashboardPage() {
                 {t("admin.quickActions.createAlert")}
               </p>
             </button>
-            <button className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all group">
+            <button
+              onClick={() => setShowAddOrgDialog(true)}
+              className="p-4 border-2 border-dashed border-slate-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all group"
+            >
               <i className="pi pi-building text-2xl text-slate-400 group-hover:text-purple-500 mb-2"></i>
               <p className="font-medium text-slate-700 group-hover:text-purple-600">
                 {t("admin.quickActions.addOrg")}
@@ -176,6 +187,23 @@ export default function DashboardPage() {
           </div>
         </Card>
       </div>
+
+      {/* Add Organization Dialog */}
+      <Dialog
+        header="Add New Organization"
+        visible={showAddOrgDialog}
+        style={{ width: "500px" }}
+        onHide={() => setShowAddOrgDialog(false)}
+        modal
+      >
+        <AddOrganizationForm
+          onSuccess={() => {
+            setShowAddOrgDialog(false);
+            getData(); // Refresh stats
+          }}
+          onCancel={() => setShowAddOrgDialog(false)}
+        />
+      </Dialog>
     </div>
   );
 }

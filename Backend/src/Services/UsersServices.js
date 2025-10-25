@@ -8,5 +8,7 @@ export class UsersServices {
         }
         return null;
     }
-
+    static getUserById=async(userId)=>{
+        return await UsersRepository.getUserById(userId);
+    }
 }

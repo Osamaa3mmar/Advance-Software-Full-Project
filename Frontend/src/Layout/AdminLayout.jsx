@@ -1,15 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Avatar } from "primereact/avatar";
 import { useTranslation } from "react-i18next";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import LanguageToggle from "../Components/LanguageToggle/LanguageToggle";
+import axios from "axios";
+
+import { Tooltip } from "primereact/tooltip";
 
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { t } = useTranslation();
-
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const getUser = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(
+        "http://localhost:5555/api/users/profile",
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+      setData(data.user);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
   return (
     <div className="min-h-screen bg-slate-100">
       {/* Sidebar */}
@@ -38,10 +64,16 @@ export default function AdminLayout() {
 
           <div className="flex items-center gap-3">
             <LanguageToggle />
+            <Tooltip target=".profile" position="bottom" />
             <Avatar
+              data-pr-tooltip={data?.first_name + " " + data?.last_name}
               icon="pi pi-user"
-              className="bg-blue-600 text-white"
+              className="bg-blue-600 text-white profile cursor-pointer"
               shape="circle"
+              image={data?.profile_image_url}
+              alt="User Image"
+              width="50"
+              height="50"
             />
           </div>
         </header>

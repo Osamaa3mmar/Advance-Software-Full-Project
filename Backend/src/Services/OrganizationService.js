@@ -4,9 +4,10 @@ import EmailSender from "../Utils/EmailSender.js";
 import { getResetPasswordTemplate } from "../HtmlTemplates/ResetPassword.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import cloudinary from "../Utils/cloudinary.js";
 export class OrganizationService {
 
- static createOrganization = async (name, email, type) => {
+ static createOrganization = async (name, email, type,image) => {
     // try {
       if (!name || !email || !type) {
         return {
@@ -14,7 +15,10 @@ export class OrganizationService {
           message: "Organization name, email, and type are required",
         };
       }
-
+      let orgImageurl=null;
+      if(image&&image.length>0){
+        orgImageurl=(await cloudinary.uploader.upload(image[0].path)).secure_url;
+      }
       let isUsedEmail = await OrganizationRepository.isOrganizationEmailUsed(email);
       if (isUsedEmail > 0) {
         return { success: false, message: "Email is already in use" };
@@ -24,7 +28,9 @@ export class OrganizationService {
         name,
         email,
         type,
-        is_active: false, 
+        is_active: false,
+        profile_image_url: orgImageurl
+
       });
       const code = Math.floor(10000000 + Math.random() * 90000000).toString();
 
@@ -239,4 +245,7 @@ export class OrganizationService {
       return { success: false, message: "Server error", error };
     }
   };
+  static getAllOrganizations=async()=>{
+    return await OrganizationRepository.getAllOrganizations();
+  }
 }

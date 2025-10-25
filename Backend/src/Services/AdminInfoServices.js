@@ -26,6 +26,9 @@ class AdminInfoServices {
       return { success: false, message: "Server Error", error };
     }
   };
+  static getAllOrganizations = async () => {
+    return await OrganizationRepository.getAllOrganizations(false);
+  }
 }
 
 export default AdminInfoServices;

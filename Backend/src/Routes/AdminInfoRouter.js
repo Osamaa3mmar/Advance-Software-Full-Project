@@ -8,7 +8,7 @@ const AdminInfoRouter=Router();
 
 
 AdminInfoRouter.get("/info",isLogin,isAdmin,adminInfoController.getSummerize);
-
+AdminInfoRouter.get("/organizations/all",isLogin,isAdmin,adminInfoController.getAllOrganizations);
 
 
 export default AdminInfoRouter;

@@ -10,4 +10,8 @@ export class UsersRepository {
         const [rows]=await connection.query("SELECT COUNT(*) as count FROM users");
         return rows[0].count;
     }
+    static getUserById=async(userId)=>{
+        const [rows]=await connection.query("SELECT * FROM users WHERE id=?",[userId]);
+        return rows[0];
+    }
 }
