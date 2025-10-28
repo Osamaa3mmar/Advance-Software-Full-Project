@@ -8,6 +8,7 @@ import { Toast } from "primereact/toast";
 import { Divider } from "primereact/divider";
 import ToastContext from "../../../Context/Toast";
 import { useTranslation } from "react-i18next";
+import { jwtDecode } from "jwt-decode";
 
 export default function LoginForm() {
   const { register, handleSubmit } = useForm();
@@ -36,7 +37,14 @@ export default function LoginForm() {
         detail: t("auth.login.success.detail"),
         life: 2000,
       });
-      navigate("/main/home");
+      const userRole = jwtDecode(data.token).role;
+      console.log(userRole);
+      if (userRole === "ADMIN") {
+        navigate("/admin/dashboard");
+        return;
+      } else {
+        navigate("/main/home");
+      }
     } catch (error) {
       console.log(error.response.data);
       toast.current.show({
@@ -113,7 +121,7 @@ export default function LoginForm() {
           size="small"
           label={t("auth.login.organizationButton")}
           outlined
-          onClick={()=>{
+          onClick={() => {
             navigate("/login/organaization");
           }}
         />

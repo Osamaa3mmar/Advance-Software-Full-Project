@@ -1,120 +1,145 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
-import { Tag } from "primereact/tag";
 import { Dropdown } from "primereact/dropdown";
 import { Skeleton } from "primereact/skeleton";
+import axios from "axios";
+import ToastContext from "../../Context/Toast";
+import { Tag } from "primereact/tag";
 
-const initialFakeFiles = [
-  {
-    id: 1,
-    name: "Patient-Record-001.pdf",
-    type: "PATIENT_RECORD",
-    status: "PENDING",
-    size: "1.2 MB",
-    uploadedBy: "Admin",
-    uploadedAt: "2025-10-20T10:24:00Z",
-    url: "https://res.cloudinary.com/demo/image/upload/v1690000000/samples/pdf-sample.pdf",
-  },
-  {
-    id: 2,
-    name: "Healthy-Diet-Guide.pdf",
-    type: "HEALTH_GUIDE",
-    status: "PENDING",
-    size: "820 KB",
-    uploadedBy: "Sarah",
-    uploadedAt: "2025-10-22T14:12:00Z",
-    url: "https://res.cloudinary.com/demo/image/upload/v1690000000/samples/landscapes/nature-mountains.jpg",
-  },
-  {
-    id: 3,
-    name: "Doctor-Certificate-123.png",
-    type: "DOCTOR_CERTIFICATE",
-    status: "APPROVED",
-    size: "12.4 MB",
-    uploadedBy: "Samir",
-    uploadedAt: "2025-10-21T08:00:00Z",
-    url: "https://res.cloudinary.com/demo/video/upload/v1690000000/samples/sea-turtle.mp4",
-  },
-  {
-    id: 4,
-    name: "Misc-Notes.docx",
-    type: "OTHER",
-    status: "REJECTED",
-    size: "340 KB",
-    uploadedBy: "Mona",
-    uploadedAt: "2025-10-19T09:45:00Z",
-    url: "https://res.cloudinary.com/demo/raw/upload/v1690000000/samples/sample.docx",
-  },
-];
-
-const statusSeverity = {
-  APPROVED: "success",
-  PENDING: "warning",
-  REJECTED: "danger",
-};
-
-const typeIcon = {
-  PATIENT_RECORD: "pi pi-file-pdf text-red-500",
-  HEALTH_GUIDE: "pi pi-book text-green-600",
-  DOCTOR_CERTIFICATE: "pi pi-id-card text-purple-600",
-  OTHER: "pi pi-file text-slate-600",
+const BASE_URL = "http://localhost:5555";
+const kindIcon = {
+  image: "pi pi-image text-blue-500",
+  pdf: "pi pi-file-pdf text-red-500",
+  video: "pi pi-video text-purple-600",
+  doc: "pi pi-file text-slate-600",
+  other: "pi pi-file text-slate-600",
 };
 
 export default function FilesPage() {
   const { t } = useTranslation();
-
+  const {toast}=useContext(ToastContext);
   const [status, setStatus] = useState(null);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const [updating, setUpdating] = useState({}); // { [id]: boolean }
+  console.log(files);
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      setLoading(true);
+  const fetchFiles = useCallback(async () => {
+    setLoading(true);
+    try {
       await delay(1000);
-      if (mounted) {
-        setFiles(initialFakeFiles);
-        setLoading(false);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
+      const { data } = await axios.get(`${BASE_URL}/api/documents/all`, {
+        headers: { Authorization: localStorage.getItem("token") },
+      });
+      console.log(data);
+      let tempFiles=data.files
+      // Expect array of { id, link, type, created_at, status }
+      const normalized = (Array.isArray(tempFiles) ? tempFiles : []).map((d) => ({
+        id: d.id,
+        link: d.link,
+        type: d.type,
+        created_at: d.created_at,
+        status: d.status, // e.g., "Pending" | "Approved" | "Rejected"
+      }));
+      setFiles(normalized);
+    } catch (e) {
+      console.error(e);
+      setFiles([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  useEffect(() => {
+    fetchFiles();
+  }, [fetchFiles]);
+
   const updateFileStatus = async (id, newStatus) => {
-    // Optimistic update; replace with API call when endpoint is provided
-    setFiles((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, status: newStatus } : f))
+    // newStatus expected: "Approved" | "Rejected" | "Pending"
+    setUpdating((u) => ({ ...u, [id]: true }));
+    const prev = files.find((f) => f.id === id)?.status;
+    setFiles((prevList) =>
+      prevList.map((f) => (f.id === id ? { ...f, status: newStatus } : f))
     );
-    // TODO: call backend endpoint here
-    // try { await axios.patch(`/api/files/${id}/status`, { status: newStatus }) } catch (e) { rollback }
+    try {
+      await axios.put(
+        `${BASE_URL}/api/documents/status/${id}`,
+        { newStatus },
+        { headers: { Authorization: localStorage.getItem("token") } }
+      );
+      toast.current.show({
+        severity: "success",
+        summary: "File status updated",
+        detail: `File status changed to ${newStatus}`,
+        life: 3000,
+      });
+    } catch (e) {
+      console.error(e);
+      // rollback
+      setFiles((prevList) =>
+        prevList.map((f) => (f.id === id ? { ...f, status: prev } : f))
+      );
+    } finally {
+      setUpdating((u) => ({ ...u, [id]: false }));
+    }
   };
 
   const statusOptions = [
     { label: t("admin.files.filterStatus"), value: null },
-    { label: t("admin.files.status.approved"), value: "APPROVED" },
-    { label: t("admin.files.status.pending"), value: "PENDING" },
-    { label: t("admin.files.status.rejected"), value: "REJECTED" },
+    { label: t("admin.files.status.approved"), value: "Approved" },
+    { label: t("admin.files.status.pending"), value: "Pending" },
+    { label: t("admin.files.status.rejected"), value: "Rejected" },
   ];
 
   // typeOptions removed per request: only keep status filter
 
   const statusChangeOptions = [
-    { label: t("admin.files.status.approved"), value: "APPROVED" },
-    { label: t("admin.files.status.pending"), value: "PENDING" },
-    { label: t("admin.files.status.rejected"), value: "REJECTED" },
+    { label: t("admin.files.status.approved"), value: "Approved" },
+    { label: t("admin.files.status.pending"), value: "Pending" },
+    { label: t("admin.files.status.rejected"), value: "Rejected" },
   ];
 
   const filtered = useMemo(() => {
     return files
       .filter((f) => (status ? f.status === status : true))
-      .sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt));
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   }, [files, status]);
+
+  const getTypeLabel = (type) =>
+    t(
+      `admin.files.type.${
+        type === "PATIENT_RECORD"
+          ? "patientRecord"
+          : type === "HEALTH_GUIDE"
+          ? "healthGuide"
+          : type === "DOCTOR_CERTIFICATE"
+          ? "doctorCertificate"
+          : "other"
+      }`
+    );
+
+  const getKindFromLink = (link) => {
+    if (!link) return "other";
+    try {
+      const last = (link.split("?")[0] || "").split("/").pop() || "";
+      const ext = (last.split(".").pop() || "").toLowerCase();
+      if (
+        ["png", "jpg", "jpeg", "gif", "webp", "bmp", "tiff", "svg"].includes(
+          ext
+        )
+      )
+        return "image";
+      if (["pdf"].includes(ext)) return "pdf";
+      if (["mp4", "webm", "mov", "avi", "mkv"].includes(ext)) return "video";
+      if (["doc", "docx", "txt", "rtf"].includes(ext)) return "doc";
+      return "other";
+    } catch {
+      return "other";
+    }
+  };
 
   return (
     <div className="space-y-6 p-6">
@@ -145,7 +170,7 @@ export default function FilesPage() {
         </div>
       </Card>
 
-      {/* List */}
+      {/* List - styled similar to Recent Pending */}
       <div className="bg-white rounded-lg shadow-sm border border-slate-200 divide-y">
         {loading && (
           <div>
@@ -191,65 +216,47 @@ export default function FilesPage() {
             >
               <div className="flex items-center gap-3 min-w-[220px]">
                 <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
-                  <i className={`${typeIcon[file.type]} text-xl`}></i>
+                  <i
+                    className={`${
+                      kindIcon[getKindFromLink(file.link)]
+                    } text-xl`}
+                  ></i>
                 </div>
                 <div>
-                  <a
-                    href={file.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-slate-800 hover:text-blue-600 hover:underline"
-                  >
-                    {file.name}
-                  </a>
-                  <div className="text-xs text-slate-500">{file.size}</div>
+                  <div className="font-semibold text-slate-800">
+                    {getTypeLabel(file.type)}
+                  </div>
+                  <div className=" text-xs text-slate-500">
+                    {new Date(file.created_at).toLocaleString()} •{" "}
+                    <Tag value={t(
+                      `admin.files.status.${String(
+                        file.status || ""
+                      ).toLowerCase()}`
+                    )} severity={file.status=="Pending"?"warning":file.status=="Rejected"?"danger":"success"}/>
+                    
+                  </div>
                 </div>
               </div>
 
-              <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
-                <div className="text-slate-700">
-                  <span className="text-slate-500">Type: </span>
-                  {t(
-                    `admin.files.type.${
-                      file.type === "PATIENT_RECORD"
-                        ? "patientRecord"
-                        : file.type === "HEALTH_GUIDE"
-                        ? "healthGuide"
-                        : file.type === "DOCTOR_CERTIFICATE"
-                        ? "doctorCertificate"
-                        : "other"
-                    }`
-                  )}
-                </div>
-                <div className="text-slate-700">
-                  <span className="text-slate-500">Uploaded by: </span>
-                  {file.uploadedBy}
-                </div>
-                <div className="text-slate-700">
-                  <span className="text-slate-500">Date: </span>
-                  {new Date(file.uploadedAt).toLocaleString()}
-                </div>
-              </div>
+              <div className="flex-1" />
 
               <div className="flex items-center gap-3 ml-auto">
-                <Tag
-                  value={t(`admin.files.status.${file.status.toLowerCase()}`)}
-                  severity={statusSeverity[file.status]}
-                />
                 <Dropdown
                   value={file.status}
                   options={statusChangeOptions}
                   onChange={(e) => updateFileStatus(file.id, e.value)}
                   placeholder={t("admin.files.changeStatus")}
                   className="w-44"
+                  disabled={!!updating[file.id]}
                 />
-                <Button
-                  label={t("admin.files.open")}
-                  icon="pi pi-external-link"
-                  onClick={() => window.open(file.url, "_blank", "noopener")}
-                  className=""
-                  outlined
-                />
+                {file.link && (
+                  <Button
+                    label={t("admin.files.open")}
+                    icon="pi pi-external-link"
+                    onClick={() => window.open(file.link, "_blank", "noopener")}
+                    outlined
+                  />
+                )}
               </div>
             </div>
           ))}

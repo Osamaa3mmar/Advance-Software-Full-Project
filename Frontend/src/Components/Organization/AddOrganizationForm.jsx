@@ -1,15 +1,15 @@
+/* eslint-disable react/prop-types */
 import { useState, useContext } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { FileUpload } from "primereact/fileupload";
 import { Image } from "primereact/image";
 import { Dropdown } from "primereact/dropdown";
-import { useTranslation } from "react-i18next";
+import { FloatLabel } from "primereact/floatlabel";
 import ToastContext from "../../Context/Toast";
 import axios from "axios";
 
 export default function AddOrganizationForm({ onSuccess, onCancel }) {
-  const { t } = useTranslation();
   const { toast } = useContext(ToastContext);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,6 +19,8 @@ export default function AddOrganizationForm({ onSuccess, onCancel }) {
     pic: null,
   });
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const BASE_URL = "http://localhost:5555";
 
   const organizationTypes = [
     { label: "Hospital", value: "HOSPITAL" },
@@ -43,9 +45,14 @@ export default function AddOrganizationForm({ onSuccess, onCancel }) {
     }
   };
 
+  const handleClearImage = () => {
+    setFormData((prev) => ({ ...prev, pic: null }));
+    setPreviewUrl(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setSubmitted(true);
     if (!formData.name || !formData.email || !formData.type) {
       toast.current.show({
         severity: "warn",
@@ -67,7 +74,7 @@ export default function AddOrganizationForm({ onSuccess, onCancel }) {
       }
 
       const response = await axios.post(
-        "http://localhost:5555/api/organization/create-organization",
+        `${BASE_URL}/api/organization/create-organization`,
         data,
         {
           headers: {
@@ -87,6 +94,7 @@ export default function AddOrganizationForm({ onSuccess, onCancel }) {
       // Reset form
       setFormData({ name: "", email: "", type: "", pic: null });
       setPreviewUrl(null);
+      setSubmitted(false);
 
       if (onSuccess) onSuccess(response.data);
     } catch (error) {
@@ -103,89 +111,141 @@ export default function AddOrganizationForm({ onSuccess, onCancel }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Name Field */}
-      <div className="flex flex-col gap-2">
-        <label htmlFor="name" className="font-medium text-slate-700">
-          Organization Name
-        </label>
-        <InputText
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleInputChange}
-          placeholder="Enter organization name"
-          className="w-full"
-          disabled={loading}
-        />
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Organization Details */}
+      <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-4">
+        <div className="flex items-center gap-2">
+          <i className="pi pi-building text-slate-500" />
+          <h3 className="text-slate-800 font-semibold">Organization Details</h3>
+        </div>
+
+        <div className="space-y-4">
+          {/* Name */}
+          <div>
+            <FloatLabel>
+              <InputText
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                className={`w-full ${
+                  submitted && !formData.name ? "p-invalid" : ""
+                }`}
+                disabled={loading}
+              />
+              <label htmlFor="name">Organization Name *</label>
+            </FloatLabel>
+            {submitted && !formData.name && (
+              <small className="text-red-500">Name is required.</small>
+            )}
+          </div>
+
+          {/* Email */}
+          <div>
+            <FloatLabel>
+              <InputText
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className={`w-full ${
+                  submitted && !formData.email ? "p-invalid" : ""
+                }`}
+                disabled={loading}
+              />
+              <label htmlFor="email">Email *</label>
+            </FloatLabel>
+            {submitted && !formData.email && (
+              <small className="text-red-500">Email is required.</small>
+            )}
+            <small className="block text-slate-500 mt-1">
+              We will use this for official communications.
+            </small>
+          </div>
+
+          {/* Type */}
+          <div>
+            <FloatLabel>
+              <Dropdown
+                inputId="type"
+                name="type"
+                value={formData.type}
+                options={organizationTypes}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, type: e.value }))
+                }
+                className={`w-full ${
+                  submitted && !formData.type ? "p-invalid" : ""
+                }`}
+                disabled={loading}
+                showClear
+              />
+              <label htmlFor="type">Organization Type *</label>
+            </FloatLabel>
+            {submitted && !formData.type && (
+              <small className="text-red-500">Type is required.</small>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Email Field */}
-      <div className="flex flex-col gap-2">
-        <label htmlFor="email" className="font-medium text-slate-700">
-          Email
-        </label>
-        <InputText
-          id="email"
-          name="email"
-          type="email"
-          value={formData.email}
-          onChange={handleInputChange}
-          placeholder="Enter email address"
-          className="w-full"
-          disabled={loading}
-        />
-      </div>
+      {/* Branding */}
+      <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-4">
+        <div className="flex items-center gap-2">
+          <i className="pi pi-image text-slate-500" />
+          <h3 className="text-slate-800 font-semibold">Branding</h3>
+        </div>
 
-      {/* Type Dropdown */}
-      <div className="flex flex-col gap-2">
-        <label htmlFor="type" className="font-medium text-slate-700">
-          Organization Type
-        </label>
-        <Dropdown
-          id="type"
-          name="type"
-          value={formData.type}
-          options={organizationTypes}
-          onChange={(e) => setFormData((prev) => ({ ...prev, type: e.value }))}
-          placeholder="Select organization type"
-          className="w-full"
-          disabled={loading}
-        />
-      </div>
-
-      {/* Image Upload */}
-      <div className="flex flex-col gap-2">
-        <label className="font-medium text-slate-700">Organization Logo</label>
-        <FileUpload
-          mode="basic"
-          name="pic"
-          accept="image/*"
-          maxFileSize={5000000}
-          onSelect={handleFileSelect}
-          auto={false}
-          chooseLabel="Choose Image"
-          className="w-full"
-          disabled={loading}
-        />
-        {previewUrl && (
-          <div className="mt-2">
+        <div className="flex items-start gap-4">
+          {previewUrl ? (
             <Image
               src={previewUrl}
               alt="Preview"
-              width="150"
+              width="96"
               preview
               className="border rounded-lg"
             />
+          ) : (
+            <div className="w-24 h-24 border border-dashed rounded-lg flex items-center justify-center text-slate-400 text-xs">
+              96×96
+            </div>
+          )}
+          <div className="flex-1 space-y-2">
+            <FileUpload
+              mode="basic"
+              name="pic"
+              accept="image/*"
+              maxFileSize={5000000}
+              onSelect={handleFileSelect}
+              auto={false}
+              chooseLabel={previewUrl ? "Change Image" : "Choose Image"}
+              className="w-full max-w-xs"
+              disabled={loading}
+            />
+            {previewUrl && (
+              <Button
+                type="button"
+                label="Remove"
+                icon="pi pi-trash"
+                severity="danger"
+                outlined
+                onClick={handleClearImage}
+                disabled={loading}
+              />
+            )}
+            <small className="block text-slate-500">
+              PNG or JPG up to 5MB.
+            </small>
           </div>
-        )}
+        </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex gap-3 pt-4">
+      {/* Actions */}
+      <div className="flex gap-3 pt-1">
         <Button
           type="submit"
-          label="Add Organization"
+          label="Create"
           icon="pi pi-check"
           loading={loading}
           className="flex-1"
@@ -195,6 +255,7 @@ export default function AddOrganizationForm({ onSuccess, onCancel }) {
             type="button"
             label="Cancel"
             icon="pi pi-times"
+            outlined
             severity="secondary"
             onClick={onCancel}
             disabled={loading}

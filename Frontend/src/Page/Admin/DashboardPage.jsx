@@ -7,6 +7,7 @@ import { Dialog } from "primereact/dialog";
 import AddOrganizationForm from "../../Components/Organization/AddOrganizationForm";
 import axios from "axios";
 import { Button } from "primereact/button";
+const BASE_URL = "http://localhost:5555";
 export default function DashboardPage() {
   const { t } = useTranslation();
   const { toast } = useContext(ToastContext);
@@ -41,14 +42,13 @@ export default function DashboardPage() {
       color: "bg-purple-500",
     },
   ];
+
   const getData = useCallback(async () => {
     try {
       setLoading(true);
       await delay(1000);
-      const { data } = await axios.get("http://localhost:5555/api/admin/info", {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
+      const { data } = await axios.get(`${BASE_URL}/api/admin/info`, {
+        headers: { Authorization: localStorage.getItem("token") },
       });
       setData(data.data);
     } catch (error) {
@@ -63,9 +63,11 @@ export default function DashboardPage() {
       setLoading(false);
     }
   }, [toast]);
+
   useEffect(() => {
     getData();
   }, [getData]);
+
   return (
     <div className="space-y-6">
       {/* Page Title */}
@@ -97,7 +99,6 @@ export default function DashboardPage() {
                   ) : (
                     stat.value
                   )}
-                  {}
                 </h3>
               </div>
               <div
@@ -146,86 +147,149 @@ export default function DashboardPage() {
           className="shadow-sm border border-slate-200"
         >
           {(() => {
-            const typeIcon = {
-              PATIENT_RECORD: "pi pi-file-pdf text-red-500",
-              HEALTH_GUIDE: "pi pi-book text-green-600",
-              DOCTOR_CERTIFICATE: "pi pi-id-card text-purple-600",
-              OTHER: "pi pi-file text-slate-600",
+            const kindIcon = {
+              image: "pi pi-image text-blue-500",
+              pdf: "pi pi-file-pdf text-red-500",
+              video: "pi pi-video text-purple-600",
+              doc: "pi pi-file text-slate-600",
+              other: "pi pi-file text-slate-600",
             };
-            const pending = [
-              {
-                id: 201,
-                name: "Patient-Record-009.pdf",
-                type: "PATIENT_RECORD",
-                uploadedBy: "Nour",
-                uploadedAt: "2025-10-23T10:00:00Z",
-                url: "https://res.cloudinary.com/demo/image/upload/v1690000000/samples/pdf-sample.pdf",
-              },
-              {
-                id: 202,
-                name: "Healthy-Diet-Guide.pdf",
-                type: "HEALTH_GUIDE",
-                uploadedBy: "Sarah",
-                uploadedAt: "2025-10-23T09:40:00Z",
-                url: "https://res.cloudinary.com/demo/image/upload/v1690000000/samples/landscapes/nature-mountains.jpg",
-              },
-              {
-                id: 203,
-                name: "Doctor-Certificate-777.png",
-                type: "DOCTOR_CERTIFICATE",
-                uploadedBy: "Dr. Ali",
-                uploadedAt: "2025-10-22T18:20:00Z",
-                url: "https://res.cloudinary.com/demo/video/upload/v1690000000/samples/sea-turtle.mp4",
-              },
-              {
-                id: 204,
-                name: "Misc-Notes.docx",
-                type: "OTHER",
-                uploadedBy: "Admin",
-                uploadedAt: "2025-10-22T08:05:00Z",
-                url: "https://res.cloudinary.com/demo/raw/upload/v1690000000/samples/sample.docx",
-              },
-            ]
-              .sort((a, b) => new Date(b.uploadedAt) - new Date(a.uploadedAt))
-              .slice(0, 4);
 
-            return (
-              <div className="space-y-3">
-                {pending.map((f) => (
-                  <div
-                    key={f.id}
-                    className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg transition-colors"
-                  >
-                    <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
-                      <i className={`${typeIcon[f.type]} text-lg`}></i>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-800 truncate">
-                        {f.name}
-                      </p>
-                      <p className="text-xs text-slate-500">
-                        {t("admin.files.filterType")
-                          .replace(":", "")
-                          .replace("by type", "")}{" "}
-                        {/* fallback small label context */}{" "}
-                        {f.type.replace("_", " ")}
-                        {" • "}
-                        {new Date(f.uploadedAt).toLocaleString()}
-                        {" • "}
-                        {f.uploadedBy}
-                      </p>
-                    </div>
-                    <Button
-                      label={t("admin.files.open")}
-                      icon="pi pi-external-link"
-                      onClick={() => window.open(f.url, "_blank", "noopener")}
-                      size="small"
-                      outlined
+            const RecentPendingList = () => {
+              const [items, setItems] = useState([]);
+              const [loadingList, setLoadingList] = useState(true);
+
+              const fetchRecent = useCallback(async () => {
+                try {
+                  setLoadingList(true);
+                  const { data } = await axios.get(
+                    `${BASE_URL}/api/documents/recentPending`,
+                    {
+                      headers: { Authorization: localStorage.getItem("token") },
+                    }
+                  );
+                  setItems(Array.isArray(data) ? data.slice(0, 6) : []);
+                } catch (e) {
+                  console.error(e);
+                  setItems([]);
+                } finally {
+                  setLoadingList(false);
+                }
+              }, []);
+
+              useEffect(() => {
+                fetchRecent();
+              }, [fetchRecent]);
+
+              if (loadingList) {
+                return (
+                  <div className="py-6 flex items-center justify-center">
+                    <ProgressSpinner
+                      style={{ width: 30, height: 30 }}
+                      strokeWidth="6"
                     />
                   </div>
-                ))}
-              </div>
-            );
+                );
+              }
+
+              if (!items.length) {
+                return (
+                  <div className="py-6 text-center text-slate-500 text-sm">
+                    {t("admin.files.noFiles")}
+                  </div>
+                );
+              }
+
+              const getTypeLabel = (type) =>
+                t(
+                  `admin.files.type.${
+                    type === "PATIENT_RECORD"
+                      ? "patientRecord"
+                      : type === "HEALTH_GUIDE"
+                      ? "healthGuide"
+                      : type === "DOCTOR_CERTIFICATE"
+                      ? "doctorCertificate"
+                      : "other"
+                  }`
+                );
+
+              // No need to compute a name from link; we display the type as the title
+
+              const getKindFromLink = (link) => {
+                if (!link) return "other";
+                try {
+                  const last =
+                    (link.split("?")[0] || "").split("/").pop() || "";
+                  const ext = (last.split(".").pop() || "").toLowerCase();
+                  if (
+                    [
+                      "png",
+                      "jpg",
+                      "jpeg",
+                      "gif",
+                      "webp",
+                      "bmp",
+                      "tiff",
+                      "svg",
+                    ].includes(ext)
+                  )
+                    return "image";
+                  if (["pdf"].includes(ext)) return "pdf";
+                  if (["mp4", "webm", "mov", "avi", "mkv"].includes(ext))
+                    return "video";
+                  if (["doc", "docx", "txt", "rtf"].includes(ext)) return "doc";
+                  return "other";
+                } catch {
+                  return "other";
+                }
+              };
+
+              return (
+                <div className="space-y-3">
+                  {items.map((f) => (
+                    <div
+                      key={f.id}
+                      className="flex items-center gap-3 p-3 hover:bg-slate-50 rounded-lg transition-colors"
+                    >
+                      <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
+                        <i
+                          className={`${
+                            kindIcon[getKindFromLink(f.link)]
+                          } text-lg`}
+                        ></i>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-slate-800 truncate">
+                          {getTypeLabel(f.type)}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {new Date(f.created_at).toLocaleString()}
+                          {" • "}
+                          {t(
+                            `admin.files.status.${String(
+                              f.status || ""
+                            ).toLowerCase()}`
+                          )}
+                        </p>
+                      </div>
+                      {f.link && (
+                        <Button
+                          label={t("admin.files.open")}
+                          icon="pi pi-external-link"
+                          onClick={() =>
+                            window.open(f.link, "_blank", "noopener")
+                          }
+                          size="small"
+                          outlined
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              );
+            };
+
+            return <RecentPendingList />;
           })()}
         </Card>
       </div>

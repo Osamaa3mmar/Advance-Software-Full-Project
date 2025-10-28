@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types, no-unused-vars */
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Tag } from "primereact/tag";
@@ -19,11 +20,11 @@ export default function OrganizationListItem({
     >
       <Card className="mb-4 bg-white border-2 border-slate-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300 overflow-hidden">
         <div className="flex flex-col lg:flex-row gap-6 items-start">
-          <div className="flex items-start gap-4 flex-shrink-0">
+          <div className="flex items-start gap-4 shrink-0">
             <div className="relative">
               <div className="w-24 h-24 rounded-xl overflow-hidden border-3 border-slate-300 shadow-md">
                 <Image
-                preview
+                  preview
                   src={
                     org?.profile_image_url || "https://via.placeholder.com/100"
                   }
@@ -118,7 +119,6 @@ export default function OrganizationListItem({
           </div>
 
           <div className="flex lg:flex-col gap-3 w-full lg:w-auto">
-           
             <Button
               label="Delete"
               icon="pi pi-trash"

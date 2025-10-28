@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Dialog } from "primereact/dialog";
 import { Tag } from "primereact/tag";
 import { Badge } from "primereact/badge";
@@ -27,7 +28,7 @@ export default function OrganizationDetailsDialog({
     >
       <div className="space-y-6">
         {/* Header Section with Image and Status */}
-        <div className="flex items-center gap-6 bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl">
+        <div className="flex items-center gap-6 bg-linear-to-r from-blue-50 to-purple-50 p-6 rounded-xl">
           <div className="relative">
             <div className="w-32 h-32 rounded-2xl overflow-hidden border-4 border-white shadow-lg">
               <img
@@ -72,7 +73,7 @@ export default function OrganizationDetailsDialog({
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-start gap-3 bg-blue-50 p-4 rounded-lg">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
                 <i className="pi pi-envelope text-blue-600"></i>
               </div>
               <div className="flex-1 min-w-0">
@@ -87,7 +88,7 @@ export default function OrganizationDetailsDialog({
 
             {organization.phone_number && (
               <div className="flex items-start gap-3 bg-green-50 p-4 rounded-lg">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center shrink-0">
                   <i className="pi pi-phone text-green-600"></i>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -115,7 +116,7 @@ export default function OrganizationDetailsDialog({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {organization.city && (
                   <div className="flex items-start gap-3 bg-red-50 p-4 rounded-lg">
-                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center shrink-0">
                       <i className="pi pi-map-marker text-red-600"></i>
                     </div>
                     <div className="flex-1 min-w-0">
@@ -131,7 +132,7 @@ export default function OrganizationDetailsDialog({
 
                 {organization.street && (
                   <div className="flex items-start gap-3 bg-orange-50 p-4 rounded-lg md:col-span-2">
-                    <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center shrink-0">
                       <i className="pi pi-map text-orange-600"></i>
                     </div>
                     <div className="flex-1 min-w-0">
@@ -158,7 +159,7 @@ export default function OrganizationDetailsDialog({
             Additional Information
           </h3>
           <div className="flex items-start gap-3 bg-purple-50 p-4 rounded-lg">
-            <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center shrink-0">
               <i className="pi pi-calendar text-purple-600"></i>
             </div>
             <div className="flex-1 min-w-0">

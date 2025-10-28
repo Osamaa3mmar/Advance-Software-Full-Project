@@ -9,7 +9,7 @@ export default function OrganizationLoadingSkeleton() {
           <Card key={i} className="border-2 border-slate-200">
             <div className="flex flex-col lg:flex-row gap-6 items-start">
               {/* Left Section - Image */}
-              <div className="flex items-start gap-4 flex-shrink-0">
+              <div className="flex items-start gap-4 shrink-0">
                 <div className="relative">
                   <Skeleton
                     shape="square"
