@@ -9,6 +9,7 @@ import orgRouter from "./Routes/OrganizationRouter.js";
 import AdminInfoRouter from "./Routes/AdminInfoRouter.js";
 import userRouter from "./Routes/UsersRouter.js";
 import documentsRouter from "./Routes/DocumentsRouter.js";
+import roomsRouter from "./Routes/RoomsRouter.js";
 
 
 export const initControllers = (app) => {
@@ -22,6 +23,7 @@ app.use("/api/group/messages",groupMessagesRouter);
 app.use("/api/admin",AdminInfoRouter);
 app.use("/api/users",userRouter);
 app.use("/api/documents",documentsRouter);
+app.use("/api/rooms",roomsRouter);
 };
 
 

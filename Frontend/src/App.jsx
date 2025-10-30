@@ -1,5 +1,5 @@
 import { PrimeReactProvider } from "primereact/api";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import AuthLayout from "./Layout/AuthLayout";
 import AdminLayout from "./Layout/AdminLayout";
 import LoginPage from "./Page/Auth/LoginPage";
@@ -15,6 +15,8 @@ import OrganizationLogin from "./Page/Auth/OrganizationLogin";
 import DashboardPage from "./Page/Admin/DashboardPage";
 import OrganizationsPage from "./Page/Admin/OrganizationsPage";
 import FilesPage from "./Page/Admin/FilesPage";
+import RoomsLayout from "./Layout/RoomsLayout";
+import Room from "./Page/Rooms/Room/Room";
 
 export default function App() {
   const value = {
@@ -91,6 +93,20 @@ export default function App() {
         },
       ],
     },
+    {
+      path:"/rooms",
+      element:<RoomsLayout/>,
+      children:[
+        {
+        index:true,
+        element:<Navigate to={"/rooms/-9999"}/>
+      },
+        {
+          path:":id",
+          element:<Room/>
+        }
+      ]
+    }
   ]);
 
   return (
