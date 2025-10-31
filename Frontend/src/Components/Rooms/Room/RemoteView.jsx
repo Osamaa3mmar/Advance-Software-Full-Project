@@ -1,18 +1,12 @@
-import { useEffect, useRef } from "react"
 
-export default function RemoteView({media}) {
+import {RemoteUser} from "agora-rtc-react";
 
- const vidRef=useRef(null);
 
-    useEffect(()=>{
-        if (vidRef.current && media) {
-      vidRef.current.srcObject = media;
-    }
-    },[media])
+export default function RemoteView({ user }) {
+
   return (
     <div className="bg-black w-full h-screen">
-      <video muted autoPlay playsInline ref={vidRef}/>
-      
+      <RemoteUser user={user} />
     </div>
-  )
+  );
 }

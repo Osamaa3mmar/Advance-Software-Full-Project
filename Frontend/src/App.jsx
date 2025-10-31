@@ -17,12 +17,14 @@ import OrganizationsPage from "./Page/Admin/OrganizationsPage";
 import FilesPage from "./Page/Admin/FilesPage";
 import RoomsLayout from "./Layout/RoomsLayout";
 import Room from "./Page/Rooms/Room/Room";
+import AgoraRTC, { AgoraRTCProvider, useRTCClient } from "agora-rtc-react";
 
 export default function App() {
   const value = {
     ripple: true,
   };
   const { toast } = useContext(ToastContext);
+  const agoraClient = useRTCClient( AgoraRTC.createClient({ codec: "vp8", mode: "rtc" })); // Initialize Agora Client
 
   const router = createBrowserRouter([
     //auth
@@ -103,7 +105,10 @@ export default function App() {
       },
         {
           path:":id",
-          element:<Room/>
+          element:
+          <AgoraRTCProvider client={agoraClient}>
+            <Room/>
+          </AgoraRTCProvider>
         }
       ]
     }
