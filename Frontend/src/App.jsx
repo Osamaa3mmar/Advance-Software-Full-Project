@@ -18,6 +18,7 @@ import FilesPage from "./Page/Admin/FilesPage";
 import RoomsLayout from "./Layout/RoomsLayout";
 import Room from "./Page/Rooms/Room/Room";
 import AgoraRTC, { AgoraRTCProvider, useRTCClient } from "agora-rtc-react";
+import RoomCheck from "./Page/Rooms/Room/RoomCheck";
 
 export default function App() {
   const value = {
@@ -107,7 +108,7 @@ export default function App() {
           path:":id",
           element:
           <AgoraRTCProvider client={agoraClient}>
-            <Room/>
+            <RoomCheck/>
           </AgoraRTCProvider>
         }
       ]

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   useJoin,
@@ -14,6 +14,7 @@ import LocalView from "../../../Components/Rooms/Room/LocalView";
 import RemoteView from "../../../Components/Rooms/Room/RemoteView";
 import ChatRoom from "../../../Components/Rooms/Room/ChatRoom";
 import { Button } from "primereact/button";
+import InvaliedRoomId from "../../../Components/Rooms/Room/InvaliedRoomId";
 export default function Room() {
   
   const appId = "8932c4886f704fd98015d6f3a7c32317";
@@ -23,7 +24,7 @@ export default function Room() {
   const [micOn, setMic] = useState(true);
   const [cameraOn, setCamera] = useState(true);
   const { online, type, downlink } = useNetworkStatus();
-
+  
   const { localMicrophoneTrack } = useLocalMicrophoneTrack(micOn);
   const { localCameraTrack } = useLocalCameraTrack(cameraOn);
 
@@ -38,7 +39,8 @@ export default function Room() {
   usePublish([localMicrophoneTrack, localCameraTrack])
   const remoteUsers = useRemoteUsers()
   const { audioTracks } = useRemoteAudioTracks(remoteUsers)
-  audioTracks.forEach((track) => track.play())
+  audioTracks.forEach((track) => track.play());
+  
   return (
     <div className="flex items-center justify-between h-screen ">
       <div className="views relative w-[70%] grow bg-red-200 h-screen">
