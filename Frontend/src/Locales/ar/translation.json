@@ -58,6 +58,7 @@
     "common": {
         "or": "أو"
     },
+
     "admin": {
         "panel": "لوحة الإدارة",
         "dashboard": "لوحة التحكم",
@@ -111,5 +112,17 @@
             "createAlert": "إنشاء تنبيه",
             "addOrg": "إضافة منظمة"
         }
+    },
+    "groups":
+    {
+        "chat":"دردشة",
+        "AllGroups":"جميع المجموعات",
+        "Showmy":"اعرض لي",
+         "ShowAll":"اعرض الجميع",
+         "MyGroups":"مجموعاتي",
+           "WaitforResponse":"انتظر الرد",
+           "Joined":"منضم",
+         "Rejected":"مرفوض",
+         "Join":"انضم"
     }
 }

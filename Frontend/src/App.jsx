@@ -1,7 +1,13 @@
 import { PrimeReactProvider } from "primereact/api";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import AuthLayout from "./Layout/AuthLayout";
+
 import AdminLayout from "./Layout/AdminLayout";
+import GroupLayout from "./Layout/GroupLayout";
 import LoginPage from "./Page/Auth/LoginPage";
 import "primeicons/primeicons.css";
 import SignupPage from "./Page/Auth/SignupPage";
@@ -16,16 +22,21 @@ import DashboardPage from "./Page/Admin/DashboardPage";
 import OrganizationsPage from "./Page/Admin/OrganizationsPage";
 import FilesPage from "./Page/Admin/FilesPage";
 import RoomsLayout from "./Layout/RoomsLayout";
-import Room from "./Page/Rooms/Room/Room";
 import AgoraRTC, { AgoraRTCProvider, useRTCClient } from "agora-rtc-react";
 import RoomCheck from "./Page/Rooms/Room/RoomCheck";
+import GroupsPage from "./Page/Groups/GroupsPage";
+import ChatPage from "./Page/Groups/ChatPage";
+import HealthGuidesLayout from "./Layout/HealthGuidesLayout";
+import HealthGuidesPage from "./Page/HealthGuides/HealthGuidesPage";
 
 export default function App() {
   const value = {
     ripple: true,
   };
   const { toast } = useContext(ToastContext);
-  const agoraClient = useRTCClient( AgoraRTC.createClient({ codec: "vp8", mode: "rtc" })); // Initialize Agora Client
+  const agoraClient = useRTCClient(
+    AgoraRTC.createClient({ codec: "vp8", mode: "rtc" })
+  ); // Initialize Agora Client
 
   const router = createBrowserRouter([
     //auth
@@ -39,16 +50,6 @@ export default function App() {
         { path: "/reset-password", element: <ResetPassword /> },
         { path: "/verify/:code", element: <VerifyPage /> },
         { path: "/login/organaization", element: <OrganizationLogin /> },
-      ],
-    },
-    {
-      path: "/main",
-      element: <div>Main App Here</div>,
-      children: [
-        {
-          path: "home",
-          element: <div>Home Page</div>,
-        },
       ],
     },
     {
@@ -97,20 +98,35 @@ export default function App() {
       ],
     },
     {
-      path:"/rooms",
-      element:<RoomsLayout/>,
+      path: "/rooms",
+      element: <RoomsLayout />,
+      children: [
+        {
+          index: true,
+          element: <Navigate to={"/rooms/-9999"} />,
+        },
+        {
+          path: ":id",
+          element: (
+            <AgoraRTCProvider client={agoraClient}>
+              <RoomCheck />
+            </AgoraRTCProvider>
+          ),
+        },
+      ],
+    },
+    {
+      path: "/main",
+      element: <GroupLayout />,
+      children: [
+        { path: "groups", element: <GroupsPage /> },
+        { path: "chat/:groupId", element: <ChatPage /> },
+      ],
+    },{
+      path:"/test",
+      element:<HealthGuidesLayout/>,
       children:[
-        {
-        index:true,
-        element:<Navigate to={"/rooms/-9999"}/>
-      },
-        {
-          path:":id",
-          element:
-          <AgoraRTCProvider client={agoraClient}>
-            <RoomCheck/>
-          </AgoraRTCProvider>
-        }
+      { path: "helthGuides", element: <HealthGuidesPage /> }
       ]
     }
   ]);

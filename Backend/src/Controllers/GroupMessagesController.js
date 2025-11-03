@@ -6,13 +6,14 @@ export class GroupMessagesContoller
  
      sendMessage = async (req, res) => {
     try {
-      const { groupId, userId, message } = req.body;
+        const userId = req.user.id;
+      const { groupId, message } = req.body;
       let fileUrl = null;
       if (req.file) {
         const file = await cloudinary.uploader.upload(req.file.path, {
           folder: "group_patient_file",
           resource_type: "auto",
-        });
+        }); 
         fileUrl = file.secure_url;
       }
       const result = await groupMessagesServices.sendMessage(

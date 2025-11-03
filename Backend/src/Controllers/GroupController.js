@@ -69,7 +69,21 @@ export class GroupController {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
+
+
 }
+
+ getUserGroups = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const groups = await GroupService.getUserGroups(userId);
+    res.status(200).json(groups);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
+
+
 }
 const groupControllers= new GroupController();
 export default groupControllers;
