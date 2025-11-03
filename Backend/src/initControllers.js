@@ -23,7 +23,7 @@ app.use("/api/group/messages",groupMessagesRouter);
 app.use("/api/admin",AdminInfoRouter);
 app.use("/api/users",userRouter);
 app.use("/api/documents",documentsRouter);
-app.use("/api/rooms",roomsRouter);
+// app.use("/api/rooms",roomsRouter);
 };
 
 

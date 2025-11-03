@@ -15,6 +15,7 @@ import RemoteView from "../../../Components/Rooms/Room/RemoteView";
 import ChatRoom from "../../../Components/Rooms/Room/ChatRoom";
 import { Button } from "primereact/button";
 import Controls from "../../../Components/Rooms/Room/Controls";
+import { ProgressSpinner } from "primereact/progressspinner";
 export default function Room() {
   const appId = "8932c4886f704fd98015d6f3a7c32317";
   const { id } = useParams();
@@ -41,9 +42,16 @@ export default function Room() {
   return (
     <div className="flex items-center justify-between h-screen ">
       <div className="views relative w-[70%] grow  h-screen">
-        {remoteUsers.map((user) => {
-          return <RemoteView key={user.uid} user={user} />;
-        })}
+        {remoteUsers.length > 0 ? (
+          remoteUsers.map((user) => {
+            return <RemoteView key={user.uid} user={user} />;
+          })
+        ) : (
+          <div className="w-full h-full bg-black flex items-center justify-center flex-col gap-10">
+            <ProgressSpinner />
+            <p className=" text-2xl text-white">Waiting For Osama To Join ...</p>
+          </div>
+        )}
         <LocalView
           audioTrack={localMicrophoneTrack}
           videoTrack={localCameraTrack}
@@ -53,10 +61,10 @@ export default function Room() {
           playVideo={cameraOn}
         />
         <Controls
-        setCamera={setCamera}
-        setMic={setMic}
-        micOn={micOn}
-        cameraOn={cameraOn}
+          setCamera={setCamera}
+          setMic={setMic}
+          micOn={micOn}
+          cameraOn={cameraOn}
         />
       </div>
       {chatVisable ? (

@@ -1,97 +1,282 @@
-.container{
-    width:100%;
-    position: absolute;
-    bottom: 0px;
-    padding: 16px 20px;
-    z-index: 100;
-    display:flex;
-    align-items: center;
-    justify-content: space-between;
+.root {
+  display: none;
 }
-.controles{
-    background-color:rgba(0, 0, 0, 0.3) ;
-    width: fit-content;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    padding: 10px;
-    gap: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 0px 2px black;
+:root {
+  --neon-1: #00f5ff;
+  --neon-2: #7b61ff;
+  --accent: #ff3cac;
+  --glass: rgba(255, 255, 255, 0.06);
 }
-.controleButton{
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px;
+  
+}
+
+.controles {
+  display: flex;
+  gap: 12px;
+}
+
+.controleButton {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03),
+    rgba(255, 255, 255, 0.01)
+  );
+  color: var(--neon-1);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+  box-shadow: 0 6px 18px rgba(123, 97, 255, 0.12),
+    0 0 18px rgba(0, 245, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.controleButton:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    60deg,
+    rgba(0, 245, 255, 0.06),
+    rgba(123, 97, 255, 0.06)
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.controleButton:hover {
+  transform: translateY(-4px) scale(1.03) rotate(-1deg);
+  box-shadow: 0 18px 36px rgba(123, 97, 255, 0.14),
+    0 0 36px rgba(0, 245, 255, 0.08);
+}
+
+.controleButton:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.controleButton[disabled] {
+  cursor: not-allowed;
+  filter: grayscale(0.65) contrast(0.9) brightness(0.8) opacity(0.6);
+  transform: none;
+  box-shadow: none;
+}
+
+.controleButtonRed {
+  color: #ff6b6b;
+  box-shadow: 0 8px 28px rgba(255, 60, 60, 0.12),
+    0 0 12px rgba(255, 60, 60, 0.06);
+}
+
+.icons {
+  font-size: 20px;
+  filter: drop-shadow(0 3px 6px rgba(123, 97, 255, 0.14));
+}
+
+.netStatus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.01),
+    rgba(0, 0, 0, 0.01)
+  );
+}
+
+.bars {
+  display: flex;
+  gap: 6px;
+  align-items: end;
+  height: 28px;
+}
+
+.bar {
+  width: 8px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(0, 0, 0, 0.06)
+  );
+  border-radius: 4px;
+  transform-origin: bottom center;
+  animation: pulse 1.6s infinite ease-in-out;
+  opacity: 0.95;
+}
+
+.bar1 {
+  height: 6px;
+  animation-delay: 0s;
+}
+.bar2 {
+  height: 12px;
+  animation-delay: 0.15s;
+}
+.bar3 {
+  height: 20px;
+  animation-delay: 0.3s;
+}
+.bar4 {
+  height: 28px;
+  animation-delay: 0.45s;
+}
+
+.green {
+  background: linear-gradient(180deg, #4ce3b0, #00e0a7);
+  box-shadow: 0 6px 18px rgba(76, 227, 176, 0.12),
+    0 0 10px rgba(76, 227, 176, 0.08);
+}
+.orange {
+  background: linear-gradient(180deg, #ffb86b, #ff8a00);
+  box-shadow: 0 6px 18px rgba(255, 184, 107, 0.12),
+    0 0 10px rgba(255, 138, 0, 0.08);
+}
+.red {
+  background: linear-gradient(180deg, #ff6b6b, #ff3b3b);
+  box-shadow: 0 6px 18px rgba(255, 107, 107, 0.12),
+    0 0 10px rgba(255, 59, 59, 0.08);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scaleY(0.85);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scaleY(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.9);
+    opacity: 0.65;
+  }
+}
+
+/* responsive tweaks */
+@media (max-width: 720px) {
+  .container {
+    gap: 12px;
+    padding: 8px;
+  }
+  .controleButton {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    transition: 300ms;
-}
-.controleButton:hover{
-    background-color: rgba(0, 0, 0, 0.53);
-}
-.controleButtonRed{
-    color: red;
-    background-color: rgba(255, 0, 0, 0.4) !important;
-    border: 0.5px solid red;
-    box-shadow: 0px 0px 4px ;
-}
-
-.icons{
-    font-size: 24px;
-}
-
-.netStatus{
-    background-color:rgba(0, 0, 0, 0.3) ;
-    width: fit-content;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    padding: 10px;
-    gap: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 0px 2px black;
-    font-size: 16px;
-    text-transform: uppercase;
-}
-.netStatus p{
-    color: white;
-}
-
-
-.bars{
-    display: flex;
-    align-items: end;
-    gap: 1.5px;
-}
-
-.bar{
-    border-radius: 10px;
-    width: 4px; 
-    background-color: white;
-    transition: 400ms;
-}
-.bar4{
+    border-radius: 12px;
+  }
+  .icons {
+    font-size: 18px;
+  }
+  .bars {
     height: 20px;
+  }
 }
-.bar3{
-    height: 15px;
+.container {
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  padding: 16px 20px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.bar2{
-    height: 10px;
+.controles {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 10px;
+  gap: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 2px black;
 }
-.bar1{
-    height: 5px;
+.controleButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  transition: 300ms;
+}
+.controleButton:hover {
+  background-color: rgba(0, 0, 0, 0.53);
+}
+.controleButtonRed {
+  color: red;
+  background-color: rgba(255, 0, 0, 0.4) !important;
+  border: 0.5px solid red;
+  box-shadow: 0px 0px 4px;
 }
 
-.green{
-background-color: green;
+.icons {
+  font-size: 24px;
 }
-.red{
-    background-color: red;
+
+.netStatus {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 10px;
+  gap: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 2px black;
+  font-size: 16px;
+  text-transform: uppercase;
 }
-.orange{
-    background-color: orange;
+.netStatus p {
+  color: white;
+}
+
+.bars {
+  display: flex;
+  align-items: end;
+  gap: 1.5px;
+}
+
+.bar {
+  border-radius: 10px;
+  width: 4px;
+  background-color: white;
+  transition: 400ms;
+}
+.bar4 {
+  height: 20px;
+}
+.bar3 {
+  height: 15px;
+}
+.bar2 {
+  height: 10px;
+}
+.bar1 {
+  height: 5px;
+}
+
+.green {
+  background-color: green;
+}
+.red {
+  background-color: red;
+}
+.orange {
+  background-color: orange;
 }
