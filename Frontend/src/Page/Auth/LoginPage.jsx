@@ -10,6 +10,7 @@ export default function LoginPage() {
         <Logo/>
         <p className="text-lg font-normal">{t("auth.loginMessage")}</p>
       <LoginForm/>
+      
     </div>
   )
 }

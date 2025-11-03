@@ -1,6 +1,7 @@
 import { PrimeReactProvider } from "primereact/api";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthLayout from "./Layout/AuthLayout";
+import GroupLayout from "./Layout/GroupLayout";
 import LoginPage from "./Page/Auth/LoginPage";
 import 'primeicons/primeicons.css';
 import SignupPage from "./Page/Auth/SignupPage";
@@ -12,6 +13,10 @@ import ResetPassword from "./Page/Auth/ResetPassword";
 import VerifyPage from "./Page/Auth/VerifyPage";
 import OrganizationLogin from "./Page/Auth/OrganizationLogin";
 import OrganizationLogin2 from "./Page/Auth/OrganizationLogin2";
+import GroupsPage from "./Page/Groups/GroupsPage";
+import ChatPage from "./Page/Groups/ChatPage";
+import HealthGuidesLayout from './Layout/HealthGuidesLayout';
+import HealthGuidesPage from "./Page/HealthGuides/HealthGuidesPage";
 
 export default function App() {
   const value = {
@@ -36,13 +41,17 @@ export default function App() {
       ],
     },{
       path:"/main",
-      element:<div>Main App Here</div>,
-      children:[{
-        path:"home",
-        element:<div>Home Page</div>
+      element:<GroupLayout />,
+      children:[{   path:"groups",   element:<GroupsPage/> },
+                {   path:"chat/:groupId",   element:<ChatPage/> }
 
-      }]
-    }
+      ]},
+      {
+     path:"/main",
+     element:<HealthGuidesLayout/>,
+      children:[{   path:"helthGuides",   element:<HealthGuidesPage/> },]
+
+      }
   ]);
 
   return (

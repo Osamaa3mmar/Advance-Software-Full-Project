@@ -9,12 +9,32 @@ static createGroup=async({name,description,category,createdBy })=>
    const [result]=await connection.query("insert into support_groups (name,description,category,created_by ) values(?,?,?,?)",[name,description,category,createdBy ]); 
     return result.insertId;
 }
-// get all groups
+// get all groups for admin
 static getAllGroups=async()=>
 {
     const [rows]=await connection.query( `SELECT * FROM support_groups`);
    return rows;
 }
+
+// get all groups for a specific user
+static getAllGroupsForUser = async (userId) => {
+  const [rows] = await connection.query(
+    `
+    SELECT 
+      g.id,
+      g.name,
+      g.description,
+      g.category,
+      gm.state
+    FROM support_groups g
+    LEFT JOIN group_member gm
+      ON g.id = gm.group_id AND gm.user_id = ?
+    ORDER BY g.created_at DESC
+    `,
+      [userId]
+  );
+  return rows;
+};
 
 //user sends join request 
 static sendJoinRequest=async(groupId,userId)=>

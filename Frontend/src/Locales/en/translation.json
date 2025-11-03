@@ -57,5 +57,17 @@
     },
     "common": {
         "or": "OR"
+    },
+     "groups":
+    {
+        "chat":"chat",
+        "AllGroups":"All Groups",
+         "Showmy":"Show My",
+         "ShowAll":"Show All",
+          "MyGroups":"My Groups",
+          "WaitforResponse":"Wait for Response",
+          "Joined":"Joined",
+          "Rejected":"Rejected",
+           "Join":"Join"
     }
 }

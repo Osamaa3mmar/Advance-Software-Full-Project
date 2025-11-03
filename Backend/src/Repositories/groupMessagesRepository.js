@@ -26,7 +26,7 @@ static async findGroupById(groupId) {
     const [rows] = await connection.query(
       `SELECT * FROM support_groups WHERE id = ?`,  [groupId]  );
     return rows;
-   }
+   } 
 
 
   static async getMessagesByGroup(groupId) {

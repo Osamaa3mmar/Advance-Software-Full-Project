@@ -8,14 +8,16 @@ export class groupMessagesServices
     if (member.length === 0) {
       return { message: "You are not a member of this group" };
     }
-    const { status, state } = member[0];
-    if (status !== "ACTIVE" || state !== "APPROVED") {
-      return { message: "You are not active in this group" };
-    }
+    // const { status, state } = member[0];
+    // if (status !== "ACTIVE" || state !== "APPROVED") {
+      //return { message: "You are not active in this group" };
+   // }
     await groupMessagesRepository.insertMessage(groupId, userId, message, assetLink);
 
     return { message: "Message sent successfully" };
   }
+
+
 
   static getAllMessages=async(groupId)=>
   {

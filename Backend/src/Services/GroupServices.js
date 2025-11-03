@@ -39,4 +39,11 @@ static async handleRequest(requestId, state) {
     return { message: "Group updated successfully" };
   }
 
+  static async getUserGroups(userId) {
+    return await groupRepository.getAllGroupsForUser(userId);
+  }
+  
+
+
+
 }
