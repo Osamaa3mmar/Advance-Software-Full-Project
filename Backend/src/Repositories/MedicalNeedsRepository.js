@@ -8,7 +8,7 @@ class MedicalNeedsRepository {
 		return rows;
 	}
 
-	static async getMedicalNeeconnectionyId(id) {
+	static async getMedicalNeedById(id) {
 		const [rows] = await connection.query(
 			"SELECT * FROM medical_needs WHERE id = ?",
 			[id]
