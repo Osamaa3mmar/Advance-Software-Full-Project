@@ -112,6 +112,7 @@ export class AuthService {
       let isCorrect = bcrypt.compareSync(credentials.password, user.password);
       if (isCorrect) {
         let tokeInfo = {
+          first_name:user.first_name,
           id: user.id,
           role: user.role,
           email: user.email,
