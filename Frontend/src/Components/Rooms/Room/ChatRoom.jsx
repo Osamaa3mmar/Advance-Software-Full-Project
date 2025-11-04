@@ -92,10 +92,10 @@ export default function ChatRoom({ setVisable }) {
         </div>
       </div>
 
-      <ChatInputBox
-        input={input}
-        setInput={setInput}
-        onSend={sendMessage}
+      <ChatInputBox 
+        input={input} 
+        setInput={setInput} 
+        onSend={sendMessage} 
         onEndCall={handleEndCall}
       />
     </div>

@@ -3,16 +3,18 @@ export default function MessageBubble({ currentUser, message }) {
   const isMe = currentUser?.id === message.senderId;
 
   return (
-    <div className={`flex ${isMe ? "justify-end" : "justify-start"} mb-4 px-4`}>
+    <div className={`flex ${isMe ? "justify-end" : "justify-start"} mb-3`}>
       <div
         className={`flex ${
           isMe ? "flex-row-reverse" : "flex-row"
-        } items-end gap-2 max-w-[75%]`}
+        } items-end gap-2 max-w-[80%]`}
       >
         {/* Avatar */}
         <div
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 ${
-            isMe ? "bg-blue-500" : "bg-gray-500"
+          className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 shadow-md ${
+            isMe
+              ? "bg-linear-to-br from-blue-500 to-blue-600"
+              : "bg-linear-to-br from-slate-400 to-slate-500"
           }`}
         >
           {message.senderDisplayName?.charAt(0)?.toUpperCase() || "U"}
@@ -22,7 +24,7 @@ export default function MessageBubble({ currentUser, message }) {
         <div className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}>
           {/* Sender Name (only for others) */}
           {!isMe && (
-            <span className="text-xs text-gray-500 mb-1 px-3">
+            <span className="text-xs text-slate-500 mb-1 ml-3 font-medium">
               {message.senderDisplayName}
             </span>
           )}
@@ -30,11 +32,11 @@ export default function MessageBubble({ currentUser, message }) {
           {/* Message Bubble */}
           <div
             className={`
-            px-4 py-2 rounded-2xl max-w-full shadow-sm
+            relative px-4 py-3 rounded-2xl max-w-full shadow-sm backdrop-blur-sm
             ${
               isMe
-                ? "bg-blue-500 text-white rounded-br-md"
-                : "bg-white border border-gray-200 text-gray-800 rounded-bl-md"
+                ? "bg-linear-to-r from-blue-500 to-blue-600 text-white rounded-br-md"
+                : "bg-white/80 border border-slate-200/60 text-slate-800 rounded-bl-md"
             }
           `}
           >
@@ -45,7 +47,7 @@ export default function MessageBubble({ currentUser, message }) {
 
           {/* Timestamp */}
           <span
-            className={`text-xs text-gray-400 mt-1 px-3 ${
+            className={`text-xs text-slate-400 mt-1 mx-3 ${
               isMe ? "text-right" : "text-left"
             }`}
           >
