@@ -5,7 +5,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import AuthLayout from "./Layout/AuthLayout";
-
 import AdminLayout from "./Layout/AdminLayout";
 import GroupLayout from "./Layout/GroupLayout";
 import LoginPage from "./Page/Auth/LoginPage";
@@ -28,7 +27,8 @@ import GroupsPage from "./Page/Groups/GroupsPage";
 import ChatPage from "./Page/Groups/ChatPage";
 import HealthGuidesLayout from "./Layout/HealthGuidesLayout";
 import HealthGuidesPage from "./Page/HealthGuides/HealthGuidesPage";
-
+import GroupPage from "./Page/Admin/Groups/GroupPage";
+import HandleRequestPage from "./Page/Admin/Groups/HandleRequestPage.jsx";
 export default function App() {
   const value = {
     ripple: true,
@@ -91,10 +91,11 @@ export default function App() {
           path: "files",
           element: <FilesPage />,
         },
-        {
+       {
           path: "groups",
-          element: <div>Groups Page - Coming Soon</div>,
-        },
+           element: <GroupPage />,
+         
+},
       ],
     },
     {

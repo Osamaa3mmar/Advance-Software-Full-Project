@@ -83,6 +83,17 @@ export class GroupController {
   }
 }
 
+deleteGroup = async (req, res) => {
+  try {
+    const groupId = req.params.id;
+    const response = await GroupService.deleteGroup(groupId);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+
+}
+
 
 }
 const groupControllers= new GroupController();

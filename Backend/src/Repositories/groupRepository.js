@@ -98,4 +98,11 @@ return result;
 }
 
 
+static deleteGroupById=async(groupId)=>
+{ 
+  const [result]=await connection.query(`delete from support_groups where id=?`,[groupId]);
+  return result;  
+
+}
+
 }
