@@ -24,7 +24,7 @@ class MedicalNeedsService {
 	}
 
 	static async createMedicalNeed(needData, user) {
-		if (!user.organization_id) {
+		if (user.role !== "ORGANIZATION") {
 			throw new Error("Only organizations can create medical needs");
 		}
 
