@@ -18,6 +18,7 @@ export class UsersServices {
             if (!user) {
                 return { success: false, message: "User not found" };
             }
+            console.log("hereeeeee")
             return { success: true, user };
         } catch (error) {
             return { success: false, message: "Failed to retrieve user", error };

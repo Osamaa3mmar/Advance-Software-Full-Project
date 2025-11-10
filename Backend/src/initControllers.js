@@ -12,6 +12,7 @@ import AdminInfoRouter from "./Routes/AdminInfoRouter.js";
 import documentsRouter from "./Routes/DocumentsRouter.js";
 import roomsRouter from "./Routes/RoomsRouter.js";
 import anonymousMessagesRouter from "./Routes/AnonymousMessagesRouter.js";
+import translationRouter from "./Routes/TranslationRouter.js";
 
 export const initControllers = (app) => {
   app.use("/healthGuides", healthGuidesRoutes);
@@ -27,5 +28,7 @@ export const initControllers = (app) => {
   app.use("/api/medicalNeeds", medicalNeedsRouter);
   app.use("/api/anonymous-messages", anonymousMessagesRouter);
   app.use("/api/reservations", reservationRouter);
+
+  app.use("/api/translation",translationRouter)
 };
 // app.use("/api/rooms",roomsRouter);
