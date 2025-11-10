@@ -11,7 +11,6 @@ translationRouter.post("", async (req, res) => {
       return res.status(400).json({ message: "Message content is required" });
     }
 
-    // Properly encode the prompt for the URL - must include "json" in the prompt text
     const prompt = `Translate the given text "${message.content}" to Arabic. Respond in JSON format with the structure: { "translate": "<translation>" }`;
     const encodedPrompt = encodeURIComponent(prompt);
 
@@ -20,9 +19,9 @@ translationRouter.post("", async (req, res) => {
     );
     console.log("Translation response:", data);
 
-    return res.status(200).json({ translation: data.translate || data });
+    return res.status(200).json({ translation: data.translate  });
   } catch (error) {
-    console.error("Translation error:", error.response?.data || error.message);
+    console.error("Translation error:", error.response?.data );
     return res.status(500).json({
       message: "Translation failed",
       error: error.response?.data || error.message,
