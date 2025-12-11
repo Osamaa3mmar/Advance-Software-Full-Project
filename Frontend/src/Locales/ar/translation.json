@@ -56,7 +56,15 @@
         }
     },
     "common": {
-        "or": "أو"
+        "or": "أو",
+        "error": "خطأ",
+        "success": "نجح",
+        "warning": "تحذير",
+        "cancel": "إلغاء",
+        "save": "حفظ",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "createdAt": "تاريخ الإنشاء"
     },
 
     "admin": {
@@ -112,6 +120,72 @@
             "createAlert": "إنشاء تنبيه",
             "addOrg": "إضافة منظمة"
         }
+    },
+    "alerts": {
+        "pageTitle": "إدارة التنبيهات",
+        "pageSubtitle": "إدارة تنبيهات النظام والإشعارات",
+        "addNew": "إضافة تنبيه",
+        "title": "العنوان",
+        "description": "الوصف",
+        "type": "النوع",
+        "noAlerts": "لا توجد تنبيهات",
+        "fillRequired": "الرجاء ملء جميع الحقول المطلوبة",
+        "createSuccess": "تم إنشاء التنبيه بنجاح",
+        "updateSuccess": "تم تحديث التنبيه بنجاح",
+        "deleteSuccess": "تم حذف التنبيه بنجاح",
+        "fetchError": "فشل في جلب التنبيهات",
+        "saveError": "فشل في حفظ التنبيه",
+        "deleteError": "فشل في حذف التنبيه",
+        "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا التنبيه؟",
+        "editAlert": "تعديل التنبيه",
+        "types": {
+            "general": "عام",
+            "emergency": "طوارئ",
+            "healthTip": "نصيحة صحية",
+            "event": "حدث",
+            "other": "أخرى"
+        }
+    },
+    "healthGuides": {
+        "pageTitle": "الأدلة الصحية",
+        "pageSubtitle": "إدارة الأدلة الصحية والمحتوى التعليمي",
+        "addNew": "إضافة دليل صحي",
+        "editGuide": "تعديل الدليل الصحي",
+        "category": "الفئة",
+        "categoryEn": "الفئة (بالإنجليزية)",
+        "categoryAr": "الفئة (بالعربية)",
+        "categoryEnPlaceholder": "مثال: Nutrition",
+        "categoryArPlaceholder": "مثال: التغذية",
+        "title": "العنوان",
+        "titleEn": "العنوان (بالإنجليزية)",
+        "titleAr": "العنوان (بالعربية)",
+        "titleEnPlaceholder": "أدخل العنوان بالإنجليزية",
+        "titleArPlaceholder": "أدخل العنوان بالعربية",
+        "content": "المحتوى",
+        "contentEn": "المحتوى (بالإنجليزية)",
+        "contentAr": "المحتوى (بالعربية)",
+        "contentEnPlaceholder": "أدخل المحتوى بالإنجليزية",
+        "contentArPlaceholder": "أدخل المحتوى بالعربية",
+        "attachFiles": "إرفاق ملفات",
+        "chooseFiles": "اختر ملفات",
+        "files": "ملفات",
+        "filesCount": "الملفات",
+        "noGuides": "لا توجد أدلة صحية",
+        "fillRequired": "الرجاء ملء الحقول المطلوبة (العنوان والمحتوى بالإنجليزية)",
+        "createSuccess": "تم إنشاء الدليل الصحي بنجاح",
+        "updateSuccess": "تم تحديث الدليل الصحي بنجاح",
+        "deleteSuccess": "تم حذف الدليل الصحي بنجاح",
+        "fetchError": "فشل في جلب الأدلة الصحية",
+        "saveError": "فشل في حفظ الدليل الصحي",
+        "deleteError": "فشل في حذف الدليل الصحي",
+        "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا الدليل الصحي؟",
+        "translateToArabic": "ترجمة إلى العربية",
+        "translateToEnglish": "ترجمة إلى الإنجليزية",
+        "toArabic": "→ عربي",
+        "toEnglish": "→ EN",
+        "noTextToTranslate": "لا يوجد نص للترجمة",
+        "translateSuccess": "تمت الترجمة بنجاح",
+        "translateError": "فشلت الترجمة"
     },
     "groups":
     {

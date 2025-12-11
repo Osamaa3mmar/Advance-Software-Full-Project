@@ -5,13 +5,18 @@ const translationRouter = Router();
 
 translationRouter.post("", async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message, targetLang } = req.body;
 
     if (!message || !message.content) {
       return res.status(400).json({ message: "Message content is required" });
     }
 
-    const prompt = `Translate the given text "${message.content}" to Arabic. Respond in JSON format with the structure: { "translate": "<translation>" }`;
+    if (!targetLang) {
+      return res.status(400).json({ message: "Target language is required (ar or en)" });
+    }
+
+    const languageName = targetLang === "ar" ? "Arabic" : "English";
+    const prompt = `Translate the given text "${message.content}" to ${languageName}. Respond in JSON format with the structure: { "translate": "<translation>" }`;
     const encodedPrompt = encodeURIComponent(prompt);
 
     const { data } = await axios.get(

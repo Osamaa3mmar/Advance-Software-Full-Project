@@ -21,13 +21,12 @@ import OrganizationLogin from "./Page/Auth/OrganizationLogin";
 import DashboardPage from "./Page/Admin/DashboardPage";
 import OrganizationsPage from "./Page/Admin/OrganizationsPage";
 import FilesPage from "./Page/Admin/FilesPage";
+import AlertsPage from "./Page/Admin/AlertsPage";
 import RoomsLayout from "./Layout/RoomsLayout";
 import AgoraRTC, { AgoraRTCProvider, useRTCClient } from "agora-rtc-react";
 import RoomCheck from "./Page/Rooms/Room/RoomCheck";
 import GroupsPage from "./Page/Groups/GroupsPage";
 import ChatPage from "./Page/Groups/ChatPage";
-import HealthGuidesLayout from "./Layout/HealthGuidesLayout";
-import HealthGuidesPage from "./Page/HealthGuides/HealthGuidesPage";
 
 export default function App() {
   const value = {
@@ -76,12 +75,8 @@ export default function App() {
           element: <DashboardPage />,
         },
         {
-          path: "health-guides",
-          element: <div>Health Guides Page - Coming Soon</div>,
-        },
-        {
           path: "alerts",
-          element: <div>Alerts Page - Coming Soon</div>,
+          element: <AlertsPage />,
         },
         {
           path: "organizations",
@@ -122,12 +117,6 @@ export default function App() {
         { path: "groups", element: <GroupsPage /> },
         { path: "chat/:groupId", element: <ChatPage /> },
       ],
-    },{
-      path:"/test",
-      element:<HealthGuidesLayout/>,
-      children:[
-      { path: "helthGuides", element: <HealthGuidesPage /> }
-      ]
     }
   ]);
 
