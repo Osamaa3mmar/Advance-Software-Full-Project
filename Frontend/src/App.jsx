@@ -5,7 +5,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import AuthLayout from "./Layout/AuthLayout";
-
 import AdminLayout from "./Layout/AdminLayout";
 import GroupLayout from "./Layout/GroupLayout";
 import LoginPage from "./Page/Auth/LoginPage";
@@ -29,6 +28,12 @@ import AgoraRTC, { AgoraRTCProvider, useRTCClient } from "agora-rtc-react";
 import RoomCheck from "./Page/Rooms/Room/RoomCheck";
 import GroupsPage from "./Page/Groups/GroupsPage";
 import ChatPage from "./Page/Groups/ChatPage";
+import HealthGuidesLayout from "./Layout/HealthGuidesLayout";
+import HealthGuidesPage from "./Page/HealthGuides/HealthGuidesPage";
+import GroupPage from "./Page/Admin/Groups/GroupPage";
+import HandleRequestPage from "./Page/Admin/Groups/HandleRequestPage.jsx";
+import HealthGuidesCard from "./Components/HealthGuides/HealthGuidesCard.jsx";
+import HealthGuidesMangePage from "./Page/Admin/HelathGuide/HealthGuidesMangePage.jsx";
 
 export default function App() {
   const value = {
@@ -84,6 +89,10 @@ export default function App() {
           element: <DashboardPage />,
         },
         {
+          path: "health-guides",
+          element: <HealthGuidesMangePage />,
+        },
+        {
           path: "alerts",
           element: <AlertsPage />,
         },
@@ -97,10 +106,17 @@ export default function App() {
         },
         {
           path: "groups",
-          element: <div>Groups Page - Coming Soon</div>,
+          element: <GroupPage />,
         },
+        {
+          path: "groups/:groupId/requests",
+          element: <HandleRequestPage />,
+        },
+
+        
       ],
     },
+    
     {
       path: "/rooms",
       element: <RoomsLayout />,

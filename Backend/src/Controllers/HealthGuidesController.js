@@ -6,8 +6,11 @@ export class HealthGuidesController {
     createGuide = async (req, res) => {
     try {
         let { translations } = req.body;
+        if (typeof translations === "string") {
+         translations = JSON.parse(translations);
+         }
+      
         let files = [];
-
         if (req.files && req.files.length > 0) {
             for (const file of req.files) {
                 const result = await cloudinary.uploader.upload(file.path, {
@@ -19,7 +22,6 @@ export class HealthGuidesController {
             }
         }
         const guide = await HealthGuidesService.createGuide({ translations, files });
-
         res.status(201).json({
             message: "Guide created successfully",
             guide,

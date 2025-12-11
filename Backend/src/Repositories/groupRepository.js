@@ -15,12 +15,11 @@ static getAllGroups=async()=>
     const [rows]=await connection.query( `SELECT * FROM support_groups`);
    return rows;
 }
-
 // get all groups for a specific user
 static getAllGroupsForUser = async (userId) => {
   const [rows] = await connection.query(
     `
-    SELECT 
+     SELECT 
       g.id,
       g.name,
       g.description,
@@ -53,11 +52,12 @@ static sendJoinRequest=async(groupId,userId)=>
       `SELECT r.id, u.first_name,r.state
        FROM group_member r
        JOIN users u ON r.user_id = u.id
-       WHERE r.group_id = ? and r.state="PENDING"`,
+       WHERE r.group_id = ?`,
       [groupId]
     );
     return rows;
   }
+
 
   // admin accepts or rejects a request 
   static updateReqStatus=async (requestId,state)=>
@@ -97,5 +97,12 @@ return result;
 
 }
 
+
+static deleteGroupById=async(groupId)=>
+{ 
+  const [result]=await connection.query(`delete from support_groups where id=?`,[groupId]);
+  return result;  
+
+}
 
 }

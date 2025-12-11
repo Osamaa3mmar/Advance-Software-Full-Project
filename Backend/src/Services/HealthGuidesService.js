@@ -3,7 +3,7 @@ import { HealthGuidesRepository } from "../Repositories/HealthGuidesRepository.j
 export class HealthGuidesService {
 
   static createGuide = async ({ translations , files}) => {
-    const guide = await HealthGuidesRepository.creatGuide();
+    const guide = await HealthGuidesRepository.createGuide();
 
 if(files && files.length > 0)
 {
@@ -11,9 +11,9 @@ if(files && files.length > 0)
 }
   
 
-    if (translations && translations.length > 0) {
-        await HealthGuidesRepository.addTranslations(guide.id, translations);
-    }
+  if (translations && Object.keys(translations).length > 0) {
+  await HealthGuidesRepository.addTranslations(guide.id, translations);
+}
 
     return guide;
 };

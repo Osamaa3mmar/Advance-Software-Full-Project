@@ -5,7 +5,6 @@ export default function HealthGuidesLayout() {
   return (
     <div className="min-h-screen">
       <div className="fixed top-4 right-4 z-50">
-        <LanguageToggle />
       </div>
       <Outlet />
     </div>

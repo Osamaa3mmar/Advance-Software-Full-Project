@@ -35,7 +35,7 @@ export class HealthGuidesRepository {
    
  const result = rows.map(guide => ({...guide, files: filesMap[guide.id] || []}));
 
-    return { data: result };
+    return result ;
 
 };
 
@@ -65,12 +65,12 @@ static addFiles = async (guideId, files) => {
 // add translate
 static addTranslations = async (guideId, translations) => {
 
-    const promises = connection.query(
+    const [rows] = await connection.query(
             `INSERT INTO health_guide_translations
                 (health_guide_id, category_en, category_ar, title_en, title_ar, content_en, content_ar)
                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
             [guideId, translations.category_en, translations.category_ar, translations.title_en, translations.title_ar, translations.content_en, translations.content_ar]  );
-    return Promise.all(promises);
+    return rows;
 }
 
 

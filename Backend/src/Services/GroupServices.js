@@ -44,6 +44,13 @@ static async handleRequest(requestId, state) {
   }
   
 
+  static async deleteGroup(groupId) {
+    const result = await groupRepository.deleteGroupById(groupId);  
+    if (result.affectedRows === 0) {
+      throw new Error("Group not found");
+    } 
+    return { message: "Group deleted successfully" };
+  } 
 
 
 }
