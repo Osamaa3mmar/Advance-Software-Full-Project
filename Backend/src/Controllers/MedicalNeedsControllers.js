@@ -41,6 +41,21 @@ class MedicalNeedsController {
 			res.status(400).json({ message: error.message });
 		}
 	}
+
+	static async updateMedicalNeedStatus(req, res) {
+		try {
+			const { id } = req.params;
+			const { status } = req.body;
+			await MedicalNeedsService.updateMedicalNeedStatus(
+				id,
+				status,
+				req.user
+			);
+			res.json({ message: "Status updated successfully" });
+		} catch (error) {
+			res.status(400).json({ message: error.message });
+		}
+	}
 }
 
 export default MedicalNeedsController;

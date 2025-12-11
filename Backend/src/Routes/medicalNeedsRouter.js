@@ -11,12 +11,14 @@ router.get("/", isLogin, MedicalNeedsController.getMedicalNeeds);
 // Get specific medical need (any logged in user)
 router.get("/:id", isLogin, MedicalNeedsController.getMedicalNeedById);
 
-// Create medical need (organizations only)
-router.post(
-	"/",
+// Create medical need (verified patients and organizations)
+router.post("/", isLogin, MedicalNeedsController.createMedicalNeed);
+
+// Update medical need status (patients and organizations only)
+router.put(
+	"/:id/status",
 	isLogin,
-	isOrganization,
-	MedicalNeedsController.createMedicalNeed
+	MedicalNeedsController.updateMedicalNeedStatus
 );
 
 export default router;
