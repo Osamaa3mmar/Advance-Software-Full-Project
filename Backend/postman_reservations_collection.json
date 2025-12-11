@@ -1,0 +1,212 @@
+{
+    "info": {
+        "_postman_id": "a1b2c3d4-5678-90ab-cdef-111213141516",
+        "name": "HealthPal - Reservations",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "version": "1.0.0"
+    },
+    "item": [
+        {
+            "name": "Create Reservation (Patient)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"doctor_appointment_id\": 1,\n  \"pref\": \"needs wheelchair\",\n  \"start_time\": \"2025-11-10T14:30:00Z\",\n  \"end_time\": \"2025-11-10T14:50:00Z\"\n}"
+                },
+                "url": {
+                    "raw": "{{burl}}/api/reservations/patient/create",
+                    "host": [
+                        "{{burl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "reservations",
+                        "patient",
+                        "create"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Patient Reservations",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{burl}}/api/reservations/patient/my-reservations",
+                    "host": [
+                        "{{burl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "reservations",
+                        "patient",
+                        "my-reservations"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Doctor Reservations (patients booked with doctor)",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{burl}}/api/reservations/doctor/reservations",
+                    "host": [
+                        "{{burl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "reservations",
+                        "doctor",
+                        "reservations"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update Reservation Status (Doctor)",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"status\": \"CONFIRMED\"\n}"
+                },
+                "url": {
+                    "raw": "{{burl}}/api/reservations/doctor/update-status/{{reservationId}}",
+                    "host": [
+                        "{{burl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "reservations",
+                        "doctor",
+                        "update-status",
+                        "{{reservationId}}"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update Reservation Pref (Doctor)",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"pref\": \"needs translator\"\n}"
+                },
+                "url": {
+                    "raw": "{{burl}}/api/reservations/doctor/update-pref/{{reservationId}}",
+                    "host": [
+                        "{{burl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "reservations",
+                        "doctor",
+                        "update-pref",
+                        "{{reservationId}}"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Create Doctor Appointment (Doctor)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"start_time\": \"2025-11-12T09:00:00Z\",\n  \"end_time\": \"2025-11-12T12:00:00Z\"\n}"
+                },
+                "url": {
+                    "raw": "{{burl}}/api/reservations/doctor/create-appointment",
+                    "host": [
+                        "{{burl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "reservations",
+                        "doctor",
+                        "create-appointment"
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Doctor Appointments",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{burl}}/api/reservations/doctor/appointments",
+                    "host": [
+                        "{{burl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "reservations",
+                        "doctor",
+                        "appointments"
+                    ]
+                }
+            }
+        }
+    ]
+}

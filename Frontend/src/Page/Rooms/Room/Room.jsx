@@ -49,7 +49,9 @@ export default function Room() {
         ) : (
           <div className="w-full h-full bg-black flex items-center justify-center flex-col gap-10">
             <ProgressSpinner />
-            <p className=" text-2xl text-white">Waiting For Osama To Join ...</p>
+            <p className=" text-2xl text-white">
+              Waiting For Osama To Join ...
+            </p>
           </div>
         )}
         <LocalView
@@ -67,11 +69,12 @@ export default function Room() {
           cameraOn={cameraOn}
         />
       </div>
-      {chatVisable ? (
-        <div className="chat lg:w-[30%] h-screen">
-          <ChatRoom setVisable={setChatVisable} />
-        </div>
-      ) : (
+      {/* {chatVisable ? ( */}
+      <div className={`${!chatVisable && "hidden"} chat lg:w-[30%] h-screen`}>
+        <ChatRoom setVisable={setChatVisable} />
+      </div>
+      {/* ) : ( */}
+      {!chatVisable && (
         <Button
           icon={"pi pi-inbox"}
           onClick={() => {
@@ -85,6 +88,7 @@ export default function Room() {
           }}
         />
       )}
+      {/* )} */}
     </div>
   );
 }

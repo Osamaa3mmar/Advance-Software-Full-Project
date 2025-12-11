@@ -14,6 +14,7 @@ export class UsersRepository {
     }
 
     static getUserById = async (userId) => {
+        console.log("test")
         const [rows] = await connection.query(
             "SELECT id, first_name, last_name, email, email_verified, profile_image_url, birth_date, phone_number, street, city, role, created_at FROM users WHERE id = ?",
             [userId]

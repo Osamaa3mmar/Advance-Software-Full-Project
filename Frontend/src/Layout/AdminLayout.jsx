@@ -19,14 +19,14 @@ export default function AdminLayout() {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "http://localhost:5555/api/users/profile",
+        "http://localhost:5555/api/users/osama/profile",
         {
           headers: {
             Authorization: localStorage.getItem("token"),
           },
         }
       );
-      setData(data.user);
+      setData(data.user.user);
     } catch (error) {
       setError(error);
     } finally {
@@ -36,6 +36,7 @@ export default function AdminLayout() {
   useEffect(() => {
     getUser();
   }, []);
+  console.log(data);
   return (
     <div className="min-h-screen bg-slate-100">
       {/* Sidebar */}

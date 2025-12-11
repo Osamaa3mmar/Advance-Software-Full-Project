@@ -216,7 +216,7 @@ export default function AddOrganizationForm({ onSuccess, onCancel }) {
               mode="basic"
               name="pic"
               accept="image/*"
-              maxFileSize={5000000}
+              maxFileSize={10000000}
               onSelect={handleFileSelect}
               auto={false}
               chooseLabel={previewUrl ? "Change Image" : "Choose Image"}

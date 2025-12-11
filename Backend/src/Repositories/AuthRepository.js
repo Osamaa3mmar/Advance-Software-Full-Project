@@ -3,7 +3,7 @@ import { connection } from "../../Database/Connection.js";
 export class AuthRepository {
   static getUserByEmail = async (email) => {
     let [rows] = await connection.query(
-      "SELECT id,email_verified,email,role,password FROM users AS user WHERE user.email=?",
+      "SELECT id,email_verified,email,role,password,first_name FROM users AS user WHERE user.email=?",
       [email]
     );
     return rows[0];

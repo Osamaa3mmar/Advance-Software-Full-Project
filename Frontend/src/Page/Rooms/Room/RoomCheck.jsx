@@ -4,8 +4,8 @@ import Room from './Room';
 
 export default function RoomCheck() {
     const {id}=useParams();
-
-    if(id<=0){
+    
+    if(Number(id)<=0){
         return <InvaliedRoomId/>;
     }
     else
