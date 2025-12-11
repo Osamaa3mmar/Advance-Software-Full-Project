@@ -12,7 +12,9 @@ translationRouter.post("", async (req, res) => {
     }
 
     if (!targetLang) {
-      return res.status(400).json({ message: "Target language is required (ar or en)" });
+      return res
+        .status(400)
+        .json({ message: "Target language is required (ar or en)" });
     }
 
     const languageName = targetLang === "ar" ? "Arabic" : "English";
@@ -24,9 +26,9 @@ translationRouter.post("", async (req, res) => {
     );
     console.log("Translation response:", data);
 
-    return res.status(200).json({ translation: data.translate  });
+    return res.status(200).json({ translation: data.translate });
   } catch (error) {
-    console.error("Translation error:", error.response?.data );
+    console.error("Translation error:", error.response?.data);
     return res.status(500).json({
       message: "Translation failed",
       error: error.response?.data || error.message,
