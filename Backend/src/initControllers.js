@@ -15,7 +15,7 @@ import anonymousMessagesRouter from "./Routes/AnonymousMessagesRouter.js";
 
 
 export const initControllers = (app) => {
-  app.use("/healthGuides", healthGuidesRoutes);
+  app.use("/api/healthGuides", healthGuidesRoutes);
   app.use("/api/auth", authRouter);
   app.use("/workshops", workshopsRouter);
   app.use("/api/organization", orgRouter);

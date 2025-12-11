@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { DataView } from "primereact/dataview";
 import { Dialog } from "primereact/dialog";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
@@ -8,7 +8,7 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import ToastContext from "../../../Context/Toast";
-import GroupItem from "./GroupItem";
+import GroupItem from "../../../Components/Groups/GroupItem";
 
 export default function GroupsPage() {
   const { toast } = useContext(ToastContext);
@@ -18,6 +18,8 @@ export default function GroupsPage() {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [editForm, setEditForm] = useState({ name: "", description: "" });
+  const [addForm, setAddForm] = useState({ name: "", description: "", category: "" });
+  const [showAddDialog, setShowAddDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const token = localStorage.getItem("token");
@@ -95,8 +97,9 @@ export default function GroupsPage() {
       return;
     }
     try {
+      console.log(selectedGroup.id);
       await axios.patch(
-        `http://localhost:5555/api/supportGroups/groups/${selectedGroup.id}`,
+        `http://localhost:5555/api/supportGroups/groups/update/${selectedGroup.id}`,
         editForm,
         { headers: { Authorization: `${token}` } }
       );
@@ -113,6 +116,32 @@ export default function GroupsPage() {
         severity: "error",
         summary: "Error",
         detail: error.response?.data?.message || "Failed to update group",
+        life: 3000,
+      });
+    }
+  };
+
+  const handleAddSubmit = async () => {
+    try {
+      await axios.post(
+        "http://localhost:5555/api/supportGroups/groups",
+        addForm,
+        { headers: { Authorization: `${token}` } }
+      );
+      toast.current.show({
+        severity: "success",
+        summary: "Success",
+        detail: "Group created successfully",
+        life: 3000,
+      });
+      setShowAddDialog(false);
+      setAddForm({ name: "", description: "", category: "" });
+      fetchGroups();
+    } catch (error) {
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: error.response?.data?.message || "Failed to create group",
         life: 3000,
       });
     }
@@ -144,7 +173,7 @@ export default function GroupsPage() {
             label="Add Group"
             icon="pi pi-plus"
             className="p-button-sm p-button-success"
-            onClick={() => navigate(`/admin/groups/create`)}
+            onClick={() => setShowAddDialog(true)}
           />
         </div>
       </div>
@@ -164,7 +193,7 @@ export default function GroupsPage() {
                 group={group}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
-                onRequests={(g) => navigate(`/admin/groups/${g.id}/requests`)}
+                onRequests={(g) => navigate(`${group.id}/requests`)}
               />
             )}
             paginator
@@ -213,6 +242,58 @@ export default function GroupsPage() {
           />
         </div>
       </Dialog>
+
+      {/* Add Group Dialog */}
+      <Dialog
+        visible={showAddDialog}
+        onHide={() => setShowAddDialog(false)}
+        header="Add New Group"
+        style={{ width: "500px" }}
+        breakpoints={{ "960px": "90vw" }}
+      >
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="text-sm text-slate-600 block mb-1">Name</label>
+            <InputText
+              value={addForm.name}
+              onChange={(e) =>
+                setAddForm({ ...addForm, name: e.target.value })
+              }
+              className="w-full"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-slate-600 block mb-1">
+              Description
+            </label>
+            <InputTextarea
+              value={addForm.description}
+              onChange={(e) =>
+                setAddForm({ ...addForm, description: e.target.value })
+              }
+              rows={4}
+              className="w-full"
+            />
+          </div>
+          <div>
+            <label className="text-sm text-slate-600 block mb-1">Category</label>
+            <InputText
+              value={addForm.category}
+              onChange={(e) =>
+                setAddForm({ ...addForm, category: e.target.value })
+              }
+              className="w-full"
+            />
+          </div>
+          <Button
+            label="Create Group"
+            icon="pi pi-plus"
+            className="p-button-success w-full"
+            onClick={handleAddSubmit}
+          />
+        </div>
+      </Dialog>
+      <Outlet/>
     </div>
   );
 }

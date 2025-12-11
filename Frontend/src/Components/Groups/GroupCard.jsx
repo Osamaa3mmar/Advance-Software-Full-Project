@@ -23,7 +23,7 @@ export default function GroupCard() {
     setLoading(true);
     try {
       const { data } = await axios.get(
-        `http://localhost:5555/api/supportGroups/groups`,
+        `http://localhost:5555/api/supportGroups/groups/user`,
         { headers: { Authorization: token } }
       );
       setGroups(data || []);
@@ -230,7 +230,7 @@ export default function GroupCard() {
                       }}
                       disabled
                     />
-                  ) : group.state === "APPROVED" ? (
+                  ) :group.state === "APPROVED" ? (
                     <div style={{ display: "flex", gap: "0.5rem" }}>
                 <Button
              label={t("groups.chat")}

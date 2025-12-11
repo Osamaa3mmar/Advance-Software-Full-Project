@@ -29,6 +29,8 @@ import HealthGuidesLayout from "./Layout/HealthGuidesLayout";
 import HealthGuidesPage from "./Page/HealthGuides/HealthGuidesPage";
 import GroupPage from "./Page/Admin/Groups/GroupPage";
 import HandleRequestPage from "./Page/Admin/Groups/HandleRequestPage.jsx";
+import HealthGuidesCard from "./Components/HealthGuides/HealthGuidesCard.jsx";
+import HealthGuidesMangePage from "./Page/Admin/HelathGuide/HealthGuidesMangePage.jsx";
 export default function App() {
   const value = {
     ripple: true,
@@ -77,7 +79,7 @@ export default function App() {
         },
         {
           path: "health-guides",
-          element: <div>Health Guides Page - Coming Soon</div>,
+          element:<HealthGuidesMangePage/>,
         },
         {
           path: "alerts",
@@ -94,10 +96,17 @@ export default function App() {
        {
           path: "groups",
            element: <GroupPage />,
-         
-},
+         },
+
+           {
+             path:"groups/:groupId/requests",
+          element:<HandleRequestPage/>  
+         },
+
+        
       ],
     },
+    
     {
       path: "/rooms",
       element: <RoomsLayout />,

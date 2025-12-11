@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Button } from "primereact/button";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 
 export default function HandleRequestPage() {
   const { groupId } = useParams();
@@ -13,13 +15,13 @@ export default function HandleRequestPage() {
       `http://localhost:5555/api/supportGroups/groups/${groupId}/requests`,
       { headers: { Authorization: `${token}` } }
     );
-    setRequests(response.data.requests);
+    setRequests(response.data);
   };
 
-  const handleUpdate = async (requestId, status) => {
+  const handleUpdate = async (requestId, state) => {
     await axios.patch(
       `http://localhost:5555/api/supportGroups/requests/${requestId}`,
-      { status },
+      { state },
       { headers: { Authorization: `${token}` } }
     );
     fetchRequests();
@@ -29,41 +31,57 @@ export default function HandleRequestPage() {
     fetchRequests();
   }, []);
 
-  return (
-    <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold text-slate-700">
-        Group {groupId} - Join Requests
-      </h1>
+return (
+  <div className="p-6">
+    <h1 className="text-2xl font-bold text-slate-700 mb-6">
+      Group {groupId} - Join Requests
+    </h1>
 
-      {requests.length === 0 ? (
-        <p className="text-slate-500">No pending requests.</p>
-      ) : (
-        requests.map((req) => (
-          <div
-            key={req.id}
-            className="flex justify-between items-center border rounded-lg p-3 shadow-sm bg-white"
-          >
-            <div>
-              <p className="font-semibold">{req.userName}</p>
-              <p className="text-sm text-slate-500">{req.email}</p>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                label="Approve"
-                icon="pi pi-check"
-                className="p-button-success p-button-sm"
-                onClick={() => handleUpdate(req.id, "APPROVED")}
-              />
-              <Button
-                label="Reject"
-                icon="pi pi-times"
-                className="p-button-danger p-button-sm"
-                onClick={() => handleUpdate(req.id, "REJECTED")}
-              />
-            </div>
+    <DataTable
+      value={requests}
+      paginator
+      rows={10}
+      className="p-datatable-sm shadow-sm rounded-lg"
+      emptyMessage="No pending requests"
+    >
+      <Column field="id" header="ID" sortable />
+      <Column field="first_name" header="Name" sortable />
+      <Column field="state" header="state" sortable 
+        body={(rowData) => (
+          <span className={`px-2 py-1 rounded text-sm ${
+            rowData.state === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+            rowData.state === 'APPROVED' ? 'bg-green-100 text-green-800' :
+            'bg-red-100 text-red-800'
+          }`}>
+            {rowData.state}
+          </span>
+        )}
+      />
+      <Column
+        header="Actions"
+        body={(rowData) => (
+          <div className="flex gap-2">
+            {rowData.state === 'PENDING' && (
+              <>
+                <Button
+                  icon="pi pi-check"
+                  className="p-button-success p-button-sm"
+                  tooltip="Approve"
+                  onClick={() => handleUpdate(rowData.id, "APPROVED")}
+                />
+                <Button
+                  icon="pi pi-times"
+                  className="p-button-danger p-button-sm"
+                  tooltip="Reject"
+                  onClick={() => handleUpdate(rowData.id, "REJECTED")}
+                />
+              </>
+            )}
           </div>
-        ))
-      )}
-    </div>
-  );
+        )}
+      />
+    </DataTable>
+  </div>
+);
+
 }
