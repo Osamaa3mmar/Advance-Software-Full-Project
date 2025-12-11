@@ -13,22 +13,23 @@ import documentsRouter from "./Routes/DocumentsRouter.js";
 import roomsRouter from "./Routes/RoomsRouter.js";
 import anonymousMessagesRouter from "./Routes/AnonymousMessagesRouter.js";
 import translationRouter from "./Routes/TranslationRouter.js";
+import donationRouter from "./Routes/DonationRouter.js";
 
 export const initControllers = (app) => {
-  app.use("/healthGuides", healthGuidesRoutes);
-  app.use("/api/auth", authRouter);
-  app.use("/workshops", workshopsRouter);
-  app.use("/api/organization", orgRouter);
-  app.use("/api/alerts", alertRoutes);
-  app.use("/api/supportGroups", groupRoutes);
-  app.use("/api/group/messages", groupMessagesRouter);
-  app.use("/api/admin", AdminInfoRouter);
-  app.use("/api/users", userRouter);
-  app.use("/api/documents", documentsRouter);
-  app.use("/api/medicalNeeds", medicalNeedsRouter);
-  app.use("/api/anonymous-messages", anonymousMessagesRouter);
-  app.use("/api/reservations", reservationRouter);
-
-  app.use("/api/translation",translationRouter)
+	app.use("/healthGuides", healthGuidesRoutes);
+	app.use("/api/auth", authRouter);
+	app.use("/workshops", workshopsRouter);
+	app.use("/api/organization", orgRouter);
+	app.use("/api/alerts", alertRoutes);
+	app.use("/api/supportGroups", groupRoutes);
+	app.use("/api/group/messages", groupMessagesRouter);
+	app.use("/api/admin", AdminInfoRouter);
+	app.use("/api/users", userRouter);
+	app.use("/api/documents", documentsRouter);
+	app.use("/api/medicalNeeds", medicalNeedsRouter);
+	app.use("/api/anonymous-messages", anonymousMessagesRouter);
+	app.use("/api/reservations", reservationRouter);
+	app.use("/api/translation", translationRouter);
+	app.use("/api/donations", donationRouter);
 };
 // app.use("/api/rooms",roomsRouter);
