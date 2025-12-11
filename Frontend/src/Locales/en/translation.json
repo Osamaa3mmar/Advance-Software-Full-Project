@@ -186,16 +186,62 @@
         "translateSuccess": "Translation completed successfully",
         "translateError": "Translation failed"
     },
-        "groups":
-    {
-        "chat":"chat",
-        "AllGroups":"All Groups",
-         "Showmy":"Show My",
-         "ShowAll":"Show All",
-          "MyGroups":"My Groups",
-          "WaitforResponse":"Wait for Response",
-          "Joined":"Joined",
-          "Rejected":"Rejected",
-           "Join":"Join"
+    "medicalNeeds": {
+        "pageTitle": "Medical Needs Management",
+        "pageSubtitle": "Manage medical needs and supplies for your organization",
+        "addNew": "Add Medical Need",
+        "editNeed": "Edit Medical Need",
+        "name": "Name",
+        "namePlaceholder": "Enter medical need name",
+        "description": "Description",
+        "descriptionPlaceholder": "Enter detailed description",
+        "type": "Type",
+        "selectType": "Select type",
+        "quantity": "Quantity",
+        "price": "Price",
+        "isRequest": "Is Request (Mark this if it's a donation request)",
+        "noNeeds": "No medical needs found",
+        "fillRequired": "Please fill in all required fields (Name and Type)",
+        "createSuccess": "Medical need created successfully",
+        "updateSuccess": "Medical need updated successfully",
+        "deleteSuccess": "Medical need deleted successfully",
+        "fetchError": "Failed to fetch medical needs",
+        "saveError": "Failed to save medical need",
+        "deleteError": "Failed to delete medical need",
+        "confirmDelete": "Are you sure you want to delete this medical need?",
+        "types": {
+            "medication": "Medication",
+            "equipment": "Equipment",
+            "supplies": "Supplies",
+            "surgery": "Surgery",
+            "therapy": "Therapy",
+            "diagnostic": "Diagnostic",
+            "consultation": "Consultation",
+            "other": "Other"
+        },
+        "status": {
+            "label": "Status",
+            "pending": "Pending",
+            "inProgress": "In Progress",
+            "fulfilled": "Fulfilled",
+            "canceled": "Canceled"
+        }
+    },
+    "organization": {
+        "panel": "Organization Panel",
+        "dashboard": "Dashboard",
+        "medicalNeeds": "Medical Needs",
+        "logout": "Logout"
+    },
+    "groups": {
+        "chat": "chat",
+        "AllGroups": "All Groups",
+        "Showmy": "Show My",
+        "ShowAll": "Show All",
+        "MyGroups": "My Groups",
+        "WaitforResponse": "Wait for Response",
+        "Joined": "Joined",
+        "Rejected": "Rejected",
+        "Join": "Join"
     }
 }

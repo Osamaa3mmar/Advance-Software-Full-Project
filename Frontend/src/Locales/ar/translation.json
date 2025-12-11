@@ -66,7 +66,6 @@
         "delete": "حذف",
         "createdAt": "تاريخ الإنشاء"
     },
-
     "admin": {
         "panel": "لوحة الإدارة",
         "dashboard": "لوحة التحكم",
@@ -187,16 +186,62 @@
         "translateSuccess": "تمت الترجمة بنجاح",
         "translateError": "فشلت الترجمة"
     },
-    "groups":
-    {
-        "chat":"دردشة",
-        "AllGroups":"جميع المجموعات",
-        "Showmy":"اعرض لي",
-         "ShowAll":"اعرض الجميع",
-         "MyGroups":"مجموعاتي",
-           "WaitforResponse":"انتظر الرد",
-           "Joined":"منضم",
-         "Rejected":"مرفوض",
-         "Join":"انضم"
+    "medicalNeeds": {
+        "pageTitle": "إدارة الاحتياجات الطبية",
+        "pageSubtitle": "إدارة الاحتياجات واللوازم الطبية لمنظمتك",
+        "addNew": "إضافة احتياج طبي",
+        "editNeed": "تعديل الاحتياج الطبي",
+        "name": "الاسم",
+        "namePlaceholder": "أدخل اسم الاحتياج الطبي",
+        "description": "الوصف",
+        "descriptionPlaceholder": "أدخل وصفًا تفصيليًا",
+        "type": "النوع",
+        "selectType": "اختر النوع",
+        "quantity": "الكمية",
+        "price": "السعر",
+        "isRequest": "طلب تبرع (حدد هذا الخيار إذا كان طلب تبرع)",
+        "noNeeds": "لا توجد احتياجات طبية",
+        "fillRequired": "الرجاء ملء جميع الحقول المطلوبة (الاسم والنوع)",
+        "createSuccess": "تم إنشاء الاحتياج الطبي بنجاح",
+        "updateSuccess": "تم تحديث الاحتياج الطبي بنجاح",
+        "deleteSuccess": "تم حذف الاحتياج الطبي بنجاح",
+        "fetchError": "فشل في جلب الاحتياجات الطبية",
+        "saveError": "فشل في حفظ الاحتياج الطبي",
+        "deleteError": "فشل في حذف الاحتياج الطبي",
+        "confirmDelete": "هل أنت متأكد أنك تريد حذف هذا الاحتياج الطبي؟",
+        "types": {
+            "medication": "أدوية",
+            "equipment": "معدات",
+            "supplies": "لوازم",
+            "surgery": "جراحة",
+            "therapy": "علاج",
+            "diagnostic": "تشخيص",
+            "consultation": "استشارة",
+            "other": "أخرى"
+        },
+        "status": {
+            "label": "الحالة",
+            "pending": "قيد الانتظار",
+            "inProgress": "قيد التنفيذ",
+            "fulfilled": "مكتمل",
+            "canceled": "ملغى"
+        }
+    },
+    "organization": {
+        "panel": "لوحة المنظمة",
+        "dashboard": "لوحة التحكم",
+        "medicalNeeds": "الاحتياجات الطبية",
+        "logout": "تسجيل الخروج"
+    },
+    "groups": {
+        "chat": "دردشة",
+        "AllGroups": "جميع المجموعات",
+        "Showmy": "اعرض لي",
+        "ShowAll": "اعرض الجميع",
+        "MyGroups": "مجموعاتي",
+        "WaitforResponse": "انتظر الرد",
+        "Joined": "منضم",
+        "Rejected": "مرفوض",
+        "Join": "انضم"
     }
 }

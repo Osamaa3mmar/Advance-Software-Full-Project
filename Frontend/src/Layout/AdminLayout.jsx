@@ -19,7 +19,7 @@ export default function AdminLayout() {
     try {
       setLoading(true);
       const { data } = await axios.get(
-        "http://localhost:5555/api/users/osama/profile",
+        "http://localhost:5555/api/users/profile",
         {
           headers: {
             Authorization: localStorage.getItem("token"),
@@ -36,6 +36,7 @@ export default function AdminLayout() {
   useEffect(() => {
     getUser();
   }, []);
+
   console.log(data);
   return (
     <div className="min-h-screen bg-slate-100">

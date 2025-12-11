@@ -22,6 +22,8 @@ import DashboardPage from "./Page/Admin/DashboardPage";
 import OrganizationsPage from "./Page/Admin/OrganizationsPage";
 import FilesPage from "./Page/Admin/FilesPage";
 import AlertsPage from "./Page/Admin/AlertsPage";
+import OrganizationLayout from "./Layout/OrganizationLayout";
+import MedicalNeedsPage from "./Page/Organization/MedicalNeedsPage";
 import RoomsLayout from "./Layout/RoomsLayout";
 import AgoraRTC, { AgoraRTCProvider, useRTCClient } from "agora-rtc-react";
 import RoomCheck from "./Page/Rooms/Room/RoomCheck";
@@ -53,13 +55,20 @@ export default function App() {
     },
     {
       path: "/org",
-      element: <div>Organization App Here</div>,
+      element: <OrganizationLayout />,
       children: [
         {
-          path: "dashboard",
-          element: <div>Organization Dashboard</div>,
+          path: "",
+          element: <Navigate to="/org/dashboard" />,
         },
-        {},
+        {
+          path: "dashboard",
+          element: <MedicalNeedsPage />,
+        },
+        {
+          path: "medical-needs",
+          element: <MedicalNeedsPage />,
+        },
       ],
     },
     {
@@ -117,7 +126,7 @@ export default function App() {
         { path: "groups", element: <GroupsPage /> },
         { path: "chat/:groupId", element: <ChatPage /> },
       ],
-    }
+    },
   ]);
 
   return (

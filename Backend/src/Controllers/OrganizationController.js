@@ -7,7 +7,8 @@ class OrganizationController {
       const response = await OrganizationService.createOrganization(
         name,
         email,
-        type, req.files.org_image
+        type,
+        req.files.org_image
       );
       if (response.success) {
         return res.status(201).json({ message: response.message });
@@ -27,7 +28,9 @@ class OrganizationController {
       password
     );
     if (response.success) {
-      return res.status(200).json({ message: response.message,token:response.token });
+      return res
+        .status(200)
+        .json({ message: response.message, token: response.token });
     } else {
       return res.status(400).json({ message: response.message });
     }
@@ -37,24 +40,23 @@ class OrganizationController {
   };
   loginOrganization = async (req, res) => {
     try {
-    const response = await OrganizationService.loginOrganization(req.body);
-    if (response.success) {
-      return res
-        .status(200)
-        .json({ message: response.message, token: response.token });
-    } else {
-      return res.status(400).json({ message: response.message });
-    }
+      const response = await OrganizationService.loginOrganization(req.body);
+      if (response.success) {
+        return res
+          .status(200)
+          .json({ message: response.message, token: response.token });
+      } else {
+        return res.status(400).json({ message: response.message });
+      }
     } catch (error) {
       return res.status(500).json({ message: "Server Error", error });
     }
   };
 
- 
   requestOrganizationPasswordReset = async (req, res) => {
     try {
-    console.log(req.body);
-      if(!req.body.email){
+      console.log(req.body);
+      if (!req.body.email) {
         return res.status(400).json({ message: "Email is required" });
       }
       const { email } = req.body;
@@ -72,8 +74,10 @@ class OrganizationController {
 
   resetOrganizationPassword = async (req, res) => {
     try {
-      if(!req.body.email || !req.body.code || !req.body.newPassword){
-        return res.status(400).json({ message: "Email, code and new password are required" });
+      if (!req.body.email || !req.body.code || !req.body.newPassword) {
+        return res
+          .status(400)
+          .json({ message: "Email, code and new password are required" });
       }
       const { email, code, newPassword } = req.body;
       const response = await OrganizationService.resetOrganizationPassword(
@@ -97,7 +101,20 @@ class OrganizationController {
     } catch (error) {
       return res.status(500).json({ message: "Server Error", error });
     }
+  };
 
+  getOrganizationProfile = async (req, res) => {
+    try {
+      const orgId = req.user.id;
+      const response = await OrganizationService.getOrganizationProfile(orgId);
+      if (response.success) {
+        return res.status(200).json({ organization: response.organization });
+      } else {
+        return res.status(404).json({ message: response.message });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: "Server Error", error });
+    }
   };
 }
 const organizationController = new OrganizationController();

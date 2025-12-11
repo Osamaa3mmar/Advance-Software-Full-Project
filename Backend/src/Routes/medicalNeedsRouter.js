@@ -16,9 +16,15 @@ router.post("/", isLogin, MedicalNeedsController.createMedicalNeed);
 
 // Update medical need status (patients and organizations only)
 router.put(
-	"/:id/status",
-	isLogin,
-	MedicalNeedsController.updateMedicalNeedStatus
+  "/:id/status",
+  isLogin,
+  MedicalNeedsController.updateMedicalNeedStatus
 );
+
+// Update medical need (patients and organizations only)
+router.put("/:id", isLogin, MedicalNeedsController.updateMedicalNeed);
+
+// Delete medical need (patients and organizations only)
+router.delete("/:id", isLogin, MedicalNeedsController.deleteMedicalNeed);
 
 export default router;

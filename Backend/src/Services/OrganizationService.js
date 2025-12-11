@@ -6,49 +6,50 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cloudinary from "../Utils/cloudinary.js";
 export class OrganizationService {
-
- static createOrganization = async (name, email, type,image) => {
+  static createOrganization = async (name, email, type, image) => {
     // try {
-      if (!name || !email || !type) {
-        return {
-          success: false,
-          message: "Organization name, email, and type are required",
-        };
-      }
-      let orgImageurl=null;
-      if(image&&image.length>0){
-        orgImageurl=(await cloudinary.uploader.upload(image[0].path)).secure_url;
-      }
-      let isUsedEmail = await OrganizationRepository.isOrganizationEmailUsed(email);
-      if (isUsedEmail > 0) {
-        return { success: false, message: "Email is already in use" };
-      }
-
-      const result = await OrganizationRepository.createOrganization({
-        name,
-        email,
-        type,
-        is_active: false,
-        profile_image_url: orgImageurl
-
-      });
-      const code = Math.floor(10000000 + Math.random() * 90000000).toString();
-
-      await VerificationCodesRepository.createVerificationCode(
-        result.insertId,
-        code,
-        "ORGANIZATION_REGISTER"
-      );
-      await EmailSender.sendEmail(
-        email,
-        "Organization Registration",
-        getResetPasswordTemplate(code)
-      );
-
+    if (!name || !email || !type) {
       return {
-        success: true,
-        message: "Organization created successfully. Setup code sent to email.",
+        success: false,
+        message: "Organization name, email, and type are required",
       };
+    }
+    let orgImageurl = null;
+    if (image && image.length > 0) {
+      orgImageurl = (await cloudinary.uploader.upload(image[0].path))
+        .secure_url;
+    }
+    let isUsedEmail = await OrganizationRepository.isOrganizationEmailUsed(
+      email
+    );
+    if (isUsedEmail > 0) {
+      return { success: false, message: "Email is already in use" };
+    }
+
+    const result = await OrganizationRepository.createOrganization({
+      name,
+      email,
+      type,
+      is_active: false,
+      profile_image_url: orgImageurl,
+    });
+    const code = Math.floor(10000000 + Math.random() * 90000000).toString();
+
+    await VerificationCodesRepository.createVerificationCode(
+      result.insertId,
+      code,
+      "ORGANIZATION_REGISTER"
+    );
+    await EmailSender.sendEmail(
+      email,
+      "Organization Registration",
+      getResetPasswordTemplate(code)
+    );
+
+    return {
+      success: true,
+      message: "Organization created successfully. Setup code sent to email.",
+    };
     // } catch (error) {
     //   return { success: false, message: "Server error", error };
     // }
@@ -56,49 +57,51 @@ export class OrganizationService {
 
   static setupOrganizationPassword = async (email, code, password) => {
     // try {
-      if (!email || !code || !password) {
-        return {
-          success: false,
-          message: "Email, code and password are required",
-        };
-      }
-
-      const organization = await OrganizationRepository.getOrganizationByEmail(email);
-      if (!organization) {
-        return { success: false, message: "Organization not found" };
-      }
-
-      const verificationCode = await VerificationCodesRepository.findValidCode(
-        code,
-        "ORGANIZATION_REGISTER"
-      );
-
-      if (!verificationCode || verificationCode.target_id !== organization.id) {
-        return { success: false, message: "Invalid or expired setup code" };
-      }
-
-      const hashedPassword = bcrypt.hashSync(password, 8);
-
-      await OrganizationRepository.activateOrganization(
-        organization.id,
-        hashedPassword
-      );
-
-      // Mark code as used
-      await VerificationCodesRepository.markCodeAsUsed(verificationCode.id);
-      const org=await OrganizationRepository.getOrganizationByEmail(email);
-      const tokenTemplate={
-        name:org.name,
-        id:org.id,
-        type:org.type,
-        isActive:org.is_active
-      }
-      const token=jwt.sign(tokenTemplate,"healthpal");
+    if (!email || !code || !password) {
       return {
-        success: true,
-        message: "Organization setup completed successfully",
-        token:token
+        success: false,
+        message: "Email, code and password are required",
       };
+    }
+
+    const organization = await OrganizationRepository.getOrganizationByEmail(
+      email
+    );
+    if (!organization) {
+      return { success: false, message: "Organization not found" };
+    }
+
+    const verificationCode = await VerificationCodesRepository.findValidCode(
+      code,
+      "ORGANIZATION_REGISTER"
+    );
+
+    if (!verificationCode || verificationCode.target_id !== organization.id) {
+      return { success: false, message: "Invalid or expired setup code" };
+    }
+
+    const hashedPassword = bcrypt.hashSync(password, 8);
+
+    await OrganizationRepository.activateOrganization(
+      organization.id,
+      hashedPassword
+    );
+
+    // Mark code as used
+    await VerificationCodesRepository.markCodeAsUsed(verificationCode.id);
+    const org = await OrganizationRepository.getOrganizationByEmail(email);
+    const tokenTemplate = {
+      name: org.name,
+      id: org.id,
+      type: org.type,
+      isActive: org.is_active,
+    };
+    const token = jwt.sign(tokenTemplate, "healthpal");
+    return {
+      success: true,
+      message: "Organization setup completed successfully",
+      token: token,
+    };
     // } catch (error) {
     //   return { success: false, message: "Server error", error };
     // }
@@ -107,91 +110,90 @@ export class OrganizationService {
   static loginOrganization = async (credentials) => {
     // try {
     console.log(credentials);
-      if (!credentials.email || !credentials.password) {
-        return { success: false, message: "Email and password are required" };
-      }
+    if (!credentials.email || !credentials.password) {
+      return { success: false, message: "Email and password are required" };
+    }
 
-      const organization = await OrganizationRepository.getOrganizationByEmail(
-        credentials.email
-      );
-      if (!organization) {
-        return { success: false, message: "Organization not found" };
-      }
+    const organization = await OrganizationRepository.getOrganizationByEmail(
+      credentials.email
+    );
+    if (!organization) {
+      return { success: false, message: "Organization not found" };
+    }
 
-      if (!organization.is_active) {
-        return {
-          success: false,
-          message: "Organization account is not activated",
-        };
-      }
-      console.log(organization);
-      const isCorrect = bcrypt.compareSync(
-        credentials.password,
-        organization.password
-      );
-      if (!isCorrect) {
-        return { success: false, message: "Invalid password" };
-      }
-
-      const tokenInfo = {
-        id: organization.id,
-        role: "ORGANIZATION",
-        type: organization.type,
-        email: organization.email,
-        name: organization.name,
-      };
-
-      const token = jwt.sign(tokenInfo, "healthpal");
+    if (!organization.is_active) {
       return {
-        success: true,
-        message: "Login successful",
-        token,
+        success: false,
+        message: "Organization account is not activated",
       };
+    }
+    console.log(organization);
+    const isCorrect = bcrypt.compareSync(
+      credentials.password,
+      organization.password
+    );
+    if (!isCorrect) {
+      return { success: false, message: "Invalid password" };
+    }
+
+    const tokenInfo = {
+      id: organization.id,
+      role: "ORGANIZATION",
+      type: organization.type,
+      email: organization.email,
+      name: organization.name,
+    };
+
+    const token = jwt.sign(tokenInfo, "healthpal");
+    return {
+      success: true,
+      message: "Login successful",
+      token,
+    };
     // } catch (error) {
     //   console.error("Organization login error:", error);
     //   return { success: false, message: "Server error", error };
     // }
   };
 
-
-
-
-    static requestOrganizationPasswordReset = async (email) => {
+  static requestOrganizationPasswordReset = async (email) => {
     // try {
-      if (!email) {
-        return { success: false, message: "Email is required" };
-      }
+    if (!email) {
+      return { success: false, message: "Email is required" };
+    }
 
-      const organization = await OrganizationRepository.getOrganizationByEmail(email);
-      if (!organization) {
-        return { success: false, message: "Organization not found" };
-      }
+    const organization = await OrganizationRepository.getOrganizationByEmail(
+      email
+    );
+    if (!organization) {
+      return { success: false, message: "Organization not found" };
+    }
 
-      if (!organization.is_active) {
-        return {
-          success: false,
-          message: "Organization account is not activated",
-        };
-      }
-
-      // Generate 8-digit code
-      const code = Math.floor(10000000 + Math.random() * 90000000).toString();
-
-      await VerificationCodesRepository.createVerificationCode(
-        organization.id,
-        code,
-        "RESET_PASSWORD"
-      );
-      await EmailSender.sendEmail(
-        email,
-        "Organization Password Reset Request",
-        getResetPasswordTemplate(code)
-      );
-
+    if (!organization.is_active) {
       return {
-        success: true,
-        message: "Password reset code has been sent to your email",
+        success: false,
+        message: "Organization account is not activated",
       };
+    }
+
+    // Generate 8-digit code
+    const code = Math.floor(10000000 + Math.random() * 90000000).toString();
+
+    await VerificationCodesRepository.createVerificationCode(
+      organization.id,
+      code,
+      "RESET_PASSWORD"
+    );
+    await EmailSender.sendEmail(
+      email,
+      "Organization Password Reset Request",
+      getResetPasswordTemplate(code)
+    );
+
+    return {
+      success: true,
+      message: "Password reset code has been sent to your email",
+    };
     // } catch (error) {
     //   return { success: false, message: "Server error", error };
     // }
@@ -206,7 +208,9 @@ export class OrganizationService {
         };
       }
 
-      const organization = await OrganizationRepository.getOrganizationByEmail(email);
+      const organization = await OrganizationRepository.getOrganizationByEmail(
+        email
+      );
       if (!organization) {
         return { success: false, message: "Organization not found" };
       }
@@ -245,7 +249,28 @@ export class OrganizationService {
       return { success: false, message: "Server error", error };
     }
   };
-  static getAllOrganizations=async()=>{
+  static getAllOrganizations = async () => {
     return await OrganizationRepository.getAllOrganizations();
-  }
+  };
+
+  static getOrganizationProfile = async (orgId) => {
+    try {
+      const organization = await OrganizationRepository.getOrganizationById(
+        orgId
+      );
+      if (!organization) {
+        return { success: false, message: "Organization not found" };
+      }
+
+      // لا نرسل الـ password
+      const { password, ...orgData } = organization;
+
+      return {
+        success: true,
+        organization: orgData,
+      };
+    } catch (error) {
+      return { success: false, message: "Server error", error };
+    }
+  };
 }
