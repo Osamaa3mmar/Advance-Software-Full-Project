@@ -112,11 +112,9 @@ export default function App() {
           path: "groups/:groupId/requests",
           element: <HandleRequestPage />,
         },
-
-        
       ],
     },
-    
+
     {
       path: "/rooms",
       element: <RoomsLayout />,
