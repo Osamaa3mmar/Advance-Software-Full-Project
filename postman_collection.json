@@ -1,0 +1,2507 @@
+{
+  "info": {
+    "name": "AdvanceSoft API",
+    "_postman_id": "9c1a0a4c-7a3d-4e72-a26f-advancesoft",
+    "description": "Collection generated from backend code.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "description": "Overview: user signup, login, email verification, and password reset flows.",
+      "item": [
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sara.patient@example.com\",\n  \"password\": \"StrongPass123!\",\n  \"role\": \"PATIENT\",\n  \"first_name\": \"Sara\",\n  \"last_name\": \"Hassan\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/auth/signup",
+              "host": ["{{burl}}"],
+              "path": ["api", "auth", "signup"]
+            },
+            "description": "Creates user with role (PATIENT, DOCTOR, DONOR).\nAccepts email/password/role; returns 201 on success."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/auth/signup" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"User created successfully\"\n}"
+            },
+            {
+              "name": "400 Email in use",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/auth/signup" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Email is already in use\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{burl}}/api/auth/verify-email?code=4b54c1d0-48fd-4f3d-9f5e-abc123",
+              "host": ["{{burl}}"],
+              "path": ["api", "auth", "verify-email"],
+              "query": [{ "key": "code", "value": "4b54c1d0-48fd-4f3d-9f5e-abc123" }]
+            },
+            "description": "Marks the signup verification code as used.\nReceives verification code; returns success or invalid/expired."
+          },
+          "response": [
+            {
+              "name": "200 Verified",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/auth/verify-email" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Email verified successfully\"\n}"
+            },
+            {
+              "name": "400 Invalid code",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/auth/verify-email" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Invalid or expired verification code or already used\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sara.patient@example.com\",\n  \"password\": \"StrongPass123!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/auth/login",
+              "host": ["{{burl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Authenticates a user and returns JWT token.\nReceives email/password; returns token on success."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/auth/login" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Login Success\",\n  \"token\": \"{{pToken}}\"\n}"
+            },
+            {
+              "name": "400 Wrong password",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/auth/login" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Wrong Password\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Request Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sara.patient@example.com\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/auth/request-reset-password",
+              "host": ["{{burl}}"],
+              "path": ["api", "auth", "request-reset-password"]
+            },
+            "description": "Sends 8-digit reset code to email.\nReceives email; returns confirmation or user not found."
+          },
+          "response": [
+            {
+              "name": "200 Code sent",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/auth/request-reset-password" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Password reset code has been sent to your email\"\n}"
+            },
+            {
+              "name": "400 Missing email",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/auth/request-reset-password" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Email is required\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sara.patient@example.com\",\n  \"code\": \"58392014\",\n  \"newPassword\": \"NewStrongPass456!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/auth/reset-password",
+              "host": ["{{burl}}"],
+              "path": ["api", "auth", "reset-password"]
+            },
+            "description": "Resets password using code.\nReceives email/code/newPassword; returns success or invalid code."
+          },
+          "response": [
+            {
+              "name": "200 Reset",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/auth/reset-password" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Password has been reset successfully\"\n}"
+            },
+            {
+              "name": "400 Invalid code",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/auth/reset-password" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Invalid or expired reset code\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Organizations",
+      "description": "Overview: organization onboarding, login, profile retrieval, and password reset.",
+      "item": [
+        {
+          "name": "Create Organization",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "HealthPal Charity", "type": "text" },
+                { "key": "email", "value": "contact@healthpal-charity.org", "type": "text" },
+                { "key": "type", "value": "CHARITY", "type": "text" },
+                { "key": "org_image", "src": ["./assets/org-logo.png"], "type": "file" }
+              ]
+            },
+            "url": {
+              "raw": "{{burl}}/api/organization/create-organization",
+              "host": ["{{burl}}"],
+              "path": ["api", "organization", "create-organization"]
+            },
+            "description": "Admin creates organization and sends setup code to email.\nAccepts name/email/type with optional org_image; returns creation message."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/organization/create-organization" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Organization created successfully. Setup code sent to email.\"\n}"
+            },
+            {
+              "name": "400 Email used",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/organization/create-organization" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Email is already in use\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Setup Organization Password",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"contact@healthpal-charity.org\",\n  \"code\": \"87342109\",\n  \"password\": \"OrgSecurePass!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/organization/organization-setup",
+              "host": ["{{burl}}"],
+              "path": ["api", "organization", "organization-setup"]
+            },
+            "description": "Completes org setup and returns org token.\nReceives email/code/password; returns JWT token."
+          },
+          "response": [
+            {
+              "name": "200 Setup done",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/organization/organization-setup" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Organization setup completed successfully\",\n  \"token\": \"{{orgToken}}\"\n}"
+            },
+            {
+              "name": "400 Invalid code",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/organization/organization-setup" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Invalid or expired setup code\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Organization Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"contact@healthpal-charity.org\",\n  \"password\": \"OrgSecurePass!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/organization/login",
+              "host": ["{{burl}}"],
+              "path": ["api", "organization", "login"]
+            },
+            "description": "Authenticates organization account.\nReceives email/password; returns organization token."
+          },
+          "response": [
+            {
+              "name": "200 Login",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/organization/login" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Login successful\",\n  \"token\": \"{{orgToken}}\"\n}"
+            },
+            {
+              "name": "400 Not activated",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/organization/login" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Organization account is not activated\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get My Organization Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{orgToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/organization/profile",
+              "host": ["{{burl}}"],
+              "path": ["api", "organization", "profile"]
+            },
+            "description": "Returns org profile for logged organization.\nNeeds org token; returns organization data or not found."
+          },
+          "response": [
+            {
+              "name": "200 Profile",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/organization/profile" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"organization\": {\n    \"id\": 11,\n    \"name\": \"HealthPal Charity\",\n    \"email\": \"contact@healthpal-charity.org\",\n    \"type\": \"CHARITY\",\n    \"is_active\": 1,\n    \"profile_image_url\": \"https://res.cloudinary.com/org.png\"\n  }\n}"
+            },
+            {
+              "name": "404 Not found",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/organization/profile" },
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"message\": \"Organization not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All Organizations (public)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{burl}}/api/organization/all-organizations",
+              "host": ["{{burl}}"],
+              "path": ["api", "organization", "all-organizations"]
+            },
+            "description": "Lists active organizations.\nNo auth; returns array of organizations."
+          },
+          "response": [
+            {
+              "name": "200 List",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/organization/all-organizations" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Success\",\n  \"organizations\": [\n    {\n      \"id\": 11,\n      \"name\": \"HealthPal Charity\",\n      \"email\": \"contact@healthpal-charity.org\",\n      \"type\": \"CHARITY\",\n      \"city\": \"Amman\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "500 Server error",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/organization/all-organizations" },
+              "status": "Internal Server Error",
+              "code": 500,
+              "body": "{\n  \"message\": \"Server Error\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Request Org Password Reset",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"contact@healthpal-charity.org\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/organization/request-reset-password",
+              "host": ["{{burl}}"],
+              "path": ["api", "organization", "request-reset-password"]
+            },
+            "description": "Sends reset code to organization email.\nReceives email; returns confirmation."
+          },
+          "response": [
+            {
+              "name": "200 Sent",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/organization/request-reset-password" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Password reset code has been sent to your email\"\n}"
+            },
+            {
+              "name": "400 Missing email",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/organization/request-reset-password" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Email is required\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reset Org Password",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"contact@healthpal-charity.org\",\n  \"code\": \"21839044\",\n  \"newPassword\": \"OrgPass2025!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/organization/reset-password",
+              "host": ["{{burl}}"],
+              "path": ["api", "organization", "reset-password"]
+            },
+            "description": "Resets organization password with code.\nReceives email/code/newPassword; returns confirmation."
+          },
+          "response": [
+            {
+              "name": "200 Reset",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/organization/reset-password" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Organization password has been reset successfully\"\n}"
+            },
+            {
+              "name": "400 Invalid code",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/organization/reset-password" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Invalid or expired reset code\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "Overview: authenticated user profile management and admin verification utilities.",
+      "item": [
+        {
+          "name": "Get All Users (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/users/all",
+              "host": ["{{burl}}"],
+              "path": ["api", "users", "all"]
+            },
+            "description": "Returns all users; admin only by controller check.\nNeeds admin token; returns users array."
+          },
+          "response": [
+            {
+              "name": "200 List",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/users/all" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Users retrieved successfully\",\n  \"users\": [\n    {\"id\":1,\"email\":\"sara.patient@example.com\",\"role\":\"PATIENT\"}\n  ]\n}"
+            },
+            {
+              "name": "403 Not admin",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/users/all" },
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"message\": \"Forbidden. Admins only.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Current Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/users/profile",
+              "host": ["{{burl}}"],
+              "path": ["api", "users", "profile"]
+            },
+            "description": "Returns logged-in user profile with role-specific data.\nNeeds token; returns profile or 404."
+          },
+          "response": [
+            {
+              "name": "200 Profile",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/users/profile" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Profile retrieved successfully\",\n  \"profile\": {\n    \"id\": 1,\n    \"email\": \"sara.patient@example.com\",\n    \"role\": \"PATIENT\",\n    \"roleSpecificData\": {\n      \"insurance_number\": \"INS-44221\",\n      \"is_verify\": 1\n    }\n  }\n}"
+            },
+            {
+              "name": "404 Not found",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/users/profile" },
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"message\": \"User profile not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Sara\",\n  \"last_name\": \"Hassan\",\n  \"city\": \"Amman\",\n  \"phone_number\": \"+962787001122\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/users/profile",
+              "host": ["{{burl}}"],
+              "path": ["api", "users", "profile"]
+            },
+            "description": "Updates current user basic fields (email cannot change).\nReceives profile fields; returns updated profile."
+          },
+          "response": [
+            {
+              "name": "200 Updated",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/users/profile" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Profile updated successfully\",\n  \"profile\": {\n    \"first_name\": \"Sara\",\n    \"city\": \"Amman\"\n  }\n}"
+            },
+            {
+              "name": "400 Invalid phone",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/users/profile" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Invalid phone number format\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Role Specific (Patient)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"insurance_number\": \"INS-44221\",\n  \"medical_info\": \"Type 1 diabetes, insulin dependent\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/users/profile/role-specific",
+              "host": ["{{burl}}"],
+              "path": ["api", "users", "profile", "role-specific"]
+            },
+            "description": "Updates patient/doctor/donor specific fields per role.\nReceives role-specific data; returns updated profile."
+          },
+          "response": [
+            {
+              "name": "200 Role updated",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/users/profile/role-specific" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Role-specific profile updated successfully\",\n  \"profile\": {\n    \"roleSpecificData\": {\n      \"insurance_number\": \"INS-44221\",\n      \"medical_info\": \"Type 1 diabetes, insulin dependent\"\n    }\n  }\n}"
+            },
+            {
+              "name": "400 Missing specialization",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/users/profile/role-specific" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Specialization is required\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Profile Image",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "profile_image", "src": ["./assets/profile.png"], "type": "file" }
+              ]
+            },
+            "url": {
+              "raw": "{{burl}}/api/users/profile/image",
+              "host": ["{{burl}}"],
+              "path": ["api", "users", "profile", "image"]
+            },
+            "description": "Uploads profile image to Cloudinary and updates user.\nNeeds token; accepts single file named profile_image."
+          },
+          "response": [
+            {
+              "name": "200 Image updated",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/users/profile/image" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Profile image updated successfully\",\n  \"imageUrl\": \"https://res.cloudinary.com/profiles/sara.png\"\n}"
+            },
+            {
+              "name": "400 No file",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/users/profile/image" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"No image file provided\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Profile",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/users/profile/1",
+              "host": ["{{burl}}"],
+              "path": ["api", "users", "profile", "1"]
+            },
+            "description": "Deletes own profile or by admin.\nReceives user id param; returns confirmation or 403."
+          },
+          "response": [
+            {
+              "name": "200 Deleted",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/users/profile/1" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Profile deleted successfully\"\n}"
+            },
+            {
+              "name": "403 Unauthorized",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/users/profile/1" },
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"message\": \"Unauthorized to delete this profile\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Verify Patient (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/users/verify-patient/3",
+              "host": ["{{burl}}"],
+              "path": ["api", "users", "verify-patient", "3"]
+            },
+            "description": "Marks patient as verified.\nNeeds admin token; returns success or 403."
+          },
+          "response": [
+            {
+              "name": "200 Verified",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/users/verify-patient/3" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Patient verified successfully\"\n}"
+            },
+            {
+              "name": "403 Not admin",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/users/verify-patient/3" },
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"message\": \"Only admins can verify patients\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Health Guides",
+      "description": "Overview: health guide CRUD, search, and retrieval with translations/files.",
+      "item": [
+        {
+          "name": "Get Guides",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/healthGuides/getGuides?skip=0&limit=5",
+              "host": ["{{burl}}"],
+              "path": ["api", "healthGuides", "getGuides"],
+              "query": [
+                { "key": "skip", "value": "0" },
+                { "key": "limit", "value": "5" }
+              ]
+            },
+            "description": "Returns paginated health guides with translations and files.\nNeeds login; accepts skip/limit."
+          },
+          "response": [
+            {
+              "name": "200 Guides",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/healthGuides/getGuides" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"data\": [\n    {\n      \"id\": 4,\n      \"title_en\": \"Managing Diabetes\",\n      \"content_en\": \"Monitor glucose daily...\",\n      \"files\": [{\"url\":\"https://res.cloudinary.com/guides/guide4.pdf\",\"type\":\"HEALTH_GUIDE\"}]\n    }\n  ]\n}"
+            },
+            {
+              "name": "500 Error",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/healthGuides/getGuides" },
+              "status": "Internal Server Error",
+              "code": 500,
+              "body": "{\n  \"message\": \"Internal server error\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Guide",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "translations", "value": "{\"category_en\":\"Nutrition\",\"category_ar\":\"تغذية\",\"title_en\":\"Healthy Plate\",\"title_ar\":\"الصحن الصحي\",\"content_en\":\"Balance carbs and protein...\",\"content_ar\":\"وازن الكربوهيدرات والبروتين...\"}", "type": "text" },
+                { "key": "files", "src": ["./assets/guide.pdf"], "type": "file" }
+              ]
+            },
+            "url": {
+              "raw": "{{burl}}/api/healthGuides/createGuide",
+              "host": ["{{burl}}"],
+              "path": ["api", "healthGuides", "createGuide"]
+            },
+            "description": "Creates health guide with translations and optional files.\nAdmin only; accepts form-data translations JSON and files[]"
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/healthGuides/createGuide" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Guide created successfully\",\n  \"guide\": {\"id\": 9}\n}"
+            },
+            {
+              "name": "500 Upload error",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/healthGuides/createGuide" },
+              "status": "Internal Server Error",
+              "code": 500,
+              "body": "{\n  \"message\": \"Cloudinary upload error\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Guide",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "translations", "value": "{\"category_en\":\"Wellness\",\"category_ar\":\"عافية\",\"title_en\":\"Sleep Hygiene\",\"title_ar\":\"نظافة النوم\",\"content_en\":\"Keep a steady schedule\",\"content_ar\":\"حافظ على جدول نوم ثابت\"}", "type": "text" },
+                { "key": "files", "src": ["./assets/sleep.pdf"], "type": "file" }
+              ]
+            },
+            "url": {
+              "raw": "{{burl}}/api/healthGuides/updateGuide/4",
+              "host": ["{{burl}}"],
+              "path": ["api", "healthGuides", "updateGuide", "4"]
+            },
+            "description": "Updates translations/files for a guide.\nAdmin only; requires guide id path param."
+          },
+          "response": [
+            {
+              "name": "200 Updated",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/healthGuides/updateGuide/4" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Guide updated successfully\",\n  \"data\": {\"id\":4,\"updated\":true}\n}"
+            },
+            {
+              "name": "400 Missing translations",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/healthGuides/updateGuide/4" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Translation not valid\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Guide",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/healthGuides/deleteGuide/4",
+              "host": ["{{burl}}"],
+              "path": ["api", "healthGuides", "deleteGuide", "4"]
+            },
+            "description": "Deletes a health guide by id.\nAdmin only; returns 404 if not found."
+          },
+          "response": [
+            {
+              "name": "200 Deleted",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/healthGuides/deleteGuide/4" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Guide deleted successfully\"\n}"
+            },
+            {
+              "name": "404 Not found",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/healthGuides/deleteGuide/4" },
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"message\": \"Guide not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Search Guides",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/healthGuides/searchGuides?title=sleep&limit=5",
+              "host": ["{{burl}}"],
+              "path": ["api", "healthGuides", "searchGuides"],
+              "query": [
+                { "key": "title", "value": "sleep" },
+                { "key": "limit", "value": "5" }
+              ]
+            },
+            "description": "Searches guides by title/content/date.\nLogin required; accepts title/content/date/skip/limit."
+          },
+          "response": [
+            {
+              "name": "200 Results",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/healthGuides/searchGuides" },
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": 4,\n    \"title_en\": \"Sleep Hygiene\",\n    \"content_en\": \"Keep a steady schedule\"\n  }\n]"
+            },
+            {
+              "name": "500 Error",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/healthGuides/searchGuides" },
+              "status": "Internal Server Error",
+              "code": 500,
+              "body": "{\n  \"message\": \"Internal server error\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Workshops",
+      "description": "Overview: public workshop listing plus admin CRUD for sessions.",
+      "item": [
+        {
+          "name": "List Workshops",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{burl}}/workshops/",
+              "host": ["{{burl}}"],
+              "path": ["workshops", ""]
+            },
+            "description": "Public list of workshops.\nNo auth; returns workshops ordered by created_at."
+          },
+          "response": [
+            {
+              "name": "200 List",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/workshops/" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Success\",\n  \"workshops\": [\n    {\"id\":2,\"title\":\"Mental Health Webinar\",\"type\":\"WEBINAR\"}\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Workshop By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{burl}}/workshops/2",
+              "host": ["{{burl}}"],
+              "path": ["workshops", "2"]
+            },
+            "description": "Returns single workshop by id.\nNo auth; returns 404 if missing."
+          },
+          "response": [
+            {
+              "name": "200 Workshop",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/workshops/2" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Success\",\n  \"workshop\": {\n    \"id\": 2,\n    \"title\": \"Mental Health Webinar\",\n    \"type\": \"WEBINAR\",\n    \"link\": \"https://zoom.us/j/123456\"\n  }\n}"
+            },
+            {
+              "name": "404 Missing",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/workshops/2" },
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"message\": \"Workshop not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Workshop",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Nutrition Basics\",\n  \"description\": \"60-min session on balanced diets\",\n  \"type\": \"HEALTH_EDUCATION\",\n  \"link\": \"https://zoom.us/j/789000\",\n  \"scheduled_at\": \"2025-01-20 18:00:00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/workshops/create",
+              "host": ["{{burl}}"],
+              "path": ["workshops", "create"]
+            },
+            "description": "Creates workshop (admin).\nAccepts title/description/type/link/location/scheduled_at."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/workshops/create" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Workshop created\",\n  \"workshop\": {\n    \"id\": 6,\n    \"title\": \"Nutrition Basics\",\n    \"type\": \"HEALTH_EDUCATION\"\n  }\n}"
+            },
+            {
+              "name": "400 Missing title",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/workshops/create" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Title is required\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Workshop",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Nutrition Basics - Updated\",\n  \"description\": \"Updated agenda\",\n  \"type\": \"TRAINING\",\n  \"location\": \"Hall A\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/workshops/6",
+              "host": ["{{burl}}"],
+              "path": ["workshops", "6"]
+            },
+            "description": "Updates workshop fields (admin).\nRequires workshop id; only provided fields changed."
+          },
+          "response": [
+            {
+              "name": "200 Updated",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/workshops/6" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Workshop updated\",\n  \"workshop\": {\n    \"id\": 6,\n    \"title\": \"Nutrition Basics - Updated\",\n    \"type\": \"TRAINING\",\n    \"location\": \"Hall A\"\n  }\n}"
+            },
+            {
+              "name": "404 Not found",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/workshops/6" },
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"message\": \"Workshop not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Workshop",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/workshops/6",
+              "host": ["{{burl}}"],
+              "path": ["workshops", "6"]
+            },
+            "description": "Deletes workshop by id (admin).\nReturns 404 if missing."
+          },
+          "response": [
+            {
+              "name": "200 Deleted",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/workshops/6" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Workshop deleted\"\n}"
+            },
+            {
+              "name": "404 Missing",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/workshops/6" },
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"message\": \"Workshop not found\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Alerts",
+      "description": "Overview: admin-managed alerts plus logged-in retrieval.",
+      "item": [
+        {
+          "name": "Get Alerts",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/alerts/getAlerts",
+              "host": ["{{burl}}"],
+              "path": ["api", "alerts", "getAlerts"]
+            },
+            "description": "Returns all alerts.\nRequires login; returns alerts array."
+          },
+          "response": [
+            {
+              "name": "200 Alerts",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/alerts/getAlerts" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"alerts\": [\n    {\"id\":1,\"title\":\"Blood Drive\",\"type\":\"EVENT\"}\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Alert",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Heat Advisory\",\n  \"description\": \"Stay hydrated during the heatwave\",\n  \"type\": \"GENERAL\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/alerts/createAlert",
+              "host": ["{{burl}}"],
+              "path": ["api", "alerts", "createAlert"]
+            },
+            "description": "Admin creates alert with title/description/type.\nReturns created alert data."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/alerts/createAlert" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Alert created successfully\",\n  \"alert\": {\n    \"id\": 12,\n    \"title\": \"Heat Advisory\",\n    \"description\": \"Stay hydrated during the heatwave\",\n    \"type\": \"GENERAL\"\n  }\n}"
+            },
+            {
+              "name": "400 Missing fields",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/alerts/createAlert" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Title, description, and type are required.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Alert",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Heat Advisory Updated\",\n  \"description\": \"Avoid midday sun\",\n  \"type\": \"GENERAL\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/alerts/updateAlert/12",
+              "host": ["{{burl}}"],
+              "path": ["api", "alerts", "updateAlert", "12"]
+            },
+            "description": "Admin updates alert.\nNeeds id param and all three fields."
+          },
+          "response": [
+            {
+              "name": "200 Updated",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/alerts/updateAlert/12" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Alert updated successfully\",\n  \"alert\": {\n    \"id\": 12,\n    \"title\": \"Heat Advisory Updated\",\n    \"description\": \"Avoid midday sun\",\n    \"type\": \"GENERAL\"\n  }\n}"
+            },
+            {
+              "name": "400 Missing fields",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/alerts/updateAlert/12" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Title, description, and type are required.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Alert",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/alerts/deleteAlert/12",
+              "host": ["{{burl}}"],
+              "path": ["api", "alerts", "deleteAlert", "12"]
+            },
+            "description": "Admin deletes alert by id.\nReturns success message."
+          },
+          "response": [
+            {
+              "name": "200 Deleted",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/alerts/deleteAlert/12" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Alert deleted successfully\"\n}"
+            },
+            {
+              "name": "500 DB error",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/alerts/deleteAlert/12" },
+              "status": "Internal Server Error",
+              "code": 500,
+              "body": "{\n  \"message\": \"Error message\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Support Groups",
+      "description": "Overview: support group lifecycle, join requests, and membership management.",
+      "item": [
+        {
+          "name": "Create Group",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Diabetes Support\",\n  \"description\": \"Peers sharing insulin tips\",\n  \"category\": \"DIABETES\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/supportGroups/groups",
+              "host": ["{{burl}}"],
+              "path": ["api", "supportGroups", "groups"]
+            },
+            "description": "Admin creates support group.\nReceives name/description/category; returns id."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/supportGroups/groups" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Group created successfully\",\n  \"id\": 8\n}"
+            },
+            {
+              "name": "403 Not admin",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/supportGroups/groups" },
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"message\": \"Only admins can create groups\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Groups",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/supportGroups/groups",
+              "host": ["{{burl}}"],
+              "path": ["api", "supportGroups", "groups"]
+            },
+            "description": "Returns all support groups.\nRequires login; no pagination."
+          },
+          "response": [
+            {
+              "name": "200 Groups",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/supportGroups/groups" },
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\"id\":8,\"name\":\"Diabetes Support\",\"category\":\"DIABETES\"}\n]"
+            }
+          ]
+        },
+        {
+          "name": "My Groups",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/supportGroups/groups/user",
+              "host": ["{{burl}}"],
+              "path": ["api", "supportGroups", "groups", "user"]
+            },
+            "description": "Lists groups for logged user (with state).\nRequires login."
+          },
+          "response": [
+            {
+              "name": "200 My groups",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/supportGroups/groups/user" },
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\"id\":8,\"name\":\"Diabetes Support\",\"state\":\"APPROVED\"}\n]"
+            }
+          ]
+        },
+        {
+          "name": "Send Join Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/supportGroups/groups/8/join",
+              "host": ["{{burl}}"],
+              "path": ["api", "supportGroups", "groups", "8", "join"]
+            },
+            "description": "User sends join request to group.\nRequires login; returns pending message."
+          },
+          "response": [
+            {
+              "name": "201 Pending",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/supportGroups/groups/8/join" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Join request sent\"\n}"
+            },
+            {
+              "name": "400 Already pending",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/supportGroups/groups/8/join" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Request already sent\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Join Requests (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/supportGroups/groups/8/requests",
+              "host": ["{{burl}}"],
+              "path": ["api", "supportGroups", "groups", "8", "requests"]
+            },
+            "description": "Admin lists pending/approved requests for group.\nReturns requester info."
+          },
+          "response": [
+            {
+              "name": "200 Requests",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/supportGroups/groups/8/requests" },
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\"id\":14,\"first_name\":\"Omar\",\"state\":\"PENDING\"}\n]"
+            }
+          ]
+        },
+        {
+          "name": "Approve/Deny Request (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"state\": \"APPROVED\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/supportGroups/requests/14",
+              "host": ["{{burl}}"],
+              "path": ["api", "supportGroups", "requests", "14"]
+            },
+            "description": "Admin approves or rejects join request.\nState must be provided; returns confirmation."
+          },
+          "response": [
+            {
+              "name": "200 Approved",
+              "originalRequest": { "method": "PATCH", "url": "{{burl}}/api/supportGroups/requests/14" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Request approved successfully\"\n}"
+            },
+            {
+              "name": "400 Not found",
+              "originalRequest": { "method": "PATCH", "url": "{{burl}}/api/supportGroups/requests/14" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Request not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Group Info (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Diabetes Support MENA\",\n  \"category\": \"DIABETES\",\n  \"description\": \"Regional peer support\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/supportGroups/groups/update/8",
+              "host": ["{{burl}}"],
+              "path": ["api", "supportGroups", "groups", "update", "8"]
+            },
+            "description": "Admin updates group info; at least one field required.\nReturns success or validation error."
+          },
+          "response": [
+            {
+              "name": "200 Updated",
+              "originalRequest": { "method": "PATCH", "url": "{{burl}}/api/supportGroups/groups/update/8" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Group updated successfully\"\n}"
+            },
+            {
+              "name": "400 Short name",
+              "originalRequest": { "method": "PATCH", "url": "{{burl}}/api/supportGroups/groups/update/8" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Name must be at least 3 characters\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Group (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/supportGroups/groups/8",
+              "host": ["{{burl}}"],
+              "path": ["api", "supportGroups", "groups", "8"]
+            },
+            "description": "Admin deletes group by id.\nReturns success or error."
+          },
+          "response": [
+            {
+              "name": "200 Deleted",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/supportGroups/groups/8" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Group deleted successfully\"\n}"
+            },
+            {
+              "name": "400 Not found",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/supportGroups/groups/8" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Group not found\"}\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Group Messages",
+      "description": "Overview: messaging within support groups with optional attachments.",
+      "item": [
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "groupId", "value": "8", "type": "text" },
+                { "key": "message", "value": "Glad to join this group!", "type": "text" },
+                { "key": "file", "src": ["./assets/lab-report.pdf"], "type": "file" }
+              ]
+            },
+            "url": {
+              "raw": "{{burl}}/api/group/messages/sendmessage",
+              "host": ["{{burl}}"],
+              "path": ["api", "group", "messages", "sendmessage"]
+            },
+            "description": "Sends message to group; file optional.\nRequires membership; returns success or membership error."
+          },
+          "response": [
+            {
+              "name": "200 Sent",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/group/messages/sendmessage" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Message sent successfully\"\n}"
+            },
+            {
+              "name": "400 Not member",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/group/messages/sendmessage" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"You are not a member of this group\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Group Messages",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/group/messages/8",
+              "host": ["{{burl}}"],
+              "path": ["api", "group", "messages", "8"]
+            },
+            "description": "Lists messages for group id.\nRequires login; returns messages or not found."
+          },
+          "response": [
+            {
+              "name": "200 Messages",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/group/messages/8" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Messages retrieved successfully\",\n  \"count\": 2,\n  \"data\": [\n    {\"message\":\"Glad to join this group!\",\"first_name\":\"Sara\"}\n  ]\n}"
+            },
+            {
+              "name": "400 No group",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/group/messages/8" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Group not found\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Anonymous Messages",
+      "description": "Overview: anonymous messaging, doctor replies, search, and admin deletion.",
+      "item": [
+        {
+          "name": "Send Anonymous Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "content", "value": "I need advice about insulin dosage changes.", "type": "text" },
+                { "key": "attachment", "src": ["./assets/question.png"], "type": "file" }
+              ]
+            },
+            "url": {
+              "raw": "{{burl}}/api/anonymous-messages/send",
+              "host": ["{{burl}}"],
+              "path": ["api", "anonymous-messages", "send"]
+            },
+            "description": "Any logged user sends anonymous message with optional attachment.\nReturns messageId."
+          },
+          "response": [
+            {
+              "name": "201 Sent",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/anonymous-messages/send" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Anonymous message sent successfully\",\n  \"messageId\": 21\n}"
+            },
+            {
+              "name": "400 Missing content",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/anonymous-messages/send" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Message content is required\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reply to Message (doctor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{docToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "content", "value": "Please reduce night dose to 8 units.", "type": "text" },
+                { "key": "attachment", "src": ["./assets/dosage.pdf"], "type": "file" }
+              ]
+            },
+            "url": {
+              "raw": "{{burl}}/api/anonymous-messages/reply/21",
+              "host": ["{{burl}}"],
+              "path": ["api", "anonymous-messages", "reply", "21"]
+            },
+            "description": "Doctors/admins reply to anonymous message with optional attachment.\nReturns replyId or 403."
+          },
+          "response": [
+            {
+              "name": "201 Replied",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/anonymous-messages/reply/21" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Reply sent successfully\",\n  \"replyId\": 34\n}"
+            },
+            {
+              "name": "403 Not doctor",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/anonymous-messages/reply/21" },
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"message\": \"Only doctors can reply to anonymous messages\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Messages",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/anonymous-messages/all?page=1&limit=20",
+              "host": ["{{burl}}"],
+              "path": ["api", "anonymous-messages", "all"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Paginated list of main messages.\nRequires login; returns messages with pagination."
+          },
+          "response": [
+            {
+              "name": "200 Messages",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/anonymous-messages/all" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Messages retrieved successfully\",\n  \"messages\": [\n    {\"id\":21,\"content\":\"I need advice about insulin dosage changes.\"}\n  ],\n  \"page\":1,\n  \"limit\":20\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Conversation",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/anonymous-messages/conversation/21",
+              "host": ["{{burl}}"],
+              "path": ["api", "anonymous-messages", "conversation", "21"]
+            },
+            "description": "Gets main message with all replies.\nRequires login; returns 404 if not found."
+          },
+          "response": [
+            {
+              "name": "200 Conversation",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/anonymous-messages/conversation/21" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Conversation retrieved successfully\",\n  \"conversation\": {\n    \"mainMessage\": {\"id\":21,\"content\":\"I need advice about insulin dosage changes.\"},\n    \"replies\": [\n      {\"content\":\"Please reduce night dose to 8 units.\"}\n    ]\n  }\n}"
+            },
+            {
+              "name": "404 Missing",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/anonymous-messages/conversation/21" },
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"message\": \"Message not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Unanswered Messages (doctor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{docToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/anonymous-messages/unanswered?limit=10",
+              "host": ["{{burl}}"],
+              "path": ["api", "anonymous-messages", "unanswered"],
+              "query": [
+                { "key": "limit", "value": "10" }
+              ]
+            },
+            "description": "Doctors/admins fetch messages without replies.\nReturns messages list."
+          },
+          "response": [
+            {
+              "name": "200 Unanswered",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/anonymous-messages/unanswered" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Unanswered messages retrieved successfully\",\n  \"messages\": [\n    {\"id\":22,\"content\":\"Any good cardiologist?\"}\n  ]\n}"
+            },
+            {
+              "name": "403 Not doctor",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/anonymous-messages/unanswered" },
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"message\": \"Only doctors can view unanswered messages\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Search Messages",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/anonymous-messages/search?q=insulin&limit=5",
+              "host": ["{{burl}}"],
+              "path": ["api", "anonymous-messages", "search"],
+              "query": [
+                { "key": "q", "value": "insulin" },
+                { "key": "limit", "value": "5" }
+              ]
+            },
+            "description": "Search messages by content substring.\nRequires login; returns matching messages."
+          },
+          "response": [
+            {
+              "name": "200 Results",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/anonymous-messages/search" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Search completed\",\n  \"messages\": [\n    {\"id\":21,\"content\":\"I need advice about insulin dosage changes.\"}\n  ]\n}"
+            },
+            {
+              "name": "400 Missing term",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/anonymous-messages/search" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Search term is required\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Message (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/anonymous-messages/21",
+              "host": ["{{burl}}"],
+              "path": ["api", "anonymous-messages", "21"]
+            },
+            "description": "Admin deletes message and asset.\nReturns success or not found."
+          },
+          "response": [
+            {
+              "name": "200 Deleted",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/anonymous-messages/21" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Message deleted successfully\"\n}"
+            },
+            {
+              "name": "403 Not admin",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/anonymous-messages/21" },
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"message\": \"Only admins can delete messages\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Medical Needs",
+      "description": "Overview: patient/organization medical needs lifecycle and visibility.",
+      "item": [
+        {
+          "name": "List Medical Needs",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/medicalNeeds/",
+              "host": ["{{burl}}"],
+              "path": ["api", "medicalNeeds", ""]
+            },
+            "description": "Lists pending/in-progress medical needs for logged users.\nReturns needs array."
+          },
+          "response": [
+            {
+              "name": "200 Needs",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/medicalNeeds/" },
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\n    \"id\": 5,\n    \"name\": \"Insulin Pens\",\n    \"description\": \"Rapid-acting pens\",\n    \"type\": \"MEDICATION\",\n    \"price\": 28.00,\n    \"quantity\": 10,\n    \"status\": \"PENDING\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Medical Need",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/medicalNeeds/5",
+              "host": ["{{burl}}"],
+              "path": ["api", "medicalNeeds", "5"]
+            },
+            "description": "Fetch single medical need by id for logged user.\nReturns 404 if missing."
+          },
+          "response": [
+            {
+              "name": "200 Need",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/medicalNeeds/5" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"id\": 5,\n  \"name\": \"Insulin Pens\",\n  \"status\": \"PENDING\"\n}"
+            },
+            {
+              "name": "404 Missing",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/medicalNeeds/5" },
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"message\": \"Medical need not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Medical Need (patient/org)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Insulin Pens\",\n  \"description\": \"Rapid-acting pens for 1 month\",\n  \"type\": \"MEDICATION\",\n  \"price\": 28.00,\n  \"quantity\": 10\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/medicalNeeds/",
+              "host": ["{{burl}}"],
+              "path": ["api", "medicalNeeds", ""]
+            },
+            "description": "Verified patient or organization creates need.\nReturns created record; status set to PENDING."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/medicalNeeds/" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"id\": 6,\n  \"name\": \"Insulin Pens\",\n  \"status\": \"PENDING\"\n}"
+            },
+            {
+              "name": "400 Patient not verified",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/medicalNeeds/" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Only verified patients can create medical needs\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Need Status (patient/org)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CANCELED\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/medicalNeeds/5/status",
+              "host": ["{{burl}}"],
+              "path": ["api", "medicalNeeds", "5", "status"]
+            },
+            "description": "Patient/org updates status to PENDING or CANCELED.\nRequires ownership."
+          },
+          "response": [
+            {
+              "name": "200 Status updated",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/medicalNeeds/5/status" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Status updated successfully\"\n}"
+            },
+            {
+              "name": "400 Invalid status",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/medicalNeeds/5/status" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Invalid status. Only 'PENDING' or 'CANCELED' allowed.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Medical Need",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Insulin Pens\",\n  \"description\": \"Need for next 2 months\",\n  \"type\": \"MEDICATION\",\n  \"price\": 28.00,\n  \"quantity\": 20\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/medicalNeeds/5",
+              "host": ["{{burl}}"],
+              "path": ["api", "medicalNeeds", "5"]
+            },
+            "description": "Patient/org updates fields; must own record.\nReturns updated data or authorization error."
+          },
+          "response": [
+            {
+              "name": "200 Updated",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/medicalNeeds/5" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Medical need updated successfully\",\n  \"data\": {\n    \"id\": 5,\n    \"quantity\": 20\n  }\n}"
+            },
+            {
+              "name": "400 Not authorized",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/medicalNeeds/5" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Only organizations and patients can update medical needs\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Medical Need",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/medicalNeeds/5",
+              "host": ["{{burl}}"],
+              "path": ["api", "medicalNeeds", "5"]
+            },
+            "description": "Patient/org deletes need they own.\nReturns success or auth error."
+          },
+          "response": [
+            {
+              "name": "200 Deleted",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/medicalNeeds/5" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Medical need deleted successfully\"\n}"
+            },
+            {
+              "name": "400 Not authorized",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/medicalNeeds/5" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Only organizations and patients can delete medical needs\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Donations",
+      "description": "Overview: donor contributions tied to medical needs and their retrieval.",
+      "item": [
+        {
+          "name": "Create Donation (donor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{dToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medical_need_id\": 5,\n  \"amount\": 50.00\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/donations/",
+              "host": ["{{burl}}"],
+              "path": ["api", "donations", ""]
+            },
+            "description": "Donor contributes to medical need if status allows.\nReturns created donation."
+          },
+          "response": [
+            {
+              "name": "201 Donated",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/donations/" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"id\": 15,\n  \"donor_id\": 7,\n  \"medical_need_id\": 5,\n  \"amount\": 50.00,\n  \"status\": \"SUCCESS\"\n}"
+            },
+            {
+              "name": "400 Exceeds remaining",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/donations/" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Donation amount exceeds the remaining needed amount. Remaining: 30.00\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All Donations",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{dToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/donations/",
+              "host": ["{{burl}}"],
+              "path": ["api", "donations", ""]
+            },
+            "description": "Lists all donations (login required).\nReturns array of donations."
+          },
+          "response": [
+            {
+              "name": "200 Donations",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/donations/" },
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\"id\":15,\"medical_need_id\":5,\"amount\":50.00,\"status\":\"SUCCESS\"}\n]"
+            }
+          ]
+        },
+        {
+          "name": "Get Donation By Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{dToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/donations/15",
+              "host": ["{{burl}}"],
+              "path": ["api", "donations", "15"]
+            },
+            "description": "Returns donation by id.\nLogin required; 404 if missing."
+          },
+          "response": [
+            {
+              "name": "200 Donation",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/donations/15" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"id\": 15,\n  \"medical_need_id\": 5,\n  \"amount\": 50.00,\n  \"status\": \"SUCCESS\"\n}"
+            },
+            {
+              "name": "404 Not found",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/donations/15" },
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"message\": \"Donation not found\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Donations By Need",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{dToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/donations/need/5",
+              "host": ["{{burl}}"],
+              "path": ["api", "donations", "need", "5"]
+            },
+            "description": "Lists donations for specific medical need.\nLogin required."
+          },
+          "response": [
+            {
+              "name": "200 Need donations",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/donations/need/5" },
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\"id\":15,\"amount\":50.00,\"status\":\"SUCCESS\"}\n]"
+            },
+            {
+              "name": "500 Error",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/donations/need/5" },
+              "status": "Internal Server Error",
+              "code": 500,
+              "body": "{\n  \"message\": \"Server error\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reservations",
+      "description": "Overview: doctor appointments publishing and patient reservations/updates.",
+      "item": [
+        {
+          "name": "Create Doctor Appointment (doctor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{docToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"start_time\": \"2025-01-15 10:00:00\",\n  \"end_time\": \"2025-01-15 14:00:00\",\n  \"category\": \"ENDOCRINOLOGY\",\n  \"additional_info\": \"Clinic room 3\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/reservations/doctor/create-appointment",
+              "host": ["{{burl}}"],
+              "path": ["api", "reservations", "doctor", "create-appointment"]
+            },
+            "description": "Doctor publishes available appointment slot.\nValidates time order; returns appointmentId."
+          },
+          "response": [
+            {
+              "name": "201 Created",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/reservations/doctor/create-appointment" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Appointment schedule created successfully\",\n  \"appointmentId\": 9\n}"
+            },
+            {
+              "name": "400 End before start",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/reservations/doctor/create-appointment" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"End time must be after start time\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Doctor Appointments (doctor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{docToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/reservations/doctor/appointments",
+              "host": ["{{burl}}"],
+              "path": ["api", "reservations", "doctor", "appointments"]
+            },
+            "description": "Doctor views own appointments.\nReturns appointments list."
+          },
+          "response": [
+            {
+              "name": "200 Appointments",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/reservations/doctor/appointments" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"appointments\": [\n    {\"id\":9,\"start_time\":\"2025-01-15 10:00:00\",\"end_time\":\"2025-01-15 14:00:00\"}\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Reservation (patient)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctor_appointment_id\": 9,\n  \"pref\": \"Prefer morning\",\n  \"start_time\": \"2025-01-15 10:30:00\",\n  \"end_time\": \"2025-01-15 11:00:00\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/reservations/patient/create",
+              "host": ["{{burl}}"],
+              "path": ["api", "reservations", "patient", "create"]
+            },
+            "description": "Patient books within doctor appointment slot.\nValidates overlap and time bounds; returns reservationId."
+          },
+          "response": [
+            {
+              "name": "201 Reserved",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/reservations/patient/create" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Reservation created successfully\",\n  \"reservationId\": 18\n}"
+            },
+            {
+              "name": "400 Slot booked",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/reservations/patient/create" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"This time slot is already booked by another patient\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "My Reservations (patient)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/reservations/patient/my-reservations",
+              "host": ["{{burl}}"],
+              "path": ["api", "reservations", "patient", "my-reservations"]
+            },
+            "description": "Patient views own reservations with doctor info.\nReturns reservations array."
+          },
+          "response": [
+            {
+              "name": "200 My reservations",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/reservations/patient/my-reservations" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"reservations\": [\n    {\n      \"id\": 18,\n      \"status\": \"PENDING\",\n      \"doctor_first_name\": \"Mona\",\n      \"appointment_start_time\": \"2025-01-15 10:00:00\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Doctor Reservations",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{docToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/reservations/doctor/reservations",
+              "host": ["{{burl}}"],
+              "path": ["api", "reservations", "doctor", "reservations"]
+            },
+            "description": "Doctor views reservations booked on own appointments.\nReturns patient info."
+          },
+          "response": [
+            {
+              "name": "200 Reservations",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/reservations/doctor/reservations" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"reservations\": [\n    {\n      \"id\": 18,\n      \"patient_first_name\": \"Sara\",\n      \"status\": \"PENDING\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Reservation Status (doctor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{docToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CONFIRMED\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/reservations/doctor/update-status/18",
+              "host": ["{{burl}}"],
+              "path": ["api", "reservations", "doctor", "update-status", "18"]
+            },
+            "description": "Doctor updates reservation status (PENDING/CONFIRMED/COMPLETED/CANCELED).\nMust own the appointment."
+          },
+          "response": [
+            {
+              "name": "200 Updated",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/reservations/doctor/update-status/18" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Reservation status updated successfully\"\n}"
+            },
+            {
+              "name": "400 Unauthorized doctor",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/reservations/doctor/update-status/18" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Unauthorized to update this reservation\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Reservation Pref (doctor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{docToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pref\": \"Bring previous lab results\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/reservations/doctor/update-pref/18",
+              "host": ["{{burl}}"],
+              "path": ["api", "reservations", "doctor", "update-pref", "18"]
+            },
+            "description": "Doctor sets preference/notes for reservation.\nMust own reservation's appointment."
+          },
+          "response": [
+            {
+              "name": "200 Pref updated",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/reservations/doctor/update-pref/18" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Reservation preference updated successfully\"\n}"
+            },
+            {
+              "name": "400 Unauthorized",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/reservations/doctor/update-pref/18" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Unauthorized to update this reservation\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "description": "Overview: verification documents upload and admin review/status change.",
+      "item": [
+        {
+          "name": "Get Recent Pending (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/documents/recentPending",
+              "host": ["{{burl}}"],
+              "path": ["api", "documents", "recentPending"]
+            },
+            "description": "Admin fetches last 4 pending files for verification.\nReturns files."
+          },
+          "response": [
+            {
+              "name": "200 Pending",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/documents/recentPending" },
+              "status": "OK",
+              "code": 200,
+              "body": "[\n  {\"id\":32,\"patient_id\":1,\"link\":\"https://res.cloudinary.com/pending.pdf\",\"status\":\"Pending\"}\n]"
+            }
+          ]
+        },
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "{{pToken}}" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "document", "src": ["./assets/report.pdf"], "type": "file" }
+              ]
+            },
+            "url": {
+              "raw": "{{burl}}/api/documents/upload",
+              "host": ["{{burl}}"],
+              "path": ["api", "documents", "upload"]
+            },
+            "description": "Uploads patient document; doctors path reserved but not implemented.\nRequires login; uses field document."
+          },
+          "response": [
+            {
+              "name": "201 Uploaded",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/documents/upload" },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Success\"\n}"
+            },
+            {
+              "name": "400 Error",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/documents/upload" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Error\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "List All Files (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/documents/all",
+              "host": ["{{burl}}"],
+              "path": ["api", "documents", "all"]
+            },
+            "description": "Admin lists all patient/doctor verification files.\nReturns files array."
+          },
+          "response": [
+            {
+              "name": "200 Files",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/documents/all" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Success\",\n  \"files\": [\n    {\"id\":32,\"type\":\"PATIENT_RECORD\",\"status\":\"Pending\"}\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Change Doc Status (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newStatus\": \"Approved\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/documents/status/32",
+              "host": ["{{burl}}"],
+              "path": ["api", "documents", "status", "32"]
+            },
+            "description": "Admin updates document status Pending/Rejected/Approved; auto-verifies user on Approved.\nReturns message."
+          },
+          "response": [
+            {
+              "name": "200 Status changed",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/documents/status/32" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Document Status Change Success To Approved\"\n}"
+            },
+            {
+              "name": "400 Invalid status",
+              "originalRequest": { "method": "PUT", "url": "{{burl}}/api/documents/status/32" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Send New Status Or Invalid Status\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Translation",
+      "description": "Overview: utility endpoint to translate arbitrary message content.",
+      "item": [
+        {
+          "name": "Translate Message",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": { \"content\": \"Stay hydrated and rest\" },\n  \"targetLang\": \"ar\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{burl}}/api/translation",
+              "host": ["{{burl}}"],
+              "path": ["api", "translation"]
+            },
+            "description": "Translates message.content to ar/en via external API.\nNo auth; requires message.content and targetLang."
+          },
+          "response": [
+            {
+              "name": "200 Translated",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/translation" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"translation\": \"ابق رطبًا واسترح\"\n}"
+            },
+            {
+              "name": "400 Missing content",
+              "originalRequest": { "method": "POST", "url": "{{burl}}/api/translation" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Message content is required\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin Info",
+      "description": "Overview: admin dashboards for summary metrics and organization control.",
+      "item": [
+        {
+          "name": "Summary",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/admin/info",
+              "host": ["{{burl}}"],
+              "path": ["api", "admin", "info"]
+            },
+            "description": "Admin dashboard summary of counts.\nReturns counts of users, organizations, guides, alerts."
+          },
+          "response": [
+            {
+              "name": "200 Summary",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/admin/info" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Summary fetched successfully\",\n  \"data\": {\n    \"userCount\": 120,\n    \"organizationCount\": 8,\n    \"healthGuideCount\": 14,\n    \"alertsCount\": 5\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "All Organizations (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/admin/organizations/all",
+              "host": ["{{burl}}"],
+              "path": ["api", "admin", "organizations", "all"]
+            },
+            "description": "Admin lists all organizations including inactive.\nReturns organizations array."
+          },
+          "response": [
+            {
+              "name": "200 Orgs",
+              "originalRequest": { "method": "GET", "url": "{{burl}}/api/admin/organizations/all" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Success\",\n  \"organizations\": [\n    {\"id\":11,\"name\":\"HealthPal Charity\",\"is_active\":1}\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete Organization (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "{{aToken}}" }
+            ],
+            "url": {
+              "raw": "{{burl}}/api/admin/organization/delete/11",
+              "host": ["{{burl}}"],
+              "path": ["api", "admin", "organization", "delete", "11"]
+            },
+            "description": "Admin deletes organization by id.\nReturns success or not found message."
+          },
+          "response": [
+            {
+              "name": "200 Deleted",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/admin/organization/delete/11" },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Organization deleted successfully\"\n}"
+            },
+            {
+              "name": "400 Not found",
+              "originalRequest": { "method": "DELETE", "url": "{{burl}}/api/admin/organization/delete/11" },
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"message\": \"Organization not found\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
