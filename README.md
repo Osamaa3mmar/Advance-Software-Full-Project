@@ -7,7 +7,7 @@ Welcome to the Advance-Software-Full-Project wiki!
 HealthPal is a comprehensive healthcare management system designed to bridge the gap between patients, healthcare providers, donors, and medical organizations. The platform provides a unified ecosystem for health information sharing, medical consultations, support groups, and charitable donations.
 
 ---
-![HealthPal – Healthcare Management Platform](HealthPal.png)
+![HealthPal – Healthcare Management Platform](HealthPalImage.png)
 ##  Vision & Mission
 
 **Vision**: To create an accessible, inclusive healthcare platform that empowers patients, connects healthcare providers, and facilitates medical assistance for those in need.
